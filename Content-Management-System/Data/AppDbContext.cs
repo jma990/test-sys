@@ -7,6 +7,7 @@ namespace Content_Management_System.Data
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
 
         public DbSet<User> Users { get; set; } = null!;
+        public DbSet<Announcement> Announcements { get; set; } = null!;
     }
 
     public enum UserRole
@@ -26,5 +27,18 @@ namespace Content_Management_System.Data
         public required string Salt { get; set; } = string.Empty;
         public UserRole Role { get; set; } = UserRole.Member; 
         public DateTime CreatedAt { get; set; } = DateTime.Now; 
+    }
+
+    public class Announcement
+    {
+        public int ID { get; set; }
+        public required string Title { get; set; }
+        public required string Content { get; set; }
+        public DateTime CreatedAt { get; set; } = DateTime.Now;
+        public DateTime? UpdatedAt { get; set; }
+        public int AuthorID { get; set; }
+        public User? Author { get; set; }
+        public bool IsActive { get; set; } = true;
+        public byte[]? Attachment { get; set; }
     }
 }

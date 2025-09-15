@@ -8,7 +8,6 @@ using System.ComponentModel.DataAnnotations;
 using Content_Management_System.Data;
 using Content_Management_System.Utilities;
 
-
 namespace Content_Management_System.Pages
 {
     public class LoginModel : PageModel
