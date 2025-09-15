@@ -8,18 +8,13 @@
 <form method="post">
     <div>
         <label>Email</label>
-        <input type="text" name="Email" />
+        <input type="text" name="Email" placeholder="Email" value="@Model.Email"/>
         @Html.ValidationMessage("Email", "", new { @class = "text-danger" })
     </div>
     <div>
         <label>Password</label>
-        <input type="password" name="Password" />
+        <input type="password" name="Password" placeholder="Password" value="@Model.Password"/>
         @Html.ValidationMessage("Password", "", new { @class = "text-danger" })
     </div>
     <button type="submit">Login</button>
 </form>
-
-@if (!string.IsNullOrEmpty(Model.ErrorMessage))
-{
-    <p style="color:red">@Model.ErrorMessage</p>
-}
