@@ -16,14 +16,14 @@ public class IndexModel : PageModel
         // If user is already authenticated, redirect to dashboard
         if (User.Identity != null && User.Identity.IsAuthenticated)
         {
-            return RedirectToPage(PathDirectory.DashboardPage);
+            return RedirectToPage(PathDirectory.AnnouncementsPage);
         }
 
         // Check for authentication cookie
         var result = await HttpContext.AuthenticateAsync(CookieAuthenticationDefaults.AuthenticationScheme);
         if (result.Succeeded && result.Principal != null)
         {
-            return RedirectToPage(PathDirectory.DashboardPage);
+            return RedirectToPage(PathDirectory.AnnouncementsPage);
         }
 
         return RedirectToPage(PathDirectory.LoginPage);

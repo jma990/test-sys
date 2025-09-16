@@ -8,6 +8,7 @@ namespace Content_Management_System.Data
 
         public DbSet<User> Users { get; set; } = null!;
         public DbSet<Announcement> Announcements { get; set; } = null!;
+        public DbSet<Department> Departments { get; set; } = null!;
     }
 
     public enum UserRole
@@ -27,6 +28,13 @@ namespace Content_Management_System.Data
         public required string Salt { get; set; } = string.Empty;
         public UserRole Role { get; set; } = UserRole.Member; 
         public DateTime CreatedAt { get; set; } = DateTime.Now; 
+
+         // Link to Department
+        public required int DepartmentID { get; set; }
+        public Department? Department { get; set; }
+
+        // A user can post multiple announcements
+        public ICollection<Announcement> Announcements { get; set; } = new List<Announcement>();
     }
 
     public class Announcement
@@ -40,5 +48,21 @@ namespace Content_Management_System.Data
         public User? Author { get; set; }
         public bool IsActive { get; set; } = true;
         public byte[]? Attachment { get; set; }
+
+        // Optional link to Department (for department-specific announcements)
+        public int? DepartmentID { get; set; }
+        public Department? Department { get; set; }
+    }
+
+    public class Department
+    {
+        public int ID { get; set; }
+        public required string DepartmentName { get; set; }
+
+        // One department can have many users
+        public ICollection<User> Users { get; set; } = new List<User>();
+
+        // One department can have many announcements
+        public ICollection<Announcement> Announcements { get; set; } = new List<Announcement>();
     }
 }

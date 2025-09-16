@@ -47,7 +47,7 @@ namespace Content_Management_System.Pages
                 return Page();
             }
             await CookieService.CreateCookieAsync(HttpContext, user.ID, user.Email, user.Role.ToString());
-            return RedirectToPage(PathDirectory.DashboardPage);
+            return RedirectToPage(PathDirectory.AnnouncementsPage);
         }
     }
 }

@@ -36,6 +36,9 @@ namespace Content_Management_System.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("TEXT");
 
+                    b.Property<int?>("DepartmentID")
+                        .HasColumnType("INTEGER");
+
                     b.Property<bool>("IsActive")
                         .HasColumnType("INTEGER");
 
@@ -50,7 +53,24 @@ namespace Content_Management_System.Migrations
 
                     b.HasIndex("AuthorID");
 
+                    b.HasIndex("DepartmentID");
+
                     b.ToTable("Announcements");
+                });
+
+            modelBuilder.Entity("Content_Management_System.Data.Department", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("DepartmentName")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("ID");
+
+                    b.ToTable("Departments");
                 });
 
             modelBuilder.Entity("Content_Management_System.Data.User", b =>
@@ -61,6 +81,9 @@ namespace Content_Management_System.Migrations
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("TEXT");
+
+                    b.Property<int>("DepartmentID")
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("Email")
                         .IsRequired()
@@ -90,18 +113,49 @@ namespace Content_Management_System.Migrations
 
                     b.HasKey("ID");
 
+                    b.HasIndex("DepartmentID");
+
                     b.ToTable("Users");
                 });
 
             modelBuilder.Entity("Content_Management_System.Data.Announcement", b =>
                 {
                     b.HasOne("Content_Management_System.Data.User", "Author")
-                        .WithMany()
+                        .WithMany("Announcements")
                         .HasForeignKey("AuthorID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("Content_Management_System.Data.Department", "Department")
+                        .WithMany("Announcements")
+                        .HasForeignKey("DepartmentID");
+
                     b.Navigation("Author");
+
+                    b.Navigation("Department");
+                });
+
+            modelBuilder.Entity("Content_Management_System.Data.User", b =>
+                {
+                    b.HasOne("Content_Management_System.Data.Department", "Department")
+                        .WithMany("Users")
+                        .HasForeignKey("DepartmentID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Department");
+                });
+
+            modelBuilder.Entity("Content_Management_System.Data.Department", b =>
+                {
+                    b.Navigation("Announcements");
+
+                    b.Navigation("Users");
+                });
+
+            modelBuilder.Entity("Content_Management_System.Data.User", b =>
+                {
+                    b.Navigation("Announcements");
                 });
 #pragma warning restore 612, 618
         }

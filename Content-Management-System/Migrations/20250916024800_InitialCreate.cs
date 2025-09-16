@@ -12,6 +12,19 @@ namespace Content_Management_System.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
+                name: "Departments",
+                columns: table => new
+                {
+                    ID = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    DepartmentName = table.Column<string>(type: "TEXT", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Departments", x => x.ID);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Users",
                 columns: table => new
                 {
@@ -24,11 +37,18 @@ namespace Content_Management_System.Migrations
                     Password = table.Column<string>(type: "TEXT", nullable: false),
                     Salt = table.Column<string>(type: "TEXT", nullable: false),
                     Role = table.Column<int>(type: "INTEGER", nullable: false),
-                    CreatedAt = table.Column<DateTime>(type: "TEXT", nullable: false)
+                    CreatedAt = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    DepartmentID = table.Column<int>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Users", x => x.ID);
+                    table.ForeignKey(
+                        name: "FK_Users_Departments_DepartmentID",
+                        column: x => x.DepartmentID,
+                        principalTable: "Departments",
+                        principalColumn: "ID",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -43,11 +63,17 @@ namespace Content_Management_System.Migrations
                     UpdatedAt = table.Column<DateTime>(type: "TEXT", nullable: true),
                     AuthorID = table.Column<int>(type: "INTEGER", nullable: false),
                     IsActive = table.Column<bool>(type: "INTEGER", nullable: false),
-                    Attachment = table.Column<byte[]>(type: "BLOB", nullable: true)
+                    Attachment = table.Column<byte[]>(type: "BLOB", nullable: true),
+                    DepartmentID = table.Column<int>(type: "INTEGER", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Announcements", x => x.ID);
+                    table.ForeignKey(
+                        name: "FK_Announcements_Departments_DepartmentID",
+                        column: x => x.DepartmentID,
+                        principalTable: "Departments",
+                        principalColumn: "ID");
                     table.ForeignKey(
                         name: "FK_Announcements_Users_AuthorID",
                         column: x => x.AuthorID,
@@ -60,6 +86,16 @@ namespace Content_Management_System.Migrations
                 name: "IX_Announcements_AuthorID",
                 table: "Announcements",
                 column: "AuthorID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Announcements_DepartmentID",
+                table: "Announcements",
+                column: "DepartmentID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Users_DepartmentID",
+                table: "Users",
+                column: "DepartmentID");
         }
 
         /// <inheritdoc />
@@ -70,6 +106,9 @@ namespace Content_Management_System.Migrations
 
             migrationBuilder.DropTable(
                 name: "Users");
+
+            migrationBuilder.DropTable(
+                name: "Departments");
         }
     }
 }

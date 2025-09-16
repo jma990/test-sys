@@ -18,6 +18,18 @@ namespace Content_Management_System.Utilities
             bool adminExists = await _db.Users.AnyAsync(u => u.Role == UserRole.Admin);
             if (adminExists) return;
 
+            // Ensure "Admin" department exists
+            var adminDept = await _db.Departments.FirstOrDefaultAsync(d => d.DepartmentName == "Admin");
+            if (adminDept == null)
+            {
+                adminDept = new Department
+                {
+                    DepartmentName = "Admin"
+                };
+                _db.Departments.Add(adminDept);
+                await _db.SaveChangesAsync();  
+            }
+
             // Create default admin
             var salt = HashPassword.GenerateSalt();
             var admin = new User
@@ -29,7 +41,8 @@ namespace Content_Management_System.Utilities
                 Password = HashPassword.This("123456789", salt),
                 Salt = salt,
                 Role = UserRole.Admin,
-                CreatedAt = DateTime.Now
+                CreatedAt = DateTime.Now,
+                DepartmentID = adminDept.ID
             };
             _db.Users.Add(admin);
             await _db.SaveChangesAsync();

@@ -1,0 +1,37 @@
+﻿@page
+@model Content_Management_System.Pages.AnnouncementsModel
+@{
+}
+
+<!-- The Announcements -->
+@await Html.PartialAsync(@Url.Content(PathDirectory._AddAnnouncement), Model)
+<div class="d-flex align-items-center justify-content-between mb-3">
+    <h2 class="mb-0">Announcements</h2>
+    @if (User.IsInRole("Admin"))
+    {
+        <button type="button" class="btn btn-primary btn-sm rounded-circle" title="Add Announcement" data-bs-toggle="modal" data-bs-target="#AddAnnouncementModal">
+            <i class="bi bi-plus-lg"></i>
+        </button>
+    }
+</div>
+@if (Model.Announcements.Any())
+{
+    <ul>
+        @foreach (var announcement in Model.Announcements)
+        {
+            <li>
+                <strong>@announcement.Title</strong>  
+                <p>@announcement.Content</p>
+                <small>
+                    Posted on @announcement.CreatedAt.ToString("MMMM dd, yyyy") 
+                    by @announcement.Author?.FirstName @announcement.Author?.LastName
+                </small>
+            </li>
+        }
+    </ul>
+}
+else
+{
+    <p>No Announcements Found</p>
+}
+

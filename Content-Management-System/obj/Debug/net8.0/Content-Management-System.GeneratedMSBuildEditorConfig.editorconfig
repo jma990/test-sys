@@ -26,8 +26,8 @@ build_property.GenerateRazorMetadataSourceChecksumAttributes =
 build_property.MSBuildProjectDirectory = /workspaces/test-sys/Content-Management-System
 build_property._RazorSourceGeneratorDebug = 
 
-[/workspaces/test-sys/Content-Management-System/Pages/Dashboard.cshtml]
-build_metadata.AdditionalFiles.TargetPath = UGFnZXMvRGFzaGJvYXJkLmNzaHRtbA==
+[/workspaces/test-sys/Content-Management-System/Pages/Announcements.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXMvQW5ub3VuY2VtZW50cy5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
 [/workspaces/test-sys/Content-Management-System/Pages/Error.cshtml]
@@ -42,6 +42,10 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = UGFnZXMvTG9naW4uY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
+[/workspaces/test-sys/Content-Management-System/Pages/Logout.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXMvTG9nb3V0LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
 [/workspaces/test-sys/Content-Management-System/Pages/Shared/_ValidationScriptsPartial.cshtml]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXMvU2hhcmVkL19WYWxpZGF0aW9uU2NyaXB0c1BhcnRpYWwuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
@@ -52,6 +56,18 @@ build_metadata.AdditionalFiles.CssScope =
 
 [/workspaces/test-sys/Content-Management-System/Pages/_ViewStart.cshtml]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXMvX1ZpZXdTdGFydC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[/workspaces/test-sys/Content-Management-System/Views/Announcements/_AddAnnouncement.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvQW5ub3VuY2VtZW50cy9fQWRkQW5ub3VuY2VtZW50LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[/workspaces/test-sys/Content-Management-System/Views/Shared/Components/Navbar/Default.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvU2hhcmVkL0NvbXBvbmVudHMvTmF2YmFyL0RlZmF1bHQuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[/workspaces/test-sys/Content-Management-System/Views/_ViewImports.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvX1ZpZXdJbXBvcnRzLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
 [/workspaces/test-sys/Content-Management-System/Pages/Shared/_Layout.cshtml]
