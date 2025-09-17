@@ -8,6 +8,9 @@ public static class PathDirectory
     // Announcements Page and its Partial Views
     public const string AnnouncementsPage = "/Announcements";
     public const string _AddAnnouncement = "~/Views/Announcements/_AddAnnouncement.cshtml";
+
+    // AdminPosts Page and its Partial Views
+    public const string AdminPostsPage = "/AdminPosts";
     
     // Bootstrap
     public const string BootstrapCSS = "~/lib/bootstrap/dist/css/bootstrap.css";

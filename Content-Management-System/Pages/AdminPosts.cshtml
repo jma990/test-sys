@@ -1,0 +1,171 @@
+﻿@page
+@model Content_Management_System.Pages.AdminPostsModel
+@{
+}
+
+<h2>My Posts</h2>
+<div class="mb-3">
+    <label for="departmentFilter" class="form-label">Filter by Department:</label>
+    <select id="departmentFilter" class="form-select">
+        <option value="showAll" selected="@(Model.SelectedDepartmentID == "showAll")">
+            All Announcements
+        </option>
+        <option value="showForAllDepartments" selected="@(Model.SelectedDepartmentID == "showForAllDepartments")">
+            All Departments
+        </option>
+        @foreach (var dept in Model.Departments)
+        {
+            <option value="@dept.ID" selected="@(Model.SelectedDepartmentID == dept.ID.ToString())">
+                @dept.DepartmentName
+            </option>
+        }
+    </select>
+
+</div>
+<form method="get" id="departmentForm">
+    <input type="hidden" name="SelectedDepartmentID" value="@Model.SelectedDepartmentID" />
+</form>
+
+
+@Html.AntiForgeryToken()
+
+<table class="table table-sm">
+    <thead>
+        <tr>
+            <th>Title</th>
+            <th>Content</th>
+            <th>Created At</th>
+            <th>Updated At</th>
+            <th>Link</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var post in Model.MyPosts)
+        {
+            <tr data-id="@post.ID">
+                <td class="view-mode">@post.Title</td>
+                <td class="view-mode">@post.Content</td>
+                <td>@post.CreatedAt.ToString("MM/dd/yyyy hh:mm tt")</td>
+                <td>@(post.UpdatedAt.HasValue ? post.UpdatedAt.Value.ToString("MM/dd/yyyy hh:mm tt") : "")</td>
+                <td class="view-mode">
+                    @if (!string.IsNullOrWhiteSpace(post.Link))
+                    {
+                        <a href="@post.Link" target="_blank">View</a>
+                    }
+                </td>
+                <td>
+                    <button type="button" class="btn btn-sm btn-link edit-btn"><i class="bi bi-pencil"></i></button>
+                    <button type="button" class="btn btn-sm btn-link save-btn d-none"><i class="bi bi-check-lg"></i></button>
+
+                    <!-- Keep the real inputs inside this form so they'll be posted -->
+                    <form class="edit-form d-none" method="post" asp-page-handler="Edit">
+                        @Html.AntiForgeryToken()
+                        <input type="hidden" name="EditID" value="@post.ID" />
+                        <input type="hidden" name="SelectedDepartmentID" value="@Model.SelectedDepartmentID" />
+                        <input type="text" name="EditTitle" class="form-control form-control-sm" />
+                        <input type="text" name="EditContent" class="form-control form-control-sm" />
+                        <input type="url" name="EditLink" class="form-control form-control-sm" />
+                    </form>
+                </td>
+            </tr>
+        }
+
+    </tbody>
+</table>
+
+@section Scripts {
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            // Edit the announcement
+            const rows = document.querySelectorAll("table tbody tr");
+            rows.forEach((row, rowIndex) => {
+                const editBtn = row.querySelector(".edit-btn");
+                const saveBtn = row.querySelector(".save-btn");
+                const form = row.querySelector(".edit-form");
+                const realInputs = form.querySelectorAll("input[type=text], input[type=url]");
+
+                editBtn.addEventListener("click", () => {
+                    const viewCells = row.querySelectorAll(".view-mode");
+
+                    // Show the form controls visually by placing *clones* into the cells
+                    viewCells.forEach((td, i) => {
+                        // set link to original value
+                        let text;
+                        if (i === 2 && td.querySelector("a")) { // Link column
+                            text = td.querySelector("a").href;
+                        } 
+                        else {
+                            text = td.textContent.trim();
+                        }
+                        realInputs[i].value = text;
+
+                        // create an editable clone for the user to interact with
+                        const clone = realInputs[i].cloneNode(true);
+                        // remove name from clone so it doesn't get confused in other contexts (not strictly necessary)
+                        clone.removeAttribute('name');
+
+                        // make sure clone shows current value
+                        clone.value = realInputs[i].value;
+
+                        // style: ensure the clone looks like a normal inline element inside the cell
+                        clone.classList.add('form-control', 'form-control-sm');
+                        clone.style.display = ''; // visible
+
+                        // sync clone -> real input on input events
+                        clone.addEventListener('input', () => {
+                            realInputs[i].value = clone.value;
+                        });
+
+                        // clear the cell and append the clone
+                        td.innerHTML = '';
+                        td.appendChild(clone);
+                    });
+
+                    editBtn.classList.add("d-none");
+                    saveBtn.classList.remove("d-none");
+                    form.classList.remove("d-none");
+                    form.style.display = 'none';
+                });
+
+                saveBtn.addEventListener("click", (e) => {
+                    e.preventDefault();
+                    const title = realInputs[0].value.trim();
+                    const content = realInputs[1].value.trim();
+                    const link = realInputs[2].value.trim();
+
+                    const clones = row.querySelectorAll(".view-mode input");
+                    clones.forEach((c, i) => {
+                        if (realInputs[i]) realInputs[i].value = c.value;
+                    });
+
+                    form.submit();
+                });
+            });
+
+            // SweetAlert popup if invalid user input
+            @if (!string.IsNullOrEmpty(Model.AlertMessage))
+            {
+                <text>
+                Swal.fire({
+                    icon: '@Model.AlertType',
+                    title: '@Model.AlertMessage',
+                    confirmButtonText: 'OK'
+                });
+                </text>
+
+                // Clear TempData so it doesn't show again
+                @TempData.Remove("AlertMessage");
+                @TempData.Remove("AlertType");
+            }
+            // -----------------------------
+        });
+
+        // Department filter change
+        document.getElementById('departmentFilter').addEventListener('change', function() {
+            var form = document.getElementById('departmentForm');
+            form.querySelector('input[name="SelectedDepartmentID"]').value = this.value;
+            form.submit();
+        });
+    </script>
+}
