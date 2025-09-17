@@ -6,6 +6,7 @@ using Content_Management_System.Utilities;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddRazorPages();
+builder.Services.AddControllers(); 
 builder.Services.AddSession();
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
@@ -16,6 +17,10 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
         options.LoginPath = PathDirectory.LoginPage;
         options.ExpireTimeSpan = TimeSpan.FromDays(30);
     });
+builder.Services.AddAntiforgery(options =>
+{
+    options.HeaderName = "RequestVerificationToken";  
+});
 
 var app = builder.Build();
 
@@ -42,5 +47,5 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapRazorPages();
-
+app.MapControllers(); 
 app.Run();

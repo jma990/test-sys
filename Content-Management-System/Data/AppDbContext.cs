@@ -13,6 +13,7 @@ namespace Content_Management_System.Data
 
     public enum UserRole
     {
+        SuperAdmin = 0,
         Admin = 1,
         Member = 2
     }
@@ -47,8 +48,9 @@ namespace Content_Management_System.Data
         public int AuthorID { get; set; }
         public User? Author { get; set; }
         public bool IsActive { get; set; } = true;
+        public string? Link { get; set; }
         public byte[]? Attachment { get; set; }
-
+        
         // Optional link to Department (for department-specific announcements)
         public int? DepartmentID { get; set; }
         public Department? Department { get; set; }

@@ -22,8 +22,16 @@
             <li>
                 <strong>@announcement.Title</strong>  
                 <p>@announcement.Content</p>
+                @if (!string.IsNullOrWhiteSpace(announcement.Link))
+                {
+                    <div>
+                        <a href="@announcement.Link" target="_blank" rel="noopener noreferrer">
+                            View More
+                        </a>
+                    </div>
+                }
                 <small>
-                    Posted on @announcement.CreatedAt.ToString("MMMM dd, yyyy") 
+                    Posted on @announcement.CreatedAt.ToString("MMMM dd, yyyy hh:mm tt") 
                     by @announcement.Author?.FirstName @announcement.Author?.LastName
                 </small>
             </li>

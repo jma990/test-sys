@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Content_Management_System.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250916024800_InitialCreate")]
+    [Migration("20250917030105_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -44,6 +44,9 @@ namespace Content_Management_System.Migrations
 
                     b.Property<bool>("IsActive")
                         .HasColumnType("INTEGER");
+
+                    b.Property<string>("Link")
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("Title")
                         .IsRequired()

@@ -28,43 +28,6 @@ namespace Content_Management_System.Pages
             await LoadAnnouncementsAsync();
             
         }
-
-        /*
-        public async Task<IActionResult> OnPostAddAnnouncementAsync()
-        {
-            if (!ModelState.IsValid)
-            {
-                await LoadAnnouncementsAsync();
-                return Page();
-            }
-            
-            // Get logged-in user's ID from claims
-            var userIDClaim = User.FindFirst(ClaimTypes.NameIdentifier);
-            if (userIDClaim == null)
-            {
-                // No user logged in — force logout (failsafe)
-                await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
-                return RedirectToPage(PathDirectory.LoginPage);
-            }
-
-            int userID = int.Parse(userIDClaim.Value);
-
-            var announcement = new Announcement
-            {
-                Title = Title,
-                Content = Content,
-                AuthorID = userID, 
-                CreatedAt = DateTime.Now,
-                IsActive = true
-            };
-
-            _db.Announcements.Add(announcement);
-            await _db.SaveChangesAsync();
-
-            return RedirectToPage(); // reload page and show new announcement
-        }
-        */
-
         // ----------------- Helpers -----------------
 
         private async Task LoadAnnouncementsAsync()

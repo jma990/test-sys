@@ -12,4 +12,7 @@ public static class PathDirectory
     // Bootstrap
     public const string BootstrapCSS = "~/lib/bootstrap/dist/css/bootstrap.css";
     public const string BootstrapJS = "~/lib/bootstrap/dist/js/bootstrap.bundle.min.js";
+
+    // Javascript
+    public const string SiteJS = "~/js/site.js";
 }

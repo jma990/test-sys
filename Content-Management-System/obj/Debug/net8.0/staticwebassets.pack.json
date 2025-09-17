@@ -9,6 +9,10 @@
       "PackagePath": "staticwebassets/favicon.ico"
     },
     {
+      "Id": "/workspaces/test-sys/Content-Management-System/wwwroot/js/site.js",
+      "PackagePath": "staticwebassets/js/site.js"
+    },
+    {
       "Id": "/workspaces/test-sys/Content-Management-System/wwwroot/lib/bootstrap/LICENSE",
       "PackagePath": "staticwebassets/lib/bootstrap"
     },

@@ -63,6 +63,7 @@ namespace Content_Management_System.Migrations
                     UpdatedAt = table.Column<DateTime>(type: "TEXT", nullable: true),
                     AuthorID = table.Column<int>(type: "INTEGER", nullable: false),
                     IsActive = table.Column<bool>(type: "INTEGER", nullable: false),
+                    Link = table.Column<string>(type: "TEXT", nullable: true),
                     Attachment = table.Column<byte[]>(type: "BLOB", nullable: true),
                     DepartmentID = table.Column<int>(type: "INTEGER", nullable: true)
                 },

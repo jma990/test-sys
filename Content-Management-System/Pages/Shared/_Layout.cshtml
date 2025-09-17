@@ -6,7 +6,9 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <link href="@Url.Content(PathDirectory.BootstrapCSS)" rel="stylesheet" />
     <script src="@Url.Content(PathDirectory.BootstrapJS)"></script>
-
+    <script src="@Url.Content(PathDirectory.SiteJS)"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <title>Hello World</title>
 </head>
 <body>
@@ -17,5 +19,6 @@
         }
     </header>
     @RenderBody()
+    @RenderSection("Scripts", required: false)
 </body>
 </html>
