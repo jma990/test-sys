@@ -26,6 +26,10 @@
                 <small>
                     Posted on @announcement.CreatedAt.ToString("MMMM dd, yyyy hh:mm tt") 
                     by @announcement.Author?.FirstName @announcement.Author?.LastName
+                    @if (announcement.UpdatedAt.HasValue && announcement.UpdatedAt > announcement.CreatedAt)
+                    {
+                        <span> | Updated on @announcement.UpdatedAt.Value.ToString("MMMM dd, yyyy hh:mm tt")</span>
+                    }
                 </small>
             </li>
         }
