@@ -17,7 +17,8 @@ namespace Content_Management_System.Migrations
                 {
                     ID = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
-                    DepartmentName = table.Column<string>(type: "TEXT", nullable: false)
+                    DepartmentName = table.Column<string>(type: "TEXT", nullable: false),
+                    IsActive = table.Column<bool>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
                 {

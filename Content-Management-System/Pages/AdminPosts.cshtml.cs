@@ -31,15 +31,23 @@ namespace Content_Management_System.Pages
         [BindProperty]
         public string? EditLink { get; set; }
 
+        [BindProperty]
+        public bool EditIsActive { get; set; }
+
         // TempData for SweetAlert message
         [TempData]
-        public string? AlertMessage { get; set; }
+        public string? AlertMessage { get; set; } 
 
         [TempData]
-        public string? AlertType { get; set; } // "error", "success", etc.
+        public string? AlertType { get; set; }  
+
+        // For filtering
+        [BindProperty(SupportsGet = true)]
+        public string? SelectedDepartmentID { get; set; } = "showAll";
 
         [BindProperty(SupportsGet = true)]
-        public string? SelectedDepartmentID { get; set; } 
+        public string SelectedStatus { get; set; } = "all"; 
+
 
         public async Task<IActionResult> OnGetAsync()
         {
@@ -68,6 +76,14 @@ namespace Content_Management_System.Pages
                 {
                     query = query.Where(a => a.DepartmentID == deptId);
                 }
+            }
+
+            if (!string.IsNullOrEmpty(SelectedStatus) && SelectedStatus != "all")
+            {
+                if (SelectedStatus == "active")
+                    query = query.Where(a => a.IsActive);
+                else if (SelectedStatus == "inactive")
+                    query = query.Where(a => !a.IsActive);
             }
 
             MyPosts = await query
@@ -109,7 +125,10 @@ namespace Content_Management_System.Pages
 
             // --- SKIP IF NOTHING CHANGED ---
             var newLink = string.IsNullOrWhiteSpace(EditLink) ? null : EditLink;
-            if (announcement.Title == EditTitle && announcement.Content == EditContent && announcement.Link == newLink)
+            if (announcement.Title == EditTitle &&
+                announcement.Content == EditContent &&
+                announcement.Link == newLink &&
+                announcement.IsActive == EditIsActive)
             {
                 return await ValidationError("No changes detected.", "info");
             }
@@ -118,6 +137,7 @@ namespace Content_Management_System.Pages
             announcement.Title = EditTitle;
             announcement.Content = EditContent;
             announcement.Link = string.IsNullOrWhiteSpace(EditLink) ? null : EditLink;
+            announcement.IsActive = EditIsActive;
             announcement.UpdatedAt = TimezoneHelper.NowPH();
 
             await _db.SaveChangesAsync();
@@ -126,7 +146,7 @@ namespace Content_Management_System.Pages
             AlertMessage = "Update successful!";
             AlertType = "success";
 
-            return RedirectToPage(new { SelectedDepartmentID });
+            return RedirectToPage(new { SelectedDepartmentID, SelectedStatus });
         }
 
         private async Task<IActionResult> ValidationError(string message, string type)

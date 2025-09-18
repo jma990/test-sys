@@ -11,6 +11,12 @@ public static class PathDirectory
 
     // AdminPosts Page and its Partial Views
     public const string AdminPostsPage = "/AdminPosts";
+
+    // Departments Page and its Partial Views
+    public const string DepartmentsPage = "/Departments";
+
+    // AccountCreation Page and its Partial Views
+    public const string AccountCreationPage = "/AccountCreation";
     
     // Bootstrap
     public const string BootstrapCSS = "~/lib/bootstrap/dist/css/bootstrap.css";

@@ -26,12 +26,20 @@ build_property.GenerateRazorMetadataSourceChecksumAttributes =
 build_property.MSBuildProjectDirectory = /workspaces/test-sys/Content-Management-System
 build_property._RazorSourceGeneratorDebug = 
 
+[/workspaces/test-sys/Content-Management-System/Pages/AccountCreation.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXMvQWNjb3VudENyZWF0aW9uLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
 [/workspaces/test-sys/Content-Management-System/Pages/AdminPosts.cshtml]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXMvQWRtaW5Qb3N0cy5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
 [/workspaces/test-sys/Content-Management-System/Pages/Announcements.cshtml]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXMvQW5ub3VuY2VtZW50cy5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[/workspaces/test-sys/Content-Management-System/Pages/Departments.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXMvRGVwYXJ0bWVudHMuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
 [/workspaces/test-sys/Content-Management-System/Pages/Error.cshtml]

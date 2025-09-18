@@ -43,7 +43,7 @@ namespace Content_Management_System.Data
         public int ID { get; set; }
         public required string Title { get; set; }
         public required string Content { get; set; }
-        public DateTime CreatedAt { get; set; } = DateTime.Now;
+        public DateTime CreatedAt { get; set; }
         public DateTime? UpdatedAt { get; set; }
         public int AuthorID { get; set; }
         public User? Author { get; set; }
@@ -60,6 +60,7 @@ namespace Content_Management_System.Data
     {
         public int ID { get; set; }
         public required string DepartmentName { get; set; }
+        public bool IsActive { get; set; }
 
         // One department can have many users
         public ICollection<User> Users { get; set; } = new List<User>();

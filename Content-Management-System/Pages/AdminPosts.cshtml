@@ -3,7 +3,15 @@
 @{
 }
 
+@await Html.PartialAsync(@Url.Content(PathDirectory._AddAnnouncement), Model)
 <h2>My Posts</h2>
+@if ((User.IsInRole("Admin")) || User.IsInRole("SuperAdmin"))
+{
+    <button type="button" class="btn btn-primary btn-sm rounded-circle" title="Add Announcement" data-bs-toggle="modal" data-bs-target="#AddAnnouncementModal">
+        <i class="bi bi-plus-lg"></i>
+    </button>
+}
+
 <div class="mb-3">
     <label for="departmentFilter" class="form-label">Filter by Department:</label>
     <select id="departmentFilter" class="form-select">
@@ -20,10 +28,20 @@
             </option>
         }
     </select>
-
 </div>
+<div class="mb-3">
+    <label for="statusFilter" class="form-label">Filter by Status:</label>
+    <select id="statusFilter" class="form-select">
+        <option value="all" selected="@(Model.SelectedStatus == "all")">All</option>
+        <option value="active" selected="@(Model.SelectedStatus == "active")">Active</option>
+        <option value="inactive" selected="@(Model.SelectedStatus == "inactive")">Inactive</option>
+    </select>
+</div>
+
+
 <form method="get" id="departmentForm">
     <input type="hidden" name="SelectedDepartmentID" value="@Model.SelectedDepartmentID" />
+    <input type="hidden" name="SelectedStatus" value="@Model.SelectedStatus" />
 </form>
 
 
@@ -37,6 +55,7 @@
             <th>Created At</th>
             <th>Updated At</th>
             <th>Link</th>
+            <th>Status</th>
             <th>Action</th>
         </tr>
     </thead>
@@ -54,6 +73,16 @@
                         <a href="@post.Link" target="_blank">View</a>
                     }
                 </td>
+                <td class="view-mode status-cell">
+                    @if (post.IsActive)
+                    {
+                        <span class="badge bg-success">Active</span>
+                    }
+                    else
+                    {
+                        <span class="badge bg-secondary">Inactive</span>
+                    }
+                </td>
                 <td>
                     <button type="button" class="btn btn-sm btn-link edit-btn"><i class="bi bi-pencil"></i></button>
                     <button type="button" class="btn btn-sm btn-link save-btn d-none"><i class="bi bi-check-lg"></i></button>
@@ -63,9 +92,11 @@
                         @Html.AntiForgeryToken()
                         <input type="hidden" name="EditID" value="@post.ID" />
                         <input type="hidden" name="SelectedDepartmentID" value="@Model.SelectedDepartmentID" />
+                        <input type="hidden" name="SelectedStatus" value="@Model.SelectedStatus" />
                         <input type="text" name="EditTitle" class="form-control form-control-sm" />
                         <input type="text" name="EditContent" class="form-control form-control-sm" />
                         <input type="url" name="EditLink" class="form-control form-control-sm" />
+                        <input type="checkbox" name="EditIsActive" value="true" @(post.IsActive ? "checked" : "") /> Active
                     </form>
                 </td>
             </tr>
@@ -83,14 +114,31 @@
                 const editBtn = row.querySelector(".edit-btn");
                 const saveBtn = row.querySelector(".save-btn");
                 const form = row.querySelector(".edit-form");
-                const realInputs = form.querySelectorAll("input[type=text], input[type=url]");
+                const realInputs = form.querySelectorAll("input[type=text], input[type=url], input[type=checkbox]");
+
 
                 editBtn.addEventListener("click", () => {
                     const viewCells = row.querySelectorAll(".view-mode");
 
                     // Show the form controls visually by placing *clones* into the cells
                     viewCells.forEach((td, i) => {
-                        // set link to original value
+                        // Handle Status cell separately
+                        if (td.classList.contains("status-cell")) {
+                            const realCheckbox = form.querySelector('input[type=checkbox][name="EditIsActive"]');
+                            const checkboxClone = realCheckbox.cloneNode(true);
+                            checkboxClone.removeAttribute("name");
+                            checkboxClone.checked = realCheckbox.checked;
+
+                            checkboxClone.addEventListener("change", () => {
+                                realCheckbox.checked = checkboxClone.checked;
+                            });
+
+                            td.innerHTML = "";
+                            td.appendChild(checkboxClone);
+                            return;
+                        }
+
+                        // Handle Title / Content / Link normally
                         let text;
                         if (i === 2 && td.querySelector("a")) { // Link column
                             text = td.querySelector("a").href;
@@ -136,7 +184,11 @@
 
                     const clones = row.querySelectorAll(".view-mode input");
                     clones.forEach((c, i) => {
-                        if (realInputs[i]) realInputs[i].value = c.value;
+                        if (realInputs[i].type === "checkbox") {
+                            realInputs[i].checked = c.checked;
+                        } else {
+                            realInputs[i].value = c.value;
+                        }
                     });
 
                     form.submit();
@@ -165,6 +217,13 @@
         document.getElementById('departmentFilter').addEventListener('change', function() {
             var form = document.getElementById('departmentForm');
             form.querySelector('input[name="SelectedDepartmentID"]').value = this.value;
+            form.submit();
+        });
+
+        // Status filter change
+        document.getElementById('statusFilter').addEventListener('change', function () {
+            var form = document.getElementById('departmentForm');
+            form.querySelector('input[name="SelectedStatus"]').value = this.value;
             form.submit();
         });
     </script>

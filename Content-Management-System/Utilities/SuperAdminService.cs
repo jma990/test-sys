@@ -4,19 +4,19 @@ using System.Diagnostics;
 
 namespace Content_Management_System.Utilities
 {
-    public class AdminService
+    public class SuperAdminService
     {
         private readonly AppDbContext _db;
-        public AdminService(AppDbContext db)
+        public SuperAdminService(AppDbContext db)
         {
             _db = db;
         }
 
-        public async Task CreateAdmin()
+        public async Task CreateSuperAdmin()
         {
-            // Check if an admin already exists
-            bool adminExists = await _db.Users.AnyAsync(u => u.Role == UserRole.Admin);
-            if (adminExists) return;
+            // Check if an super admin already exists
+            bool superAdminExists = await _db.Users.AnyAsync(u => u.Role == UserRole.SuperAdmin);
+            if (superAdminExists) return;
 
             // Ensure "Admin" department exists
             var adminDept = await _db.Departments.FirstOrDefaultAsync(d => d.DepartmentName == "Admin");
@@ -24,7 +24,8 @@ namespace Content_Management_System.Utilities
             {
                 adminDept = new Department
                 {
-                    DepartmentName = "Admin"
+                    DepartmentName = "Admin",
+                    IsActive = true
                 };
                 _db.Departments.Add(adminDept);
                 await _db.SaveChangesAsync();  
@@ -33,9 +34,9 @@ namespace Content_Management_System.Utilities
             // Seed default departments if they don't exist (TEMPORARY!!)
             await SeedDepartments();
 
-            // Create default admin
+            // Create default super admin
             var salt = HashPassword.GenerateSalt();
-            var admin = new User
+            var superAdmin = new User
             {
                 FirstName = "John Matthew",
                 MiddleName = "Nemis",
@@ -43,11 +44,11 @@ namespace Content_Management_System.Utilities
                 Email = "jmaustria665@gmail.com",
                 Password = HashPassword.This("123456789", salt),
                 Salt = salt,
-                Role = UserRole.Admin,
+                Role = UserRole.SuperAdmin,
                 CreatedAt = DateTime.Now,
                 DepartmentID = adminDept.ID
             };
-            _db.Users.Add(admin);
+            _db.Users.Add(superAdmin);
             await _db.SaveChangesAsync();
         }
 
@@ -68,7 +69,7 @@ namespace Content_Management_System.Utilities
             {
                 if (!await _db.Departments.AnyAsync(d => d.DepartmentName == deptName))
                 {
-                    _db.Departments.Add(new Department { DepartmentName = deptName });
+                    _db.Departments.Add(new Department { DepartmentName = deptName, IsActive = true });
                 }
             }
 

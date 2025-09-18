@@ -71,6 +71,9 @@ namespace Content_Management_System.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("INTEGER");
+
                     b.HasKey("ID");
 
                     b.ToTable("Departments");

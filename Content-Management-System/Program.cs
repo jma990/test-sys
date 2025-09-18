@@ -10,7 +10,7 @@ builder.Services.AddControllers();
 builder.Services.AddSession();
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
-builder.Services.AddScoped<AdminService>();
+builder.Services.AddScoped<SuperAdminService>();
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
     .AddCookie(options =>
     {
@@ -24,11 +24,11 @@ builder.Services.AddAntiforgery(options =>
 
 var app = builder.Build();
 
-// Create the first admin if admin does not exists
+// Create the two only super admins if none exists
 using (var scope = app.Services.CreateScope())
 {
-    var adminService = scope.ServiceProvider.GetRequiredService<AdminService>();
-    await adminService.CreateAdmin();
+    var superAdminService = scope.ServiceProvider.GetRequiredService<SuperAdminService>();
+    await superAdminService.CreateSuperAdmin();
 }
 
 if (!app.Environment.IsDevelopment())
