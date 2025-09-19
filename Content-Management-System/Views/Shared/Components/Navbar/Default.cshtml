@@ -10,18 +10,31 @@
 
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav me-auto">
-                <li class="nav-item">
-                    <a class="nav-link" href="@Url.Content(PathDirectory.AnnouncementsPage)">Announcements</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="@Url.Content(PathDirectory.AdminPostsPage)">My Posts</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="@Url.Content(PathDirectory.DepartmentsPage)">Departments</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="@Url.Content(PathDirectory.AccountCreationPage)">Users</a>
-                </li>
+                @if (Model.Role == nameof(UserRole.Admin) || Model.Role == nameof(UserRole.Member))
+                {
+                    <li class="nav-item">
+                        <a class="nav-link" href="@Url.Content(PathDirectory.AnnouncementsPage)">Announcements</a>
+                    </li>
+                }       
+
+                @if (Model.Role == nameof(UserRole.Admin))
+                {
+                    <li class="nav-item">
+                        <a class="nav-link" href="@Url.Content(PathDirectory.AdminPostsPage)">My Posts</a>
+                    </li>
+                }
+
+                @if (Model.Role == nameof(UserRole.SuperAdmin) || Model.Role == nameof(UserRole.Admin))
+                {
+                    <li class="nav-item">
+                        <a class="nav-link" href="@Url.Content(PathDirectory.DepartmentsPage)">Departments</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="@Url.Content(PathDirectory.AccountCreationPage)">Users</a>
+                    </li>
+                }
+                
+                
             </ul>
             <ul class="navbar-nav ms-auto">
                 @if (Model?.UserName != null)

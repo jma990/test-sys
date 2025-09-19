@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
+using System.Security.Claims;
 using Content_Management_System.Data;
 using Content_Management_System.Utilities;
 
@@ -30,7 +31,7 @@ namespace Content_Management_System.Pages
 
         public async Task<IActionResult> OnGetAsync()
         {
-            var userIdClaim = User.FindFirst("UserID")?.Value;
+            var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             if (string.IsNullOrEmpty(userIdClaim) || !int.TryParse(userIdClaim, out int userId))
             {
                 return RedirectToPage(PathDirectory.LoginPage);
@@ -56,7 +57,7 @@ namespace Content_Management_System.Pages
                 return Page();
 
             // Get current logged-in user
-            var userIdClaim = User.FindFirst("UserID")?.Value;
+            var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             if (string.IsNullOrEmpty(userIdClaim) || !int.TryParse(userIdClaim, out int userId))
             {
                 return RedirectToPage(PathDirectory.LoginPage);
@@ -76,6 +77,9 @@ namespace Content_Management_System.Pages
 
             _db.Users.Update(user);
             await _db.SaveChangesAsync();
+
+            // Refresh cookie so it has updated MustChangePassword = false
+            await CookieService.CreateCookieAsync(HttpContext, user.ID, user.Email, user.Role.ToString(), user.MustChangePassword);
 
             // Redirect to announcements
             return RedirectToPage(PathDirectory.AnnouncementsPage);

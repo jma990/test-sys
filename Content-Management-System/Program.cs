@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Content_Management_System.Data;
 using Content_Management_System.Utilities;
+using Content_Management_System.PageFilters;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,12 +12,31 @@ builder.Services.AddSession();
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
 builder.Services.AddScoped<SuperAdminService>();
+builder.Services.AddScoped<AuthPageFilter>();
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
     .AddCookie(options =>
     {
         options.LoginPath = PathDirectory.LoginPage;
         options.ExpireTimeSpan = TimeSpan.FromDays(30);
+
+        options.Events = new CookieAuthenticationEvents
+        {
+            OnRedirectToLogin = context =>
+            {
+                // If user must change password, allow redirect to that page instead of login
+                if (context.HttpContext.User.HasClaim(c => c.Type == "MustChangePassword" && c.Value == "True"))
+                {
+                    context.Response.Redirect(PathDirectory.MandatoryPasswordChangePage);
+                }
+                else
+                {
+                    context.Response.Redirect(PathDirectory.LoginPage);
+                }
+                return Task.CompletedTask;
+            }
+        };
     });
+
 builder.Services.AddAntiforgery(options =>
 {
     options.HeaderName = "RequestVerificationToken";  

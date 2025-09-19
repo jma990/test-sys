@@ -5,9 +5,11 @@ using System.Security.Claims;
 using System.Text.RegularExpressions;
 using Content_Management_System.Data;
 using Content_Management_System.Utilities;
+using Content_Management_System.PageFilters;
 
 namespace Content_Management_System.Pages
 {
+    [ServiceFilter(typeof(AuthPageFilter))]
     public class AdminPostsModel : PageModel
     {
         private readonly AppDbContext _db;

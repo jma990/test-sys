@@ -14,10 +14,19 @@ public class IndexModel : PageModel
     {
         if (User.Identity?.IsAuthenticated == true)
         {
+            // Check MustChangePassword claim
             if (User.HasClaim(c => c.Type == "MustChangePassword" && c.Value == "True"))
                 return RedirectToPage(PathDirectory.MandatoryPasswordChangePage);
 
-            return RedirectToPage(PathDirectory.AnnouncementsPage);
+            // Get user role from claims
+            var role = User.FindFirst(ClaimTypes.Role)?.Value;
+
+            return role switch
+            {
+                nameof(UserRole.SuperAdmin) => RedirectToPage(PathDirectory.AccountCreationPage),
+                nameof(UserRole.Admin) or nameof(UserRole.Member) => RedirectToPage(PathDirectory.AnnouncementsPage),
+                _ => RedirectToPage(PathDirectory.AnnouncementsPage)
+            };
         }
 
         return RedirectToPage(PathDirectory.LoginPage);

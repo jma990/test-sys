@@ -2,9 +2,11 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using Content_Management_System.Data;
+using Content_Management_System.PageFilters;
 
 namespace Content_Management_System.Pages
 {
+    [ServiceFilter(typeof(AuthPageFilter))]
     public class DepartmentsModel : PageModel
     {
         private readonly AppDbContext _db;

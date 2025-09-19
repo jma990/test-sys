@@ -6,9 +6,11 @@ using System.Security.Cryptography;
 using System.ComponentModel.DataAnnotations;
 using Content_Management_System.Data;
 using Content_Management_System.Utilities;
+using Content_Management_System.PageFilters;
 
 namespace Content_Management_System.Pages
 {
+    [ServiceFilter(typeof(AuthPageFilter))]
     public class AccountCreationModel : PageModel
     {
         private readonly AppDbContext _db;

@@ -55,7 +55,12 @@ namespace Content_Management_System.Pages
                 return RedirectToPage(PathDirectory.MandatoryPasswordChangePage);
             }
 
-            return RedirectToPage(PathDirectory.AnnouncementsPage);
+            return user.Role switch
+            {
+                UserRole.SuperAdmin => RedirectToPage(PathDirectory.AccountCreationPage),
+                UserRole.Admin or UserRole.Member => RedirectToPage(PathDirectory.AnnouncementsPage),
+                _ => RedirectToPage(PathDirectory.AnnouncementsPage)  
+            };
         }
     }
 }
