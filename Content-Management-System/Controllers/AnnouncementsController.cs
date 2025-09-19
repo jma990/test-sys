@@ -22,6 +22,7 @@ namespace Content_Management_System.Controllers
         public IActionResult GetDepartments()
         {
             var departments = _db.Departments
+                .Where(d => d.ID != 1) // exclude DepartmentID 1 (Super Admin)
                 .Select(d => new { d.ID, d.DepartmentName })
                 .ToList();
 

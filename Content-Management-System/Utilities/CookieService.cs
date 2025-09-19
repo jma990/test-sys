@@ -7,13 +7,14 @@ namespace Content_Management_System.Utilities
 {
     public static class CookieService
     {
-        public static async Task CreateCookieAsync(HttpContext httpContext, int userId, string email, string role)
+        public static async Task CreateCookieAsync(HttpContext httpContext, int userId, string email, string role, bool mustChangePassword)
         {
             var claims = new List<Claim>
             {
                 new Claim(ClaimTypes.NameIdentifier, userId.ToString()),
                 new Claim(ClaimTypes.Name, email),
-                new Claim(ClaimTypes.Role, role)
+                new Claim(ClaimTypes.Role, role),
+                new Claim("MustChangePassword", mustChangePassword.ToString())
             };
 
             var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);

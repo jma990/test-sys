@@ -4,6 +4,7 @@ public static class PathDirectory
 {
     public const string LoginPage = "/Login";
     public const string LogoutPage = "/Logout";
+    public const string MandatoryPasswordChangePage = "/MandatoryPasswordChange";
 
     // Announcements Page and its Partial Views
     public const string AnnouncementsPage = "/Announcements";

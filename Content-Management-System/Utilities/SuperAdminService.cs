@@ -24,7 +24,7 @@ namespace Content_Management_System.Utilities
             {
                 adminDept = new Department
                 {
-                    DepartmentName = "Admin",
+                    DepartmentName = "Super Admin",
                     IsActive = true
                 };
                 _db.Departments.Add(adminDept);
@@ -46,6 +46,7 @@ namespace Content_Management_System.Utilities
                 Salt = salt,
                 Role = UserRole.SuperAdmin,
                 CreatedAt = DateTime.Now,
+                MustChangePassword = false,
                 DepartmentID = adminDept.ID
             };
             _db.Users.Add(superAdmin);

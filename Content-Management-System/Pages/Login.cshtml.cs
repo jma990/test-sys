@@ -46,7 +46,15 @@ namespace Content_Management_System.Pages
                 ModelState.AddModelError("Password", "Invalid email or password.");
                 return Page();
             }
-            await CookieService.CreateCookieAsync(HttpContext, user.ID, user.Email, user.Role.ToString());
+
+            await CookieService.CreateCookieAsync(HttpContext, user.ID, user.Email, user.Role.ToString(), user.MustChangePassword);
+
+            // Redirect based on MustChangePassword flag
+            if (user.MustChangePassword)
+            {
+                return RedirectToPage(PathDirectory.MandatoryPasswordChangePage);
+            }
+
             return RedirectToPage(PathDirectory.AnnouncementsPage);
         }
     }

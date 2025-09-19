@@ -2,30 +2,25 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Authentication;  
 using Microsoft.AspNetCore.Authentication.Cookies;
+using System.Security.Claims;
 using Content_Management_System.Data;
+using Content_Management_System.Utilities;
 
 namespace Content_Management_System.Pages;
 
 public class IndexModel : PageModel
 {
-    public IndexModel()
-    {
-    }
     public async Task<IActionResult> OnGet()
     {
-        // If user is already authenticated, redirect to dashboard
-        if (User.Identity != null && User.Identity.IsAuthenticated)
+        if (User.Identity?.IsAuthenticated == true)
         {
-            return RedirectToPage(PathDirectory.AnnouncementsPage);
-        }
+            if (User.HasClaim(c => c.Type == "MustChangePassword" && c.Value == "True"))
+                return RedirectToPage(PathDirectory.MandatoryPasswordChangePage);
 
-        // Check for authentication cookie
-        var result = await HttpContext.AuthenticateAsync(CookieAuthenticationDefaults.AuthenticationScheme);
-        if (result.Succeeded && result.Principal != null)
-        {
             return RedirectToPage(PathDirectory.AnnouncementsPage);
         }
 
         return RedirectToPage(PathDirectory.LoginPage);
     }
+
 }

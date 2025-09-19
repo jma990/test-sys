@@ -3,4 +3,64 @@
 @{
 }
 
-hello world
+<h2>Create Account</h2>
+
+@if (TempData["Message"] != null)
+{
+    <div class="alert alert-info">
+        @TempData["Message"]
+    </div>
+}
+
+<form method="post">
+    <div class="mb-3">
+        <label class="form-label">First Name</label><span class="text-danger">*</span>
+        <input asp-for="FirstName" class="form-control" />
+        @Html.ValidationMessageFor(m => m.FirstName, "", new { @class = "text-danger" })
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Middle Name</label>
+        <input asp-for="MiddleName" class="form-control" />
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Last Name</label><span class="text-danger">*</span>
+        <input asp-for="LastName" class="form-control" />
+        @Html.ValidationMessageFor(m => m.LastName, "", new { @class = "text-danger" })
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Email</label><span class="text-danger">*</span>
+        <input asp-for="Email" type="email" class="form-control" />
+        @Html.ValidationMessageFor(m => m.Email, "", new { @class = "text-danger" })
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Department</label><span class="text-danger">*</span>
+        <select asp-for="DepartmentID" class="form-control" required>
+            <option value="">-- Select Department --</option>
+            @foreach (var dept in Model.Departments)
+            {
+                <option value="@dept.ID">@dept.DepartmentName</option>
+            }
+        </select>
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Role</label><span class="text-danger">*</span>
+        <select asp-for="Role" class="form-control" required>
+            @if (User.IsInRole("SuperAdmin"))
+            {
+                <option value="1">Admin</option>
+                <option value="2">Member</option>
+            }
+            else if (User.IsInRole("Admin"))
+            {
+                <option value="2">Member</option>
+            }
+        </select>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Create Account</button>
+</form>

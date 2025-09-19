@@ -29,6 +29,7 @@ namespace Content_Management_System.Data
         public required string Salt { get; set; } = string.Empty;
         public UserRole Role { get; set; } = UserRole.Member; 
         public DateTime CreatedAt { get; set; } = DateTime.Now; 
+        public bool MustChangePassword { get; set; } = true;
 
          // Link to Department
         public required int DepartmentID { get; set; }
