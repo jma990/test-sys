@@ -77,6 +77,19 @@ namespace Content_Management_System.Pages
                 return Page();
             }
 
+            // Normalize email for case-insensitive check
+            var normalizedEmail = Email.ToLower();
+
+            var existingUser = await _db.Users
+                .AnyAsync(u => u.Email.ToLower() == normalizedEmail);
+
+            if (existingUser)
+            {
+                TempData["Message"] = "Email is already in use.";
+                return Page();
+            }
+
+
             // Generate random secure password
             string tempPassword = RandomPasswordGenerator.Generate(10);
             string salt = HashPassword.GenerateSalt();

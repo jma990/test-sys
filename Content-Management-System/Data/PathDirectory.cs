@@ -9,16 +9,21 @@ public static class PathDirectory
 
     // Announcements Page and its Partial Views
     public const string AnnouncementsPage = "/Announcements";
-    public const string _AddAnnouncement = "~/Views/Announcements/_AddAnnouncement.cshtml";
 
     // AdminPosts Page and its Partial Views
     public const string AdminPostsPage = "/AdminPosts";
+    public const string _AddAnnouncement = "~/Views/AdminPosts/_AddAnnouncement.cshtml";
 
     // Departments Page and its Partial Views
     public const string DepartmentsPage = "/Departments";
+    public const string _AddDepartment = "~/Views/Departments/_AddDepartment.cshtml";
+    public const string _ViewUsers = "~/Views/Departments/_ViewUsers.cshtml";
 
     // AccountCreation Page and its Partial Views
     public const string AccountCreationPage = "/AccountCreation";
+
+    // AccountSettings Page
+    public const string AccountSettingsPage = "/AccountSettings";
     
     // Bootstrap
     public const string BootstrapCSS = "~/lib/bootstrap/dist/css/bootstrap.css";

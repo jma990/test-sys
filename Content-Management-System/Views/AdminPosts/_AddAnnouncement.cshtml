@@ -1,0 +1,90 @@
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        // Populate departments
+        fetch("/Announcements/GetDepartments")
+            .then(r => r.json())
+            .then(departments => {
+                const select = document.getElementById("announcementDepartment");
+
+                const allOption = document.createElement("option");
+                allOption.value = "0";
+                allOption.textContent = "All Departments";
+                select.appendChild(allOption);
+
+                departments.forEach(dept => {
+                    const option = document.createElement("option");
+                    option.value = dept.id;
+                    option.textContent = dept.departmentName;
+                    select.appendChild(option);
+                });
+            });
+
+        // Hook up the reusable form submit
+        initFormSubmit(
+            "submitAnnouncement",                // button ID
+            "/Announcements/AddAnnouncement",   // controller endpoint
+            () => {                             // payload
+                return {
+                    Title: document.getElementById("announcementTitle").value || "",
+                    Content: document.getElementById("announcementContent").value || "",
+                    DepartmentID: parseInt(document.getElementById("announcementDepartment").value) || 0,
+                    Link: document.getElementById("announcementLink").value || ""
+                };
+            },
+            () => { // success callback
+                hideForm("AddAnnouncementModal");
+                document.getElementById("announcementTitle").value = "";
+                document.getElementById("announcementContent").value = "";
+                document.getElementById("announcementDepartment").value = "";
+                document.getElementById("announcementLink").value = "";
+                location.reload();
+            }
+        );
+    });
+</script>
+
+
+<div class="modal fade" id="AddAnnouncementModal" tabindex="-1" aria-labelledby="AddAnnouncementModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="AddAnnouncementModalLabel">Add Announcement</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        @Html.AntiForgeryToken()
+        <!-- Title -->
+        <div class="mb-3">
+            <label for="announcementTitle" class="form-label">Title</label><span class="text-danger">*</span>
+            <input type="text" class="form-control" id="announcementTitle" name="Title" placeholder="Enter announcement title" required>
+        </div>
+
+        <!-- Content -->
+        <div class="mb-3">
+            <label for="announcementContent" class="form-label">Content</label><span class="text-danger">*</span>
+            <textarea class="form-control" id="announcementContent" name="Content" rows="4" placeholder="Enter announcement details" required></textarea>
+        </div>
+
+        <!-- Department Dropdown -->
+        <div class="mb-3">
+            <label for="announcementDepartment" class="form-label">Department</label><span class="text-danger">*</span>
+            <select class="form-select" id="announcementDepartment" name="DepartmentID" required>
+                <!-- Options will be populated dynamically via JavaScript -->
+            </select>
+        </div>
+        
+        <!-- Link (optional) -->
+        <div class="mb-3">
+            <label for="announcementLink" class="form-label">Link (optional)</label>
+            <input type="url" class="form-control" id="announcementLink" name="Link" placeholder="https://example.com">
+        </div>
+
+        <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+            <button id="submitAnnouncement" type="submit" class="btn btn-primary">Save Announcement</button>
+        </div>
+        <div id="formError" class="text-danger" style="display: none;"></div>
+      </div>
+    </div>
+  </div>
+</div>

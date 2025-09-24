@@ -37,6 +37,7 @@ namespace Content_Management_System.Pages
         public async Task OnGetAsync()
         {
             Departments = await _db.Departments
+                .Where(d => d.DepartmentName.ToLower() != "super admin")
                 .OrderBy(d => d.DepartmentName)
                 .Select(d => new DepartmentViewModel
                 {

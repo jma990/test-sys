@@ -3,7 +3,15 @@
 @{
 }
 
+@await Html.PartialAsync(@Url.Content(PathDirectory._ViewUsers), Model)
+@await Html.PartialAsync(@Url.Content(PathDirectory._AddDepartment), Model)
 <h2>Departments</h2>
+
+<!-- Add Department Button -->
+<button type="button" class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#addDepartmentModal">
+    <i class="bi bi-plus-lg"></i> Add Department
+</button>
+
 
 @Html.AntiForgeryToken()
 
@@ -47,6 +55,16 @@
                         }
                     </button>
                 }
+
+                <button type="button"
+                        class="btn btn-sm btn-link view-users-btn"
+                        data-bs-toggle="modal"
+                        data-bs-target="#viewUsersModal"
+                        data-id="@dept.ID"
+                        data-name="@dept.DepartmentName">
+                    <i class="bi bi-people" title="View Users"></i>
+                </button>
+
 
                 
                 <!-- Hidden edit form -->

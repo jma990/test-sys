@@ -18,6 +18,22 @@ namespace Content_Management_System.Controllers
             _db = db;
         }
 
+        [HttpGet("GetUsers")]
+        public IActionResult GetUsers(int departmentId)
+        {
+            var users = _db.Users
+                .Where(u => u.DepartmentID == departmentId)
+                .Select(u => new 
+                {
+                    u.FirstName,
+                    u.LastName
+                })
+                .ToList();
+
+            return Ok(users);
+        }
+
+
         [HttpGet("GetDepartments")]
         public IActionResult GetDepartments()
         {
@@ -61,13 +77,6 @@ namespace Content_Management_System.Controllers
             }
             try
             {
-                Console.WriteLine("===== New Announcement Submitted =====");
-                Console.WriteLine($"Title: {data.Title}");
-                Console.WriteLine($"Content: {data.Content}");
-                Console.WriteLine($"DepartmentID: {data.DepartmentID}");
-                Console.WriteLine($"Link: {data.Link}");
-                Console.WriteLine("=====================================");
-
                 var userIDClaim = User.FindFirst(ClaimTypes.NameIdentifier);
                 if (userIDClaim == null)
                 {

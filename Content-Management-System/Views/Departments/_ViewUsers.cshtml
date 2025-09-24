@@ -1,0 +1,55 @@
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const viewUsersModal = document.getElementById("viewUsersModal");
+        const usersList = document.getElementById("usersList");
+        const modalTitle = document.getElementById("viewUsersModalLabel");
+
+        viewUsersModal.addEventListener("show.bs.modal", function (event) {
+            const button = event.relatedTarget; // Button that triggered the modal
+            const deptId = button.getAttribute("data-id");
+            const deptName = button.getAttribute("data-name");
+            
+            modalTitle.textContent = `Users in ${deptName}`;
+            usersList.innerHTML = "<p>Loading...</p>";
+
+            fetch(`/Announcements/GetUsers?departmentId=${deptId}`)
+                .then(r => r.json())
+                .then(users => {
+                    if (users.length === 0) {
+                        usersList.innerHTML = "<p>No users found in this department.</p>";
+                        return;
+                    }
+
+                    usersList.innerHTML = "";
+                    users.forEach(u => {
+                        const li = document.createElement("li");
+                        li.textContent = `${u.firstName} ${u.lastName}`;
+                        usersList.appendChild(li);
+                    });
+                })
+                .catch(err => {
+                    usersList.innerHTML = "<p class='text-danger'>Failed to load users.</p>";
+                    console.error(err);
+                });
+        });
+    });
+</script>
+
+<div class="modal fade" id="viewUsersModal" tabindex="-1" aria-labelledby="viewUsersModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="viewUsersModalLabel"></h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <ul id="usersList" class="list-unstyled mb-0">
+                    <!-- Filled dynamically -->
+                </ul>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
