@@ -1,77 +1,28 @@
 ﻿@page
 @model Content_Management_System.Pages.AccountSettingsModel
 @{
-     
-}
-@section Scripts {
-    @if (TempData["SuccessMessage"] != null)
-    {
-        <script>
-            Swal.fire({
-                icon: 'success',
-                title: 'Success',
-                text: '@TempData["SuccessMessage"]'
-            });
-        </script>
-    }
-
-    @if (TempData["ErrorMessage"] != null)
-    {
-        <script>
-            Swal.fire({
-                icon: 'error',
-                title: 'Error',
-                text: '@TempData["ErrorMessage"]'
-            });
-        </script>
-    }
 }
 
 <h2>Account Settings</h2>
 
-<form method="post">
-    <div>
-        <label asp-for="Input.FirstName">First Name</label><span class="text-danger">*</span>
-        <input asp-for="Input.FirstName" class="form-control" />
-        <span asp-validation-for="Input.FirstName" class="text-danger"></span>
+<div class="row mt-4">
+    <div class="col-md-6 mb-3">
+        <div class="card shadow-sm">
+            <div class="card-body text-center">
+                <h5 class="card-title">Change Personal Information</h5>
+                <p class="card-text">Update your first name, middle name, last name, and email address.</p>
+                <a asp-page="@Url.Content(PathDirectory.ChangePersonalInfoPage)" class="btn btn-primary">Go</a>
+            </div>
+        </div>
     </div>
 
-    <div>
-        <label asp-for="Input.MiddleName">Middle Name</label>
-        <input asp-for="Input.MiddleName" class="form-control" />
-        <span asp-validation-for="Input.MiddleName" class="text-danger"></span>
+    <div class="col-md-6 mb-3">
+        <div class="card shadow-sm">
+            <div class="card-body text-center">
+                <h5 class="card-title">Change Password</h5>
+                <p class="card-text">Update your account password securely.</p>
+                <a asp-page="@Url.Content(PathDirectory.ChangePasswordPage)" class="btn btn-danger">Go</a>
+            </div>
+        </div>
     </div>
-
-    <div>
-        <label asp-for="Input.LastName">Last Name</label><span class="text-danger">*</span>
-        <input asp-for="Input.LastName" class="form-control" />
-        <span asp-validation-for="Input.LastName" class="text-danger"></span>
-    </div>
-
-    <div>
-        <label asp-for="Input.Email">Email</label><span class="text-danger">*</span>
-        <input asp-for="Input.Email" class="form-control" />
-        <span asp-validation-for="Input.Email" class="text-danger"></span>
-    </div>
-
-    <div>
-        <label asp-for="Input.CurrentPassword">Enter Current Password</label><span class="text-danger">*</span>
-        <input asp-for="Input.CurrentPassword" type="password" class="form-control" />
-        <span asp-validation-for="Input.CurrentPassword" class="text-danger"></span>
-    </div>
-
-    <div>
-        <label asp-for="Input.NewPassword">Enter New Password</label><span class="text-danger">*</span>
-        <input asp-for="Input.NewPassword" type="password" class="form-control" />
-        <span asp-validation-for="Input.NewPassword" class="text-danger"></span>
-    </div>
-
-    <div>
-        <label asp-for="Input.ConfirmPassword">Confirm New Password</label><span class="text-danger">*</span>
-        <input asp-for="Input.ConfirmPassword" type="password" class="form-control" />
-        <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
-    </div>
-
-    <button type="submit" class="btn btn-primary">Save Changes</button>
-</form>
-
+</div>

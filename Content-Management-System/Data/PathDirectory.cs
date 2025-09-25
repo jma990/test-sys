@@ -24,6 +24,12 @@ public static class PathDirectory
 
     // AccountSettings Page
     public const string AccountSettingsPage = "/AccountSettings";
+
+    // ChangePersonalInfo Page
+    public const string ChangePersonalInfoPage = "/ChangePersonalInfo";
+
+    // ChangePassword Page
+    public const string ChangePasswordPage = "/ChangePassword";
     
     // Bootstrap
     public const string BootstrapCSS = "~/lib/bootstrap/dist/css/bootstrap.css";

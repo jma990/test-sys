@@ -37,11 +37,17 @@ namespace Content_Management_System.Pages
         public bool EditIsActive { get; set; }
 
         // TempData for SweetAlert message
-        [TempData]
-        public string? AlertMessage { get; set; } 
+        public string? AlertMessage
+        {
+            get => TempData["AlertMessage"] as string;
+            set => TempData["AlertMessage"] = value;
+        }
 
-        [TempData]
-        public string? AlertType { get; set; }  
+        public string? AlertType
+        {
+            get => TempData["AlertType"] as string;
+            set => TempData["AlertType"] = value;
+        }
 
         // For filtering
         [BindProperty(SupportsGet = true)]

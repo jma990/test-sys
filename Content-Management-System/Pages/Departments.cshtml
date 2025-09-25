@@ -14,7 +14,14 @@
 
 
 @Html.AntiForgeryToken()
-
+<div class="mb-3">
+    <a asp-page="@Url.Content(PathDirectory.DepartmentsPage)" asp-route-filter="all"
+       class="btn btn-outline-primary @(Model.Filter == "all" ? "active" : "")">All</a>
+    <a asp-page="@Url.Content(PathDirectory.DepartmentsPage)" asp-route-filter="active"
+       class="btn btn-outline-success @(Model.Filter == "active" ? "active" : "")">Active</a>
+    <a asp-page="@Url.Content(PathDirectory.DepartmentsPage)" asp-route-filter="inactive"
+       class="btn btn-outline-secondary @(Model.Filter == "inactive" ? "active" : "")">Inactive</a>
+</div>
 <table class="table table-sm">
     <thead>
         <tr>
@@ -72,12 +79,14 @@
                     @Html.AntiForgeryToken()
                     <input type="hidden" name="EditID" value="@dept.ID" />
                     <input type="text" name="EditDepartmentName" class="form-control form-control-sm" />
+                    <input type="hidden" name="Filter" value="@Model.Filter" /> 
                 </form>
 
                 <!-- Hidden archive form -->
                 <form class="archive-form d-none" method="post" asp-page-handler="Archive">
                     @Html.AntiForgeryToken()
                     <input type="hidden" name="ArchiveID" value="@dept.ID" />
+                    <input type="hidden" name="Filter" value="@Model.Filter" /> 
                 </form>
             </td>
         </tr>

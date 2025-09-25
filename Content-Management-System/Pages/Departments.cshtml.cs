@@ -27,6 +27,9 @@ namespace Content_Management_System.Pages
         [BindProperty] 
         public int ArchiveID { get; set; }
 
+        [BindProperty(SupportsGet = true)]
+        public string Filter { get; set; } = "all";
+
         // TempData for SweetAlert message
         [TempData]
         public string? AlertMessage { get; set; }
@@ -36,8 +39,22 @@ namespace Content_Management_System.Pages
 
         public async Task OnGetAsync()
         {
-            Departments = await _db.Departments
-                .Where(d => d.DepartmentName.ToLower() != "super admin")
+            var query = _db.Departments
+                .Where(d => d.DepartmentName.ToLower() != "super admin");
+
+            switch (Filter.ToLower())
+            {
+                case "active":
+                    query = query.Where(d => d.IsActive);
+                    break;
+                case "inactive":
+                    query = query.Where(d => !d.IsActive);
+                    break;
+                default:
+                    break; 
+            }
+
+            Departments = await query
                 .OrderBy(d => d.DepartmentName)
                 .Select(d => new DepartmentViewModel
                 {
@@ -78,7 +95,7 @@ namespace Content_Management_System.Pages
 
             AlertMessage = "Department updated successfully!";
             AlertType = "success";
-            return RedirectToPage();
+            return RedirectToPage(new { filter = Filter });
         }
 
         public async Task<IActionResult> OnPostArchiveAsync()
@@ -117,7 +134,7 @@ namespace Content_Management_System.Pages
             }
 
             await _db.SaveChangesAsync();
-            return RedirectToPage();
+            return RedirectToPage(new { filter = Filter });
         }
     }
 

@@ -1,0 +1,56 @@
+﻿@page
+@model Content_Management_System.Pages.ChangePersonalInfoModel
+@{
+}
+
+@section Scripts {
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <script>
+            Swal.fire({
+                icon: 'success',
+                title: 'Success',
+                text: '@TempData["SuccessMessage"]'
+            });
+        </script>
+    }
+
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <script>
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: '@TempData["ErrorMessage"]'
+            });
+        </script>
+    }
+}
+
+<h2>Change Personal Information</h2>
+<form method="post">
+    <div>
+        <label asp-for="Input.FirstName">First Name</label><span class="text-danger">*</span>
+        <input asp-for="Input.FirstName" class="form-control" />
+        <span asp-validation-for="Input.FirstName" class="text-danger"></span>
+    </div>
+
+    <div>
+        <label asp-for="Input.MiddleName">Middle Name</label>
+        <input asp-for="Input.MiddleName" class="form-control" />
+        <span asp-validation-for="Input.MiddleName" class="text-danger"></span>
+    </div>
+
+    <div>
+        <label asp-for="Input.LastName">Last Name</label><span class="text-danger">*</span>
+        <input asp-for="Input.LastName" class="form-control" />
+        <span asp-validation-for="Input.LastName" class="text-danger"></span>
+    </div>
+
+    <div>
+        <label asp-for="Input.Email">Email</label><span class="text-danger">*</span>
+        <input asp-for="Input.Email" class="form-control" />
+        <span asp-validation-for="Input.Email" class="text-danger"></span>
+    </div>
+    <button type="submit" class="btn btn-primary">Save Changes</button>
+</form>
