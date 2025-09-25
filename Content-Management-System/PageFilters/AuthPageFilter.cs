@@ -69,16 +69,19 @@ namespace Content_Management_System.PageFilters
             {
                 case nameof(UserRole.SuperAdmin):
                     return normalizedPath == PathDirectory.AccountCreationPage ||
-                        normalizedPath == PathDirectory.DepartmentsPage;
+                        normalizedPath == PathDirectory.DepartmentsPage || 
+                        normalizedPath == PathDirectory.AccountSettingsPage;
 
                 case nameof(UserRole.Admin):
                     return normalizedPath == PathDirectory.AnnouncementsPage ||
                         normalizedPath == PathDirectory.AccountCreationPage ||
                         normalizedPath == PathDirectory.AdminPostsPage ||
-                        normalizedPath == PathDirectory.DepartmentsPage;
+                        normalizedPath == PathDirectory.DepartmentsPage ||
+                        normalizedPath == PathDirectory.AccountSettingsPage;
 
                 case nameof(UserRole.Member):
-                    return normalizedPath == PathDirectory.AnnouncementsPage;
+                    return normalizedPath == PathDirectory.AnnouncementsPage ||
+                        normalizedPath == PathDirectory.AccountSettingsPage;
 
                 default:
                     return false;

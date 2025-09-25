@@ -10,6 +10,7 @@ using Content_Management_System.PageFilters;
 
 namespace Content_Management_System.Pages
 {
+    [ServiceFilter(typeof(AuthPageFilter))]
     public class AccountSettingsModel(AppDbContext db) : PageModel
     {
         private readonly AppDbContext _db = db;
