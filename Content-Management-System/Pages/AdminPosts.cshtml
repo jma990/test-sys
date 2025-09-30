@@ -108,6 +108,8 @@
 @section Scripts {
     <script>
         document.addEventListener("DOMContentLoaded", () => {
+            enableTableSorting("table", [6]);
+            // -----------------------------
             // Edit the announcement
             const rows = document.querySelectorAll("table tbody tr");
             rows.forEach((row, rowIndex) => {

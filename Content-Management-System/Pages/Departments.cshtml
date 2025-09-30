@@ -27,6 +27,7 @@
         <tr>
             <th>Department Name</th>
             <th>Number of Users</th>
+            <th>Status</th>
             <th>Action</th>
         </tr>
     </thead>
@@ -97,6 +98,8 @@
 @section Scripts {
     <script>
         document.addEventListener("DOMContentLoaded", () => {
+            enableTableSorting("table", [3]);
+            // -----------------------------
             const rows = document.querySelectorAll("table tbody tr");
             rows.forEach((row) => {
                 const editBtn = row.querySelector(".edit-btn");
