@@ -22,6 +22,9 @@ public static class PathDirectory
     // AccountCreation Page and its Partial Views
     public const string AccountCreationPage = "/AccountCreation";
 
+    // UserManagement Page and its Partial Views
+    public const string UserManagementPage = "/UserManagement";
+
     // AccountSettings Page
     public const string AccountSettingsPage = "/AccountSettings";
 

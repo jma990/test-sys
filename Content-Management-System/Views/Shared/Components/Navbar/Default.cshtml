@@ -29,8 +29,19 @@
                     <li class="nav-item">
                         <a class="nav-link" href="@Url.Content(PathDirectory.DepartmentsPage)">Departments</a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="@Url.Content(PathDirectory.AccountCreationPage)">Users</a>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="usersDropdown" role="button" 
+                        data-bs-toggle="dropdown" aria-expanded="false">
+                            Users
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="usersDropdown">
+                            <li>
+                                <a class="dropdown-item" href="@Url.Content(PathDirectory.UserManagementPage)">User Management</a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item" href="@Url.Content(PathDirectory.AccountCreationPage)">Account Creation</a>
+                            </li>
+                        </ul>
                     </li>
                 }
                 

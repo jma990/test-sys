@@ -1,0 +1,165 @@
+﻿@page
+@model Content_Management_System.Pages.UserManagementModel
+@{
+}
+
+<h2>User Management</h2>
+
+@if (Model.Users == null || !Model.Users.Any())
+{
+    <p>No users available.</p>
+}
+else
+{
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Role</th>
+                <th>Department</th>
+                <th>Created At</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var user in Model.Users)
+            {
+                <tr>
+                    <td>@($"{user.FirstName} {user.LastName}")</td>
+                    <td>@user.Email</td>
+                    <td>@user.Role</td>
+                    <td>@user.Department?.DepartmentName</td>
+                    <td>@user.CreatedAt.ToString("MM/dd/yyyy")</td>
+                    <td>
+                        <a href="javascript:void(0);" 
+                            class="text-danger"
+                            title="Reset Password"
+                            onclick="resetPassword(@user.ID, '@user.FirstName @user.LastName')">
+                            <i class="bi bi-arrow-repeat fs-5"></i>
+                        </a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@section Scripts {
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            enableTableSorting("table", [5]);
+        });
+
+        function resetPassword(userId, userName) {
+            let attempts = 0;
+            const maxAttempts = 4;
+
+            Swal.fire({
+                title: 'Reset Password',
+                text: `Do you want to reset the password of ${userName}?`,
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Confirm',
+                cancelButtonText: 'Cancel'
+            }).then((result) => {
+                if (!result.isConfirmed) return;
+
+                Swal.fire({
+                    title: 'Enter your Password',
+                    input: 'password',
+                    inputPlaceholder: 'Enter your password',
+                    inputAttributes: {
+                        autocapitalize: 'off',
+                        autocorrect: 'off'
+                    },
+                    showCancelButton: true,
+                    confirmButtonText: 'Submit',
+                    cancelButtonText: 'Cancel',
+                    allowOutsideClick: () => !Swal.isLoading(),
+                    preConfirm: async (password) => {
+                        if (!password) {
+                            Swal.showValidationMessage("Password is required!");
+                            return false;
+                        }
+
+                        try {
+                            const res = await fetch('/UserManagement/VerifyPassword', {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/json'
+                                },
+                                credentials: 'same-origin',
+                                body: JSON.stringify({ userID: userId, password: password })
+                            });
+
+                            const data = await res.json().catch(() => ({}));
+
+                            if (!res.ok) {
+                                attempts++;
+                                if (attempts >= maxAttempts) {
+                                    Swal.fire({
+                                        icon: 'error',
+                                        title: 'Too Many Attempts',
+                                        text: 'You have been locked out. Refreshing page...',
+                                        allowOutsideClick: false,
+                                        allowEscapeKey: false,
+                                        allowEnterKey: false,
+                                        showConfirmButton: false,
+                                        timer: 5000, 
+                                        didOpen: () => {
+                                            Swal.showLoading();
+                                        },
+                                        willClose: () => {
+                                            location.reload();
+                                        }
+                                    });
+                                }
+                                else {
+                                    Swal.showValidationMessage(
+                                        `${data?.message || 'Invalid password'} (${attempts}/${maxAttempts} attempts used)`
+                                    );
+                                }
+                                return false;
+                            }
+                            return data;
+                        } catch (err) {
+                            Swal.showValidationMessage(err?.message || 'Network error. Please try again.');
+                            return false;
+                        }
+                    }
+                }).then((innerResult) => {
+                     if (innerResult.isConfirmed) {
+                        const data = innerResult.value || {};
+                        Swal.fire({
+                            icon: 'info',
+                            title: 'Temporary Password',
+                            html: `
+                                <p><strong>${data.newPassword}</strong></p>
+                                <p id="timer-text">This password will disappear in <b>30</b> seconds.</p>
+                            `,
+                            timer: 30000,
+                            timerProgressBar: true,
+                            allowOutsideClick: true,
+                            allowEscapeKey: true,
+                            allowEnterKey: true,
+                            didOpen: () => {
+                                const timerText = Swal.getPopup().querySelector('#timer-text').querySelector('b');
+                                const interval = setInterval(() => {
+                                    const timeLeft = Math.ceil(Swal.getTimerLeft() / 1000);
+                                    timerText.textContent = timeLeft;
+                                }, 1000);
+
+                                Swal.showLoading();
+
+                                Swal.getPopup().addEventListener('swal:close', () => {
+                                    clearInterval(interval);
+                                });
+                            }
+                        });
+                    }
+                });
+            });
+        }
+    </script>
+}
