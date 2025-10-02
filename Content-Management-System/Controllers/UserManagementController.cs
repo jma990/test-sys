@@ -55,8 +55,15 @@ namespace Content_Management_System.Controllers
             targetUser.Salt = newSalt;
             targetUser.MustChangePassword = true;
 
-            await _db.SaveChangesAsync();
+            var log = new ResetPasswordLog
+            {
+                AdminID = loggedInUser.ID,
+                TargetUserID = targetUser.ID,
+                ResetAt = DateTime.Now
+            };
+            _db.ResetPasswordLogs.Add(log);
 
+            await _db.SaveChangesAsync();
             return Ok(new { success = true, message = "Password reset successful.", newPassword });
         }
 

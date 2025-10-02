@@ -9,6 +9,7 @@ namespace Content_Management_System.Data
         public DbSet<User> Users { get; set; } = null!;
         public DbSet<Announcement> Announcements { get; set; } = null!;
         public DbSet<Department> Departments { get; set; } = null!;
+        public DbSet<ResetPasswordLog> ResetPasswordLogs { get; set; } = null!;
     }
 
     public enum UserRole
@@ -68,5 +69,21 @@ namespace Content_Management_System.Data
 
         // One department can have many announcements
         public ICollection<Announcement> Announcements { get; set; } = new List<Announcement>();
+    }
+
+    public class ResetPasswordLog
+    {
+        public int ID { get; set; }
+
+        // Admin who reset the password
+        public int AdminID { get; set; }
+        public User? Admin { get; set; }
+
+        // Target user whose password was reset
+        public int TargetUserID { get; set; }
+        public User? TargetUser { get; set; }
+
+        // Timestamp of reset
+        public DateTime ResetAt { get; set; } = DateTime.Now;
     }
 }
