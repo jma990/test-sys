@@ -24,6 +24,7 @@ public static class PathDirectory
 
     // UserManagement Page and its Partial Views
     public const string UserManagementPage = "/UserManagement";
+    public const string _ResetPasswordLogs = "~/Views/UserManagement/_ResetPasswordLogs.cshtml";
 
     // AccountSettings Page
     public const string AccountSettingsPage = "/AccountSettings";

@@ -36,5 +36,21 @@ namespace Content_Management_System.Pages
 
             return Page();
         }
+
+        public async Task<IActionResult> OnGetGetResetLogsAsync(int userId)
+        {
+            var logs = await _db.ResetPasswordLogs
+                .Where(l => l.TargetUserID == userId)
+                .Include(l => l.Admin)
+                .OrderByDescending(l => l.ResetAt)
+                .Select(l => new {
+                    adminName = l.Admin != null ? $"{l.Admin.FirstName} {l.Admin.LastName}" : "Unknown",
+                    resetAt = l.ResetAt
+                })
+                .ToListAsync();
+
+            return new JsonResult(logs);
+        }
+
     }
 }

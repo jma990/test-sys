@@ -3,6 +3,7 @@
 @{
 }
 
+@await Html.PartialAsync(@Url.Content(PathDirectory._ResetPasswordLogs), Model)
 <h2>User Management</h2>
 
 @if (Model.Users == null || !Model.Users.Any())
@@ -38,6 +39,12 @@ else
                             onclick="resetPassword(@user.ID, '@user.FirstName @user.LastName')">
                             <i class="bi bi-arrow-repeat fs-5"></i>
                         </a>
+                        <a href="javascript:void(0);" 
+                            class="text-muted ms-2"
+                            title="View Reset Password Logs"
+                            onclick="showResetLogs(@user.ID, '@user.FirstName @user.LastName')">
+                            <i class="bi bi-journal-text fs-5"></i>
+                        </a>
                     </td>
                 </tr>
             }
@@ -50,6 +57,37 @@ else
         document.addEventListener("DOMContentLoaded", () => {
             enableTableSorting("table", [5]);
         });
+
+        async function showResetLogs(userId, userName) {
+            const tableBody = document.getElementById("resetLogsTableBody");
+            tableBody.innerHTML = `<tr><td colspan="2" class="text-center">Loading...</td></tr>`;
+
+            try {
+                const res = await fetch(`/UserManagement?handler=GetResetLogs&userId=${userId}`);
+                if (!res.ok) throw new Error("Failed to load logs");
+
+                const logs = await res.json();
+
+                if (logs.length === 0) {
+                    tableBody.innerHTML = `<tr><td colspan="2" class="text-center text-muted">No logs found</td></tr>`;
+                } else {
+                    tableBody.innerHTML = logs.map(log => `
+                        <tr>
+                            <td>${log.adminName}</td>
+                            <td>${new Date(log.resetAt).toLocaleString()}</td>
+                        </tr>
+                    `).join("");
+                }
+
+                document.getElementById("resetLogsModalLabel").innerText = `Reset Password Logs - ${userName}`;
+                new bootstrap.Modal(document.getElementById("resetLogsModal")).show();
+
+            } catch (err) {
+                console.error(err);
+                tableBody.innerHTML = `<tr><td colspan="2" class="text-danger text-center">Error loading logs</td></tr>`;
+            }
+        }
+
 
         function resetPassword(userId, userName) {
             let attempts = 0;
