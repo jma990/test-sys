@@ -12,7 +12,7 @@
 }
 else
 {
-    <table class="table table-striped">
+    <table id="usersTable" class="table table-striped">
         <thead>
             <tr>
                 <th>Name</th>
@@ -45,6 +45,13 @@ else
                             onclick="showResetLogs(@user.ID, '@user.FirstName @user.LastName')">
                             <i class="bi bi-journal-text fs-5"></i>
                         </a>
+ 
+                        <a href="javascript:void(0);" 
+                            class="ms-2"
+                            title="@(user.IsArchived ? "Unarchive User" : "Archive User")"
+                            onclick="toggleArchive(@user.ID, '@user.FirstName @user.LastName', @user.IsArchived.ToString().ToLower())">
+                                <i class="bi @(user.IsArchived ? "bi-box-arrow-in-up text-success" : "bi-archive text-secondary") fs-5"></i>
+                        </a>
                     </td>
                 </tr>
             }
@@ -55,7 +62,7 @@ else
 @section Scripts {
     <script>
         document.addEventListener("DOMContentLoaded", () => {
-            enableTableSorting("table", [5]);
+            enableTableSorting("#usersTable", [5]);
         });
 
         async function showResetLogs(userId, userName) {
@@ -199,5 +206,38 @@ else
                 });
             });
         }
+
+        async function toggleArchive(userId, userName, isArchived) {
+            const action = isArchived ? 'unarchive' : 'archive';
+            const result = await Swal.fire({
+                title: `${action.charAt(0).toUpperCase() + action.slice(1)} User`,
+                text: `Are you sure you want to ${action} ${userName}?`,
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: `Confirm`,
+                cancelButtonText: 'Cancel'
+            });
+
+            if (!result.isConfirmed) return;
+            try {
+                const res = await fetch(`/UserManagement?handler=ToggleArchive`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ userID: userId })
+                });
+
+                if (!res.ok) throw new Error("Failed to send userId");
+
+                const data = await res.json();
+                console.log(`The userId received is: ${userId}`);
+
+            } catch (err) {
+                console.error("Error sending userId:", err);
+            }
+
+        }
+
     </script>
 }

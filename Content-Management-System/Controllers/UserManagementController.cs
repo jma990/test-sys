@@ -67,10 +67,22 @@ namespace Content_Management_System.Controllers
             return Ok(new { success = true, message = "Password reset successful.", newPassword });
         }
 
+        [HttpPost("ToggleArchive")]
+        public IActionResult ToggleArchive([FromBody] ArchiveData data)
+        {
+            Console.WriteLine($"The userId received is: {data.UserID}");
+            return Ok(new { success = true, message = $"UserID {data.UserID} received." });
+        }
+
         public class Data
         {
-            public int UserID { get; set; } = 0;
-            public required string Password { get; set; } = string.Empty;
+            public int UserID { get; set; }
+            public required string Password { get; set; }
+        }
+
+        public class ArchiveData
+        {
+            public int UserID { get; set; }
         }
     }
 }

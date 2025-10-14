@@ -4,14 +4,6 @@
 }
 
 <h2>Create Account</h2>
-
-@if (TempData["Message"] != null)
-{
-    <div class="alert alert-info">
-        @TempData["Message"]
-    </div>
-}
-
 <form method="post">
     <div class="mb-3">
         <label class="form-label">First Name</label><span class="text-danger">*</span>
@@ -64,3 +56,69 @@
 
     <button type="submit" class="btn btn-primary">Create Account</button>
 </form>
+
+@section Scripts {
+    @if (TempData["Message"] != null)
+    {
+        var message = TempData["Message"].ToString();
+        var tempPassword = "";
+
+        if (message.Contains("Temporary password is:"))
+        {
+            var parts = message.Split("Temporary password is:");
+            var infoMessage = parts[0].Trim();
+            tempPassword = parts.Length > 1 ? parts[1].Trim() : "";
+        }
+
+        <text>
+            <script>
+                document.addEventListener("DOMContentLoaded", () => {
+                    const msg = "@message";
+                    const tempPass = "@tempPassword";
+
+                    if (tempPass && tempPass.length > 0) {
+                        Swal.fire({
+                            icon: 'info',
+                            title: 'Temporary Password',
+                            html: `
+                                <p>User created successfully.</p>
+                                <p><strong>${tempPass}</strong></p>
+                                <p id="timer-text">This password will disappear in <b>30</b> seconds.</p>
+                            `,
+                            timer: 30000,
+                            timerProgressBar: true,
+                            allowOutsideClick: true,
+                            allowEscapeKey: true,
+                            allowEnterKey: true,
+                            didOpen: () => {
+                                const timerText = Swal.getPopup().querySelector('#timer-text').querySelector('b');
+                                const interval = setInterval(() => {
+                                    const timeLeft = Math.ceil(Swal.getTimerLeft() / 1000);
+                                    timerText.textContent = timeLeft;
+                                }, 1000);
+
+                                Swal.showLoading();
+
+                                Swal.getPopup().addEventListener('swal:close', () => {
+                                    clearInterval(interval);
+                                });
+                            },
+                            willClose: () => {
+                                location.reload();
+                            }
+                        });
+                    } else {
+                        Swal.fire({
+                            icon: 'info',
+                            title: 'Notification',
+                            text: msg,
+                            willClose: () => {
+                                location.reload();
+                            }
+                        });
+                    }
+                });
+            </script>
+        </text>
+    }
+}

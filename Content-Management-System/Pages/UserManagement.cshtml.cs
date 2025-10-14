@@ -51,6 +51,5 @@ namespace Content_Management_System.Pages
 
             return new JsonResult(logs);
         }
-
     }
 }

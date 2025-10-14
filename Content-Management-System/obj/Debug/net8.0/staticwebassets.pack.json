@@ -5,6 +5,10 @@
       "PackagePath": "staticwebassets/Content-Management-System.bundle.scp.css"
     },
     {
+      "Id": "/workspaces/test-sys/Content-Management-System/wwwroot/css/login.css",
+      "PackagePath": "staticwebassets/css/login.css"
+    },
+    {
       "Id": "/workspaces/test-sys/Content-Management-System/wwwroot/favicon.ico",
       "PackagePath": "staticwebassets/favicon.ico"
     },

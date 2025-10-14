@@ -112,7 +112,7 @@ namespace Content_Management_System.Pages
             await _db.SaveChangesAsync();
 
             TempData["Message"] = $"User created successfully. Temporary password is: {tempPassword}";
-            return Page();
+            return RedirectToPage();
         }
     }
 }

@@ -31,6 +31,7 @@ namespace Content_Management_System.Data
         public UserRole Role { get; set; } = UserRole.Member; 
         public DateTime CreatedAt { get; set; } = DateTime.Now; 
         public bool MustChangePassword { get; set; } = true;
+        public bool IsArchived { get; set; } = false;
 
          // Link to Department
         public required int DepartmentID { get; set; }

@@ -1,20 +1,73 @@
 ﻿@page
 @model Content_Management_System.Pages.LoginModel
 @{
+    Layout = "_Layout";
 }
 
-<h2>Login</h2>
+<link rel="stylesheet" href="~/css/login.css" />
 
-<form method="post">
-    <div>
-        <label>Email</label>
-        <input type="text" name="Email" placeholder="Email" value="@Model.Email"/>
-        @Html.ValidationMessage("Email", "", new { @class = "text-danger" })
+<div class="login-container">
+    <div class="login-card">
+        <div class="login-header">
+            <h2>Sign In</h2>
+            <p>Enter your credentials to access your account</p>
+        </div>
+
+        <form method="post" class="login-form" id="loginForm" novalidate>
+            <div class="form-group">
+                <div class="input-wrapper">
+                    <input type="email" id="email" name="Email" required autocomplete="email" placeholder=" " value="@Model.Email" />
+                    <label for="email">Email Address</label>
+                </div>
+                @Html.ValidationMessage("Email", "", new { @class = "error-message show" })
+            </div>
+
+            <div class="form-group">
+                <div class="input-wrapper password-wrapper">
+                    <input type="password" id="password" name="Password" required autocomplete="current-password" placeholder=" " value="@Model.Password" />
+                    <label for="password">Password</label>
+                    <button type="button" class="password-toggle" id="passwordToggle" aria-label="Toggle password visibility">
+                        <span class="eye-icon"></span>
+                    </button>
+                </div>
+                @Html.ValidationMessage("Password", "", new { @class = "error-message show" })
+            </div>
+
+            <div class="form-options">
+                <label class="remember-wrapper">
+                    <input type="checkbox" id="remember" name="RememberMe" />
+                    <span class="checkbox-label">
+                        <span class="checkmark"></span>
+                        Remember me
+                    </span>
+                </label>
+                <a href="#" class="forgot-password">Forgot password?</a>
+            </div>
+
+            <button type="submit" class="login-btn">
+                <span class="btn-text">Sign In</span>
+                <span class="btn-loader"></span>
+            </button>
+        </form>
+
+        <div class="success-message" id="successMessage">
+            <div class="success-icon">✓</div>
+            <h3>Login Successful!</h3>
+            <p>Redirecting to your dashboard...</p>
+        </div>
     </div>
-    <div>
-        <label>Password</label>
-        <input type="password" name="Password" placeholder="Password" value="@Model.Password"/>
-        @Html.ValidationMessage("Password", "", new { @class = "text-danger" })
-    </div>
-    <button type="submit">Login</button>
-</form>
+</div>
+
+@section Scripts {
+    <script>
+        const passwordInput = document.getElementById('password');
+        const toggleButton = document.getElementById('passwordToggle');
+        const eyeIcon = toggleButton.querySelector('.eye-icon');
+
+        toggleButton.addEventListener('click', () => {
+            const isPassword = passwordInput.type === 'password';
+            passwordInput.type = isPassword ? 'text' : 'password';
+            eyeIcon.classList.toggle('show-password', !isPassword);
+        });
+    </script>
+}
