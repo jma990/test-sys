@@ -5,8 +5,24 @@
       "PackagePath": "staticwebassets/Content-Management-System.bundle.scp.css"
     },
     {
+      "Id": "/workspaces/test-sys/Content-Management-System/wwwroot/assets/logo.png",
+      "PackagePath": "staticwebassets/assets/logo.png"
+    },
+    {
+      "Id": "/workspaces/test-sys/Content-Management-System/wwwroot/css/announcements.css",
+      "PackagePath": "staticwebassets/css/announcements.css"
+    },
+    {
       "Id": "/workspaces/test-sys/Content-Management-System/wwwroot/css/login.css",
       "PackagePath": "staticwebassets/css/login.css"
+    },
+    {
+      "Id": "/workspaces/test-sys/Content-Management-System/wwwroot/css/navbar.css",
+      "PackagePath": "staticwebassets/css/navbar.css"
+    },
+    {
+      "Id": "/workspaces/test-sys/Content-Management-System/wwwroot/css/site.css",
+      "PackagePath": "staticwebassets/css/site.css"
     },
     {
       "Id": "/workspaces/test-sys/Content-Management-System/wwwroot/favicon.ico",

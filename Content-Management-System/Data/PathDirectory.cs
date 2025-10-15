@@ -3,12 +3,14 @@ namespace Content_Management_System.Data;
 public static class PathDirectory
 {
     public const string LoginPage = "/Login";
+    public const string LoginCSS = "~/css/login.css";
     public const string LogoutPage = "/Logout";
     public const string MandatoryPasswordChangePage = "/MandatoryPasswordChange";
     public const string ErrorPage = "/Error";
 
     // Announcements Page and its Partial Views
     public const string AnnouncementsPage = "/Announcements";
+    public const string AnnouncementsCSS = "~/css/announcements.css";
 
     // AdminPosts Page and its Partial Views
     public const string AdminPostsPage = "/AdminPosts";
@@ -35,10 +37,19 @@ public static class PathDirectory
     // ChangePassword Page
     public const string ChangePasswordPage = "/ChangePassword";
     
+    // Layout
+    public const string LayoutCSS = "~/css/site.css";
+
+    // Navbar
+    public const string NavbarCSS = "~/css/navbar.css";
+
     // Bootstrap
     public const string BootstrapCSS = "~/lib/bootstrap/dist/css/bootstrap.css";
     public const string BootstrapJS = "~/lib/bootstrap/dist/js/bootstrap.bundle.min.js";
 
     // Javascript
     public const string SiteJS = "~/js/site.js";
+
+    // Assets
+    public const string Logo = "~/assets/logo.png";
 }
