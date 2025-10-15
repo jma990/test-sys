@@ -31,6 +31,7 @@ namespace Content_Management_System.Pages
             {
                 ImportantAnnouncements = await _db.Announcements
                     .Include(a => a.Author)
+                    .Include(a => a.Department)
                     .Where(a => a.DepartmentID == null && a.IsActive)
                     .OrderByDescending(a => a.CreatedAt)
                     .AsNoTracking()
@@ -40,6 +41,7 @@ namespace Content_Management_System.Pages
             {
                 ArchivedAnnouncements = await _db.Announcements
                     .Include(a => a.Author)
+                    .Include(a => a.Department)
                     .Where(a => !a.IsActive)
                     .OrderByDescending(a => a.CreatedAt)
                     .AsNoTracking()
@@ -47,13 +49,26 @@ namespace Content_Management_System.Pages
             }
             else // Default = recent
             {
+                // Get user ID from cookie 
+                int userId = int.Parse(User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value ?? "0");
+
+                // Fetch user's department ID from the database
+                var userDepartmentId = await _db.Users
+                    .Where(u => u.ID == userId)
+                    .Select(u => u.DepartmentID)
+                    .FirstOrDefaultAsync();
+
+                // Then show announcements for their department OR global ones
                 RecentAnnouncements = await _db.Announcements
                     .Include(a => a.Author)
-                    .Where(a => a.IsActive)
+                    .Include(a => a.Department)
+                    .Where(a => a.IsActive &&
+                        (a.DepartmentID == null || a.DepartmentID == userDepartmentId))
                     .OrderByDescending(a => a.CreatedAt)
                     .AsNoTracking()
                     .ToListAsync();
             }
+
         }
     }
 }

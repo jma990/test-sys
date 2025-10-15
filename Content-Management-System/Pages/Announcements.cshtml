@@ -64,6 +64,8 @@
                                 {
                                     <span> | Updated on @announcement.UpdatedAt.Value.ToString("MMMM dd, yyyy hh:mm tt")</span>
                                 }
+                                <br>
+                                <strong>For:</strong> @(announcement.Department?.DepartmentName ?? "All")
                             </p>
                             <br>
 
