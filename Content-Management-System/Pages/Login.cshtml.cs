@@ -47,6 +47,13 @@ namespace Content_Management_System.Pages
                 return Page();
             }
 
+            // Check if the user is archived
+            if (user.IsArchived)
+            {
+                ModelState.AddModelError("Password", "Your account is archived. Contact the administrator to restore access.");
+                return Page();
+            }
+
             await CookieService.CreateCookieAsync(HttpContext, user.ID, user.Email, user.Role.ToString(), user.MustChangePassword);
 
             // Redirect based on MustChangePassword flag

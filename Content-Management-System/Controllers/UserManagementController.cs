@@ -84,5 +84,17 @@ namespace Content_Management_System.Controllers
         {
             public int UserID { get; set; }
         }
+
+        [HttpGet("GetDepartments")]
+        public async Task<IActionResult> OnGetGetDepartmentsAsync()
+        {
+            var departments = await _db.Departments
+                .Where(d => d.IsActive && d.ID != 1) // Exclude Super Admin (ID 1)
+                .Select(d => new { id = d.ID, name = d.DepartmentName })
+                .ToListAsync();
+
+            return new JsonResult(departments);
+        }
+
     }
 }

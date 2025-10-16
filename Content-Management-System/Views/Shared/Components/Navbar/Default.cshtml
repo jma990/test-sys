@@ -5,15 +5,14 @@
 <nav class="sidebar">
     <ul>
         <li class="nav-item">
-            @if (Model.Role == nameof(UserRole.Admin) || Model.Role == nameof(UserRole.Member))
-            {
-                <a href="@Url.Content(PathDirectory.AnnouncementsPage)" class="logo">
-                    <img src="@Url.Content(PathDirectory.Logo)" alt="Logo">
-                    <span class="nav-text">Dashboard</span>
-                    <br>
-                    <span class="nav-text">Welcome @Model.UserName (@Model.Role)</span>
-                </a>
-            }
+            <a href="@Url.Content(Model.Role == nameof(UserRole.SuperAdmin) 
+                ? PathDirectory.DepartmentsPage 
+                : PathDirectory.AnnouncementsPage)" class="logo">
+                <img src="@Url.Content(PathDirectory.Logo)" alt="Logo">
+                <span class="nav-text">Dashboard</span>
+                <br>
+                <span class="nav-text">Welcome @Model.UserName (@Model.Role)</span>
+            </a>
         </li>
         @if (Model.Role == nameof(UserRole.Admin) || Model.Role == nameof(UserRole.Member))
         {
