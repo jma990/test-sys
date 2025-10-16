@@ -5,95 +5,104 @@
 
 @await Html.PartialAsync(@Url.Content(PathDirectory._ViewUsers), Model)
 @await Html.PartialAsync(@Url.Content(PathDirectory._AddDepartment), Model)
-<h2>Departments</h2>
 
-<!-- Add Department Button -->
-<button type="button" class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#addDepartmentModal">
-    <i class="bi bi-plus-lg"></i> Add Department
-</button>
+<link rel="stylesheet" href="~/css/departments.css" />
 
+<div class="departments-container">
+    <div class="departments-header">
+        <h2>Departments</h2>
+        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addDepartmentModal">
+            <i class="bi bi-plus-lg"></i> Add Department
+        </button>
+    </div>
 
-@Html.AntiForgeryToken()
-<div class="mb-3">
-    <a asp-page="@Url.Content(PathDirectory.DepartmentsPage)" asp-route-filter="all"
-       class="btn btn-outline-primary @(Model.Filter == "all" ? "active" : "")">All</a>
-    <a asp-page="@Url.Content(PathDirectory.DepartmentsPage)" asp-route-filter="active"
-       class="btn btn-outline-success @(Model.Filter == "active" ? "active" : "")">Active</a>
-    <a asp-page="@Url.Content(PathDirectory.DepartmentsPage)" asp-route-filter="inactive"
-       class="btn btn-outline-secondary @(Model.Filter == "inactive" ? "active" : "")">Inactive</a>
-</div>
-<table class="table table-sm">
-    <thead>
-        <tr>
-            <th>Department Name</th>
-            <th>Number of Users</th>
-            <th>Status</th>
-            <th>Action</th>
-        </tr>
-    </thead>
-    <tbody>
-    @foreach (var dept in Model.Departments)
-    {
-        <tr data-id="@dept.ID">
-            <td class="view-mode">@dept.DepartmentName</td>
-            <td>@dept.UserCount</td>
-            <td class="view-mode status-cell">
-                @if (dept.IsActive)
-                {
-                    <span class="badge bg-success">Active</span>
-                }
-                else
-                {
-                    <span class="badge bg-secondary">Inactive</span>
-                }
-            </td>
-            <td>
-                <button type="button" class="btn btn-sm btn-link edit-btn"><i class="bi bi-pencil"></i></button>
-                <button type="button" class="btn btn-sm btn-link save-btn d-none"><i class="bi bi-check-lg"></i></button>
-                @if (dept.UserCount == 0)   
-                {
-                    <button type="button" class="btn btn-sm btn-link archive-btn" data-id="@dept.ID" data-active="@dept.IsActive">
+    @Html.AntiForgeryToken()
+    <div class="filter-buttons">
+        <a asp-page="@Url.Content(PathDirectory.DepartmentsPage)" asp-route-filter="all"
+           class="btn btn-outline-primary @(Model.Filter == "all" ? "active" : "")">All</a>
+        <a asp-page="@Url.Content(PathDirectory.DepartmentsPage)" asp-route-filter="active"
+           class="btn btn-outline-success @(Model.Filter == "active" ? "active" : "")">Active</a>
+        <a asp-page="@Url.Content(PathDirectory.DepartmentsPage)" asp-route-filter="inactive"
+           class="btn btn-outline-secondary @(Model.Filter == "inactive" ? "active" : "")">Inactive</a>
+    </div>
+
+    <div class="table-responsive">
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th>Department Name</th>
+                    <th>Number of Users</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+            @foreach (var dept in Model.Departments)
+            {
+                <tr data-id="@dept.ID">
+                    <td class="view-mode">@dept.DepartmentName</td>
+                    <td>@dept.UserCount</td>
+                    <td class="view-mode status-cell">
                         @if (dept.IsActive)
                         {
-                            <i class="bi bi-trash" title="Archive"></i>
+                            <span class="badge bg-success">Active</span>
                         }
                         else
                         {
-                            <i class="bi bi-arrow-counterclockwise" title="Unarchive"></i>
+                            <span class="badge bg-secondary">Inactive</span>
                         }
-                    </button>
-                }
+                    </td>
+                    <td class="action-buttons">
+                        <div class="btn-group">
+                            <button type="button" class="btn btn-sm btn-outline-primary edit-btn">
+                                <i class="bi bi-pencil"></i>
+                            </button>
+                            <button type="button" class="btn btn-sm btn-outline-success save-btn d-none">
+                                <i class="bi bi-check-lg"></i>
+                            </button>
+                            @if (dept.UserCount == 0)   
+                            {
+                                <button type="button" class="btn btn-sm btn-outline-danger archive-btn" 
+                                        data-id="@dept.ID" data-active="@dept.IsActive">
+                                    @if (dept.IsActive)
+                                    {
+                                        <i class="bi bi-trash" title="Archive"></i>
+                                    }
+                                    else
+                                    {
+                                        <i class="bi bi-arrow-counterclockwise" title="Unarchive"></i>
+                                    }
+                                </button>
+                            }
+                            <button type="button"
+                                    class="btn btn-sm btn-outline-info view-users-btn"
+                                    data-bs-toggle="modal"
+                                    data-bs-target="#viewUsersModal"
+                                    data-id="@dept.ID"
+                                    data-name="@dept.DepartmentName">
+                                <i class="bi bi-people" title="View Users"></i>
+                            </button>
+                        </div>
 
-                <button type="button"
-                        class="btn btn-sm btn-link view-users-btn"
-                        data-bs-toggle="modal"
-                        data-bs-target="#viewUsersModal"
-                        data-id="@dept.ID"
-                        data-name="@dept.DepartmentName">
-                    <i class="bi bi-people" title="View Users"></i>
-                </button>
+                        <form class="edit-form d-none" method="post" asp-page-handler="Edit">
+                            @Html.AntiForgeryToken()
+                            <input type="hidden" name="EditID" value="@dept.ID" />
+                            <input type="text" name="EditDepartmentName" class="form-control form-control-sm" />
+                            <input type="hidden" name="Filter" value="@Model.Filter" /> 
+                        </form>
 
-
-                
-                <!-- Hidden edit form -->
-                <form class="edit-form d-none" method="post" asp-page-handler="Edit">
-                    @Html.AntiForgeryToken()
-                    <input type="hidden" name="EditID" value="@dept.ID" />
-                    <input type="text" name="EditDepartmentName" class="form-control form-control-sm" />
-                    <input type="hidden" name="Filter" value="@Model.Filter" /> 
-                </form>
-
-                <!-- Hidden archive form -->
-                <form class="archive-form d-none" method="post" asp-page-handler="Archive">
-                    @Html.AntiForgeryToken()
-                    <input type="hidden" name="ArchiveID" value="@dept.ID" />
-                    <input type="hidden" name="Filter" value="@Model.Filter" /> 
-                </form>
-            </td>
-        </tr>
-    }
-    </tbody>
-</table>
+                        <form class="archive-form d-none" method="post" asp-page-handler="Archive">
+                            @Html.AntiForgeryToken()
+                            <input type="hidden" name="ArchiveID" value="@dept.ID" />
+                            <input type="hidden" name="Filter" value="@Model.Filter" /> 
+                        </form>
+                    </td>
+                </tr>
+            }
+            </tbody>
+        </table>
+    </div>
+</div>
 
 @section Scripts {
     <script>

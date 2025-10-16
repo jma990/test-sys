@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "xfcDFOPdS1VRjg1VCVczOnL6+W2DE3KYx7LRNKA1fNY=",
+  "Hash": "6ROmb4vjG0UNX1kJYa4PosIvZNqxYs0rzjCKOV3Gy00=",
   "Source": "Content-Management-System",
   "BasePath": "_content/Content-Management-System",
   "Mode": "Default",
@@ -91,6 +91,25 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot/css/announcements.css"
+    },
+    {
+      "Identity": "/workspaces/test-sys/Content-Management-System/wwwroot/css/departments.css",
+      "SourceId": "Content-Management-System",
+      "SourceType": "Discovered",
+      "ContentRoot": "/workspaces/test-sys/Content-Management-System/wwwroot/",
+      "BasePath": "_content/Content-Management-System",
+      "RelativePath": "css/departments.css",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "PreferTarget",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot/css/departments.css"
     },
     {
       "Identity": "/workspaces/test-sys/Content-Management-System/wwwroot/css/login.css",

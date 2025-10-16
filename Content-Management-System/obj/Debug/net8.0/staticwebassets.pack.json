@@ -13,6 +13,10 @@
       "PackagePath": "staticwebassets/css/announcements.css"
     },
     {
+      "Id": "/workspaces/test-sys/Content-Management-System/wwwroot/css/departments.css",
+      "PackagePath": "staticwebassets/css/departments.css"
+    },
+    {
       "Id": "/workspaces/test-sys/Content-Management-System/wwwroot/css/login.css",
       "PackagePath": "staticwebassets/css/login.css"
     },
