@@ -4,7 +4,26 @@
     Layout = "_Layout";
 }
 
-<link rel="stylesheet" href="~/css/login.css" />
+<link rel="stylesheet" href="@Url.Content(PathDirectory.LoginCSS)" />
+@section Scripts {
+    <script>
+        const passwordInput = document.getElementById('password');
+        const toggleButton = document.getElementById('passwordToggle');
+        const eyeIcon = toggleButton.querySelector('.eye-icon');
+
+        toggleButton.addEventListener('click', () => {
+            const isPassword = passwordInput.type === 'password';
+            passwordInput.type = isPassword ? 'text' : 'password';
+            eyeIcon.classList.toggle('show-password', !isPassword);
+        });
+
+        // Spinner
+        document.querySelector(".login-form").addEventListener("submit", function (event) { 
+            showLoading('.login-btn', '.btn-text', '.btn-spinner');
+        });
+    </script>
+}
+
 
 <div class="login-container">
     <div class="login-card">
@@ -47,27 +66,10 @@
             <button type="submit" class="login-btn">
                 <span class="btn-text">Sign In</span>
                 <span class="btn-loader"></span>
+                <span class="btn-spinner" style="display: none;">
+                    <i class="fas fa-spinner fa-spin"></i>
+                </span>
             </button>
         </form>
-
-        <div class="success-message" id="successMessage">
-            <div class="success-icon">✓</div>
-            <h3>Login Successful!</h3>
-            <p>Redirecting to your dashboard...</p>
-        </div>
     </div>
 </div>
-
-@section Scripts {
-    <script>
-        const passwordInput = document.getElementById('password');
-        const toggleButton = document.getElementById('passwordToggle');
-        const eyeIcon = toggleButton.querySelector('.eye-icon');
-
-        toggleButton.addEventListener('click', () => {
-            const isPassword = passwordInput.type === 'password';
-            passwordInput.type = isPassword ? 'text' : 'password';
-            eyeIcon.classList.toggle('show-password', !isPassword);
-        });
-    </script>
-}

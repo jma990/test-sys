@@ -51,5 +51,69 @@ namespace Content_Management_System.Pages
 
             return new JsonResult(logs);
         }
+
+        [HttpPost]
+        public async Task<IActionResult> OnPostToggleArchive([FromBody] ToggleArchiveRequest request)
+        {
+            if (request == null || request.UserID <= 0)
+            {
+                Console.WriteLine("Invalid or missing userID");
+                return BadRequest(new { message = "Invalid userID" });
+            }
+
+            var user = await _db.Users.FindAsync(request.UserID);
+            if (user == null)
+            {
+                Console.WriteLine($"User with ID {request.UserID} not found");
+                return NotFound(new { message = "User not found" });
+            }
+
+            user.IsArchived = !user.IsArchived;  
+            await _db.SaveChangesAsync();
+
+            Console.WriteLine($"User with ID {request.UserID} has been {(user.IsArchived ? "archived" : "unarchived")}");
+            return new JsonResult(new
+            {
+                message = $"User has been successfully {(user.IsArchived ? "archived" : "unarchived")}",
+                isArchived = user.IsArchived
+            });
+        }
+
+        public class ToggleArchiveRequest
+        {
+            public int UserID { get; set; }
+        }
+        
+        [HttpPost]
+        public async Task<IActionResult> OnPostChangeDepartmentAsync([FromBody] ChangeDepartmentRequest request)
+        {
+            if (request == null || request.UserId <= 0 || request.DepartmentId <= 0)
+            {
+                return BadRequest(new { message = "Invalid request data" });
+            }
+
+            var user = await _db.Users.FindAsync(request.UserId);
+            if (user == null)
+            {
+                return NotFound(new { message = "User not found" });
+            }
+
+            var department = await _db.Departments.FindAsync(request.DepartmentId);
+            if (department == null || !department.IsActive)
+            {
+                return NotFound(new { message = "Department not found or inactive" });
+            }
+
+            user.DepartmentID = request.DepartmentId;
+            await _db.SaveChangesAsync();
+
+            return new JsonResult(new { message = $"Department changed successfully for {user.FirstName} {user.LastName}" });
+        }
+
+        public class ChangeDepartmentRequest
+        {
+            public int UserId { get; set; }
+            public int DepartmentId { get; set; }
+        }
     }
 }

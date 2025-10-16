@@ -153,3 +153,15 @@ function enableTableSorting(tableSelector, excludeCols = []) {
     });
 }
 
+// Disable button and show loading
+function showLoading(buttonClass, textClass, spinnerClass) {
+    var button = document.querySelector(buttonClass);
+    var text = document.querySelector(textClass);
+    var spinner = document.querySelector(spinnerClass);
+
+    button.disabled = true;
+    text.style.display = "none";
+    spinner.style.display = "inline-block";
+}
+
+

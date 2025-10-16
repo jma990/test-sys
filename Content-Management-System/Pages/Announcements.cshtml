@@ -1,42 +1,122 @@
 ﻿@page
 @model Content_Management_System.Pages.AnnouncementsModel
 @{
+    var activeFilter = Model.ActiveFilter ?? "recent";
 }
+<link rel="stylesheet" href="@Url.Content(PathDirectory.AnnouncementsCSS)" />
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        const tabs = document.querySelectorAll("#announcementTabs li");
 
-<!-- The Announcements -->
-<div class="d-flex align-items-center justify-content-between mb-3">
-    <h2 class="mb-0">Announcements</h2>
-</div>
-@if (Model.Announcements.Any())
-{
-    <ul>
-        @foreach (var announcement in Model.Announcements)
-        {
-            <li>
-                <strong>@announcement.Title</strong>  
-                <p>@announcement.Content</p>
-                @if (!string.IsNullOrWhiteSpace(announcement.Link))
-                {
-                    <div>
-                        <a href="@announcement.Link" target="_blank" rel="noopener noreferrer">
-                            View More
-                        </a>
-                    </div>
-                }
-                <small>
-                    Posted on @announcement.CreatedAt.ToString("MMMM dd, yyyy hh:mm tt") 
-                    by @announcement.Author?.FirstName @announcement.Author?.LastName
-                    @if (announcement.UpdatedAt.HasValue && announcement.UpdatedAt > announcement.CreatedAt)
+        tabs.forEach(tab => {
+            tab.addEventListener("click", () => {
+                const filter = tab.getAttribute("data-filter");
+                // Reload the page with ?filter= parameter
+                window.location.href = `?filter=${filter}`;
+            });
+        });
+    });
+</script>
+
+<section class="main">
+    <div class="main-top">
+        <h1>Announcements</h1>
+        <i class="fas fa-bullhorn"></i>
+    </div>
+
+    <section class="main-announcements">
+        <div class="announcement-box">
+            <ul id="announcementTabs">
+                <li class="@(activeFilter == "recent" ? "active" : "")" data-filter="recent">Recent</li>
+                <li class="@(activeFilter == "important" ? "active" : "")" data-filter="important">Important</li>
+                <li class="@(activeFilter == "archived" ? "active" : "")" data-filter="archived">Archived</li>
+            </ul>
+
+            <div class="announcements">
+                @{
+                    var announcements = activeFilter switch
                     {
-                        <span> | Updated on @announcement.UpdatedAt.Value.ToString("MMMM dd, yyyy hh:mm tt")</span>
-                    }
-                </small>
-            </li>
-        }
-    </ul>
-}
-else
-{
-    <p>No Announcements Found</p>
-}
+                        "recent" => Model.RecentAnnouncements,
+                        "important" => Model.ImportantAnnouncements,
+                        "archived" => Model.ArchivedAnnouncements,
+                        _ => Enumerable.Empty<Announcement>()
+                    };
 
+                    var emptyMessage = activeFilter switch
+                    {
+                        "recent" => "No recent announcements found.",
+                        "important" => "No important announcements found.",
+                        "archived" => "No archived announcements found.",
+                        _ => "No announcements found."
+                    };
+                }
+
+                @if (announcements.Any())
+                {
+                    foreach (var announcement in announcements)
+                    {
+                        <div class="announcement-item">
+                            <h3>@announcement.Title</h3>
+                            <p>@announcement.CreatedAt.ToString("MMMM dd, yyyy hh:mm tt")</p>
+                            <p>
+                                @announcement.Author?.FirstName @announcement.Author?.LastName
+                                @if (activeFilter == "recent" && announcement.UpdatedAt.HasValue && announcement.UpdatedAt > announcement.CreatedAt)
+                                {
+                                    <span> | Updated on @announcement.UpdatedAt.Value.ToString("MMMM dd, yyyy hh:mm tt")</span>
+                                }
+                                <br>
+                                <strong>For:</strong> @(announcement.Department?.DepartmentName ?? "All")
+                            </p>
+                            <br>
+
+                            <!-- Split content into fixed-length paragraphs and prevent showing more than 500 characters -->
+                            @{
+                                // Limit preview to 500 characters
+                                var previewContent = announcement.Content.Length > 500
+                                    ? announcement.Content.Substring(0, 500)
+                                    : announcement.Content;
+                                var hasMore = announcement.Content.Length > 500;
+
+                                // Split preview into lines
+                                var words = previewContent
+                                    .Split(new[] { ' ', '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries);
+
+                                int wordsPerLine = 19;
+                                var lines = new List<string>();
+                                for (int i = 0; i < words.Length; i += wordsPerLine)
+                                {
+                                    var line = string.Join(" ", words.Skip(i).Take(wordsPerLine));
+                                    lines.Add(line);
+                                }
+                            }
+
+                            @foreach (var line in lines)
+                            {
+                                <p>@line</p>
+                            }
+
+                            @if (hasMore)
+                            {
+                                <span class="more-tooltip">
+                                    <a href="javascript:void(0);" tabindex="0">Click more</a>
+                                    <span class="tooltip-content">@announcement.Content</span>
+                                </span>
+                            }
+                            <!-- End of content splitting -->
+
+                            <!-- Click link if there's a link -->
+                            @if (!string.IsNullOrWhiteSpace(announcement.Link))
+                            {
+                                <button onclick="window.open('@announcement.Link', '_blank')">Link</button>
+                            }
+                        </div>
+                    }
+                }
+                else
+                {
+                    <p>@emptyMessage</p>
+                }
+            </div>
+        </div>
+    </section>
+</section>

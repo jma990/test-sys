@@ -1,0 +1,219 @@
+
+/* Main Section */
+.main{
+   position: relative;
+   padding: 20px;
+   width: 100%;
+}
+
+.main-top{
+   display: flex;
+   width: 100%;
+}
+
+.main-top i{
+   position: absolute;
+   right: 0;
+   margin: 10px 30px;
+   color: rgb(110, 109, 109);
+   cursor: pointer;
+}
+
+.links-manager{
+   margin-top: 20px;
+}
+
+.add-link-form{
+   display: flex;
+   gap: 10px;
+   margin-bottom: 20px;
+   flex-wrap: wrap;
+}
+
+.add-link-form input{
+   flex: 1;
+   min-width: 200px;
+   padding: 10px;
+   border: 1px solid #ddd;
+   border-radius: 5px;
+   font-size: 14px;
+}
+
+.add-link-form button{
+   background: orangered;
+   color: #fff;
+   padding: 10px 15px;
+   border: none;
+   border-radius: 5px;
+   cursor: pointer;
+   font-size: 14px;
+}
+
+.add-link-form button:hover{
+   background: rgba(223, 70, 15, 0.856);
+}
+
+.links-list{
+   display: flex;
+   flex-direction: column;
+   gap: 10px;
+}
+
+.link-item{
+   display: flex;
+   align-items: center;
+   justify-content: space-between;
+   background: #fff;
+   padding: 15px;
+   border-radius: 10px;
+   box-shadow: 0 20px 35px rgba(0, 0, 0, 0.1);
+}
+
+.link-info{
+   flex: 1;
+}
+
+.link-info h3{
+   margin: 0 0 5px 0;
+   font-size: 16px;
+}
+
+.link-info a{
+   color: #007bff;
+   text-decoration: none;
+}
+
+.link-info a:hover{
+   text-decoration: underline;
+}
+
+.link-actions{
+   display: flex;
+   gap: 10px;
+}
+
+.link-actions button{
+   padding: 5px 10px;
+   border: none;
+   border-radius: 5px;
+   cursor: pointer;
+   font-size: 12px;
+}
+
+.edit-btn{
+   background: #28a745;
+   color: white;
+}
+
+.delete-btn{
+   background: #dc3545;
+   color: white;
+}
+
+.edit-btn:hover{
+   background: #218838;
+}
+
+.delete-btn:hover{
+   background: #c82333;
+}
+
+/* Announcements */
+.main-announcements{
+   margin-top:20px ;
+   text-transform: capitalize;
+}
+
+.announcement-box{
+   width: 100%;
+   height: 400px;
+   padding: 10px 10px 30px 10px;
+   margin-top: 10px;
+   background: #fff;
+   border-radius: 10px;
+   box-shadow: 0 20px 35px rgba(0, 0, 0, 0.1);
+}
+
+.announcement-box ul{
+   list-style: none;
+   display: flex;
+}
+
+.announcement-box ul li{
+   margin: 10px;
+   color: gray;
+   cursor: pointer;
+}
+
+.announcement-box ul .active{
+   color: #000;
+   border-bottom: 1px solid #000;
+}
+
+.announcement-box .announcements{
+   display: flex;
+   overflow-x: auto;
+   padding: 10px 0;
+}
+
+.announcement-item{
+   min-width: 300px;
+   padding: 15px;
+   margin: 10px;
+   border-radius: 10px;
+   background: rgb(235, 233, 233);
+   box-shadow: 0 20px 35px rgba(0, 0, 0, 0.1);
+   flex-shrink: 0;
+}
+
+.announcement-item h3{
+   margin-bottom: 8px;
+   font-size: 16px;
+}
+
+.announcement-item p{
+   font-size: 12px;
+   margin-bottom: 5px;
+   color: #666;
+}
+
+.announcement-item button{
+   background: #000;
+   color: #fff;
+   padding: 7px 10px;
+   border-radius: 10px;
+   margin-top: 10px;
+   cursor: pointer;
+   border: none;
+}
+
+.announcement-item button:hover{
+   background: rgba(0, 0, 0, 0.842);
+}
+
+/* Tooltip for the Entire Announcement */
+.more-tooltip {
+    position: relative;
+    display: inline-block;
+}
+
+.more-tooltip .tooltip-content {
+    visibility: hidden;
+    width: 400px;
+    background-color: #222;
+    color: #fff;
+    text-align: left;
+    border-radius: 6px;
+    padding: 10px;
+    position: absolute;
+    z-index: 1;
+    left: 0;
+    top: 120%;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+    font-size: 0.95em;
+}
+
+.more-tooltip:hover .tooltip-content,
+.more-tooltip:focus-within .tooltip-content {
+    visibility: visible;
+}

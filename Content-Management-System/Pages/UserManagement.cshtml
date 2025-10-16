@@ -4,8 +4,8 @@
 }
 
 @await Html.PartialAsync(@Url.Content(PathDirectory._ResetPasswordLogs), Model)
+@Html.AntiForgeryToken()
 <h2>User Management</h2>
-
 @if (Model.Users == null || !Model.Users.Any())
 {
     <p>No users available.</p>
@@ -52,6 +52,16 @@ else
                             onclick="toggleArchive(@user.ID, '@user.FirstName @user.LastName', @user.IsArchived.ToString().ToLower())">
                                 <i class="bi @(user.IsArchived ? "bi-box-arrow-in-up text-success" : "bi-archive text-secondary") fs-5"></i>
                         </a>
+
+                        @if (User.FindFirstValue(ClaimTypes.Role) == nameof(UserRole.SuperAdmin))
+                        {
+                            <a href="javascript:void(0);" 
+                                class="ms-2"
+                                title="Change Department"
+                                onclick="changeDepartment(@user.ID, '@user.FirstName @user.LastName')">
+                                <i class="bi bi-building fs-5 text-primary"></i>
+                            </a>
+                        }
                     </td>
                 </tr>
             }
@@ -207,7 +217,7 @@ else
             });
         }
 
-        async function toggleArchive(userId, userName, isArchived) {
+        async function toggleArchive(userID, userName, isArchived) {
             const action = isArchived ? 'unarchive' : 'archive';
             const result = await Swal.fire({
                 title: `${action.charAt(0).toUpperCase() + action.slice(1)} User`,
@@ -219,24 +229,97 @@ else
             });
 
             if (!result.isConfirmed) return;
+
             try {
+                const csrfToken = document.querySelector('input[name="__RequestVerificationToken"]').value;
                 const res = await fetch(`/UserManagement?handler=ToggleArchive`, {
                     method: 'POST',
                     headers: {
-                        'Content-Type': 'application/json'
+                        'Content-Type': 'application/json',
+                        'RequestVerificationToken': csrfToken
                     },
-                    body: JSON.stringify({ userID: userId })
+                    body: JSON.stringify({ userID: userID })
                 });
 
-                if (!res.ok) throw new Error("Failed to send userId");
+                if (!res.ok) throw new Error("Failed to send userID");
 
                 const data = await res.json();
-                console.log(`The userId received is: ${userId}`);
-
-            } catch (err) {
-                console.error("Error sending userId:", err);
+                await Swal.fire({
+                    title: 'Success',
+                    text: data.message,
+                    icon: 'success',
+                    confirmButtonText: 'OK'
+                });
+                location.reload(); 
+            } 
+            catch (err) {
+                console.error("Error sending userID:", err);
+                await Swal.fire({
+                    title: 'Error',
+                    text: 'An error occurred while processing the request.',
+                    icon: 'error',
+                    confirmButtonText: 'OK'
+                });
             }
+        }
 
+        async function changeDepartment(userId, userName) {
+            try {
+                // Fetch the list of active departments
+                const res = await fetch(`/UserManagement/GetDepartments`);
+                if (!res.ok) throw new Error("Failed to load departments");
+
+                const departments = await res.json();
+
+                // Show SweetAlert with a dropdown for department selection
+                const { value: departmentId } = await Swal.fire({
+                    title: `Change Department for ${userName}`,
+                    input: 'select',
+                    inputOptions: departments.reduce((options, dept) => {
+                        options[dept.id] = dept.name;
+                        return options;
+                    }, {}),
+                    inputPlaceholder: 'Select a department',
+                    showCancelButton: true,
+                    confirmButtonText: 'Change',
+                    cancelButtonText: 'Cancel'
+                });
+
+                if (!departmentId) return;
+
+                // Send the selected department to the backend
+                const csrfToken = document.querySelector('input[name="__RequestVerificationToken"]').value;
+                const updateRes = await fetch(`/UserManagement?handler=ChangeDepartment`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'RequestVerificationToken': csrfToken
+                    },
+                    body: JSON.stringify({ userId, departmentId })
+                });
+
+                if (!updateRes.ok) throw new Error("Failed to change department");
+
+                const data = await updateRes.json();
+
+                // Show success message
+                await Swal.fire({
+                    title: 'Success',
+                    text: data.message,
+                    icon: 'success',
+                    confirmButtonText: 'OK'
+                });
+
+                location.reload(); // Reload the page to reflect changes
+            } catch (err) {
+                console.error("Error changing department:", err);
+                await Swal.fire({
+                    title: 'Error',
+                    text: 'An error occurred while changing the department.',
+                    icon: 'error',
+                    confirmButtonText: 'OK'
+                });
+            }
         }
 
     </script>
