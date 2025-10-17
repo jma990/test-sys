@@ -1,0 +1,248 @@
+/* admin-posts.css - maximize space + responsive table behavior */
+
+/* Reset and base styles */
+.admin-posts-page {
+    width: 100%;
+    max-width: 100%;
+    padding: 0.5rem;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+/* Page container: use full available width but keep comfortable gutters */
+.admin-posts-page {
+    box-sizing: border-box;
+    width: 100%;
+    max-width: 1400px;     /* grow large on wide screens */
+    margin: 0 auto;        /* centered inside layout */
+    padding: 12px 18px;    /* small inner padding */
+}
+
+/* Header & filters layout */
+.page-header {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+    padding: 0.5rem;
+}
+
+.page-header h2 {
+    margin: 0;
+    font-size: 1.25rem;
+    flex: 1;
+}
+
+/* Filters row: compact and wrap when narrow */
+.filters {
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 0.75rem;
+    margin-bottom: 1rem;
+}
+
+.filter-item {
+    width: 100%;
+}
+
+.filter-item select {
+    width: 100%;
+}
+
+/* Table container: allow horizontal scroll on small screens */
+.table-responsive {
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    margin-bottom: 1rem;
+    border-radius: 4px;
+}
+
+/* Use full width and fixed layout to better control column sizes on wide screens */
+.admin-posts-table {
+    width: 100%;
+    margin: 0;
+    border-collapse: collapse;
+}
+
+/* Mobile-first column widths */
+.admin-posts-table th,
+.admin-posts-table td {
+    padding: 0.75rem;
+    vertical-align: top;
+    text-align: left;
+    border-bottom: 1px solid rgba(0,0,0,0.1);
+}
+
+.admin-posts-table .cell-content {
+    word-break: break-word;
+    max-height: 150px;
+    overflow-y: auto;
+}
+
+/* Column sizing priorities (adjust percentages to taste) */
+.admin-posts-table .title-col  { width: 24%; min-width: 160px; }
+.admin-posts-table .content-col{ width: 48%; min-width: 260px; }
+.admin-posts-table .date-col   { width: 10%; min-width: 120px; }
+.admin-posts-table .link-col   { width: 6%;  min-width: 64px;  text-align: center; }
+.admin-posts-table .status-col { width: 6%;  min-width: 72px;  text-align: center; }
+.admin-posts-table .action-col { width: 6%;  min-width: 72px;  text-align: center; }
+
+/* Allow content column to display multiple lines without truncating */
+.admin-posts-table .content-col {
+    display: table-cell;
+}
+
+/* Make inline clones and inputs fill the available cell width */
+.admin-posts-table .view-mode input,
+.admin-posts-table .view-mode textarea,
+.admin-posts-table .view-mode select {
+    width: 100%;
+    box-sizing: border-box;
+    white-space: normal;
+}
+
+/* Tighter row visuals */
+.admin-posts-table tbody tr {
+    border-bottom: 1px solid rgba(0,0,0,0.06);
+}
+
+/* Small screens: make table easier to read */
+@media (max-width: 1000px) {
+    .admin-posts-page { padding: 10px 12px; max-width: 100%; }
+
+    /* reduce title and content widths so dates/actions remain visible */
+    .admin-posts-table .title-col  { width: 28%; }
+    .admin-posts-table .content-col{ width: 50%; }
+    .admin-posts-table .date-col   { width: 12%; }
+}
+
+/* Very small screens: allow horizontal scroll and slightly reduce padding */
+@media (max-width: 640px) {
+    .filters { gap: 8px; }
+    .filter-item { min-width: 120px; }
+
+    .admin-posts-table th,
+    .admin-posts-table td { padding: 8px 10px; font-size: 0.95rem; }
+
+    /* keep table-layout: fixed but allow scrolling horizontally */
+    .admin-posts-table { table-layout: fixed; }
+}
+
+/* --- strong overrides to ensure full visible content and editable inputs --- */
+
+.admin-posts-table {
+    /* allow columns to size to content so long text can wrap / expand */
+    table-layout: auto !important;
+}
+
+/* force cells to wrap and not clip */
+.admin-posts-table th,
+.admin-posts-table td {
+    white-space: normal !important;
+    overflow: visible !important;
+    text-overflow: clip !important;
+    vertical-align: top;
+}
+
+/* make the content wrapper responsible for wrapping and full width */
+.admin-posts-table .cell-content {
+    display: block;
+    width: 100%;
+    white-space: normal;
+    overflow-wrap: anywhere;
+    word-break: break-word;
+}
+
+/* ensure cloned inputs/textareas fill the cell and allow multi-line */
+.admin-posts-table .view-mode input,
+.admin-posts-table .view-mode textarea,
+.admin-posts-table .view-mode select {
+    width: 100% !important;
+    box-sizing: border-box !important;
+    display: block !important;
+    white-space: normal !important;
+}
+
+/* textarea/inputs: let textarea grow vertically */
+.admin-posts-table .view-mode textarea {
+    min-height: 64px;
+    max-height: 300px;
+    resize: vertical;
+}
+
+/* relax content column sizing so it can expand */
+.admin-posts-table .content-col {
+    max-width: none !important;
+}
+
+/* keep hidden real edit form out of sight */
+.edit-form { display: none !important; }
+
+/* Status badges */
+.badge {
+    padding: 0.25rem 0.5rem;
+    border-radius: 4px;
+    font-size: 0.875rem;
+    white-space: nowrap;
+}
+
+/* Action buttons */
+.action-col button {
+    padding: 0.25rem;
+    margin: 0 0.125rem;
+}
+
+/* Responsive breakpoints */
+@media (min-width: 768px) {
+    .admin-posts-page {
+        padding: 1rem;
+    }
+
+    .page-header h2 {
+        font-size: 1.5rem;
+    }
+
+    .date-col { 
+        display: table-cell;
+        width: 12%;
+    }
+
+    .title-col { width: 20%; }
+    .content-col { width: 35%; }
+    .link-col { width: 8%; }
+    .status-col { width: 8%; }
+    .action-col { width: 5%; }
+}
+
+@media (min-width: 1200px) {
+    .admin-posts-page {
+        padding: 1.5rem;
+        max-width: 1400px;
+        margin: 0 auto;
+    }
+
+    .filters {
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    }
+
+    .title-col { width: 15%; }
+    .content-col { width: 40%; }
+    .date-col { width: 10%; }
+    .link-col { width: 5%; }
+    .status-col { width: 5%; }
+    .action-col { width: 5%; }
+}
+
+/* Edit mode overrides */
+.edit-form { display: none !important; }
+
+.view-mode.editing input,
+.view-mode.editing textarea {
+    background-color: #fff;
+    border-color: #80bdff;
+    box-shadow: 0 0 0 0.2rem rgba(0,123,255,.25);
+}

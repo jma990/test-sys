@@ -2,231 +2,243 @@
 @model Content_Management_System.Pages.AdminPostsModel
 @{
 }
+<!-- link to page-specific stylesheet -->
+<link rel="stylesheet" href="~/css/admin-posts.css" />
 
 @await Html.PartialAsync(@Url.Content(PathDirectory._AddAnnouncement), Model)
-<h2>My Posts</h2>
-@if ((User.IsInRole("Admin")) || User.IsInRole("SuperAdmin"))
-{
-    <button type="button" class="btn btn-primary btn-sm rounded-circle" title="Add Announcement" data-bs-toggle="modal" data-bs-target="#AddAnnouncementModal">
-        <i class="bi bi-plus-lg"></i>
-    </button>
-}
+<div class="admin-posts-page">
+    <div class="page-header">
+        <h2>My Posts</h2>
 
-<div class="mb-3">
-    <label for="departmentFilter" class="form-label">Filter by Department:</label>
-    <select id="departmentFilter" class="form-select">
-        <option value="showAll" selected="@(Model.SelectedDepartmentID == "showAll")">
-            All Announcements
-        </option>
-        <option value="showForAllDepartments" selected="@(Model.SelectedDepartmentID == "showForAllDepartments")">
-            All Departments
-        </option>
-        @foreach (var dept in Model.Departments)
+        @if ((User.IsInRole("Admin")) || User.IsInRole("SuperAdmin"))
         {
-            <option value="@dept.ID" selected="@(Model.SelectedDepartmentID == dept.ID.ToString())">
-                @dept.DepartmentName
-            </option>
+            <div class="add-button-wrap">
+                <button type="button" class="btn btn-primary btn-sm rounded-circle" title="Add Announcement" data-bs-toggle="modal" data-bs-target="#AddAnnouncementModal">
+                    <i class="bi bi-plus-lg"></i>
+                </button>
+            </div>
         }
-    </select>
-</div>
-<div class="mb-3">
-    <label for="statusFilter" class="form-label">Filter by Status:</label>
-    <select id="statusFilter" class="form-select">
-        <option value="all" selected="@(Model.SelectedStatus == "all")">All</option>
-        <option value="active" selected="@(Model.SelectedStatus == "active")">Active</option>
-        <option value="inactive" selected="@(Model.SelectedStatus == "inactive")">Inactive</option>
-    </select>
-</div>
+    </div>
+
+    <div class="filters">
+        <div class="filter-item">
+            <label for="departmentFilter" class="form-label">Filter by Department:</label>
+            <select id="departmentFilter" class="form-select">
+                <option value="showAll" selected="@(Model.SelectedDepartmentID == "showAll")">
+                    All Announcements
+                </option>
+                <option value="showForAllDepartments" selected="@(Model.SelectedDepartmentID == "showForAllDepartments")">
+                    All Departments
+                </option>
+                @foreach (var dept in Model.Departments)
+                {
+                    <option value="@dept.ID" selected="@(Model.SelectedDepartmentID == dept.ID.ToString())">
+                        @dept.DepartmentName
+                    </option>
+                }
+            </select>
+        </div>
+
+        <div class="filter-item">
+            <label for="statusFilter" class="form-label">Filter by Status:</label>
+            <select id="statusFilter" class="form-select">
+                <option value="all" selected="@(Model.SelectedStatus == "all")">All</option>
+                <option value="active" selected="@(Model.SelectedStatus == "active")">Active</option>
+                <option value="inactive" selected="@(Model.SelectedStatus == "inactive")">Inactive</option>
+            </select>
+        </div>
+    </div>
+
+    <form method="get" id="departmentForm">
+        <input type="hidden" name="SelectedDepartmentID" value="@Model.SelectedDepartmentID" />
+        <input type="hidden" name="SelectedStatus" value="@Model.SelectedStatus" />
+    </form>
+
+    @Html.AntiForgeryToken()
+
+    <div class="table-responsive">
+        <table class="table table-sm admin-posts-table">
+            <thead>
+                <tr>
+                    <th class="title-col">Title</th>
+                    <th class="content-col">Content</th>
+                    <th class="date-col">Created At</th>
+                    <th class="date-col">Updated At</th>
+                    <th class="link-col">Link</th>
+                    <th class="status-col">Status</th>
+                    <th class="action-col">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var post in Model.MyPosts)
+                {
+                    <tr data-id="@post.ID">
+                        <td class="view-mode title-col"><div class="cell-content">@post.Title</div></td>
+                        <td class="view-mode content-col"><div class="cell-content">@post.Content</div></td>
+                        <td class="date-col">@post.CreatedAt.ToString("MM/dd/yyyy hh:mm tt")</td>
+                        <td class="date-col">@(post.UpdatedAt.HasValue ? post.UpdatedAt.Value.ToString("MM/dd/yyyy hh:mm tt") : "")</td>
+                        <td class="view-mode link-col"><div class="cell-content">
+                            @if (!string.IsNullOrWhiteSpace(post.Link))
+                            {
+                                <a href="@post.Link" target="_blank">View</a>
+                            }
+                        </div></td>
+                        <td class="view-mode status-cell status-col">
+                            @if (post.IsActive)
+                            {
+                                <span class="badge bg-success">Active</span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-secondary">Inactive</span>
+                            }
+                        </td>
+                        <td class="action-col">
+                            <button type="button" class="btn btn-sm btn-link edit-btn"><i class="bi bi-pencil"></i></button>
+                            <button type="button" class="btn btn-sm btn-link save-btn d-none"><i class="bi bi-check-lg"></i></button>
+
+                            <!-- Keep the real inputs inside this form so they'll be posted -->
+                            <form class="edit-form d-none" method="post" asp-page-handler="Edit">
+                                @Html.AntiForgeryToken()
+                                <input type="hidden" name="EditID" value="@post.ID" />
+                                <input type="hidden" name="SelectedDepartmentID" value="@Model.SelectedDepartmentID" />
+                                <input type="hidden" name="SelectedStatus" value="@Model.SelectedStatus" />
+                                <input type="text" name="EditTitle" class="form-control form-control-sm" />
+                                <textarea name="EditContent" class="form-control form-control-sm" rows="3"></textarea>
+                                <input type="url" name="EditLink" class="form-control form-control-sm" />
+                                <input type="checkbox" name="EditIsActive" value="true" @(post.IsActive ? "checked" : "") /> Active
+                            </form>
+                        </td>
+                    </tr>
+                }
+
+            </tbody>
+        </table>
+    </div>
+
+    @section Scripts {
+        <script>
+            document.addEventListener("DOMContentLoaded", () => {
+                enableTableSorting("table", [6]);
+                // -----------------------------
+                // Edit the announcement
+                const rows = document.querySelectorAll("table tbody tr");
+                rows.forEach((row, rowIndex) => {
+                    const editBtn = row.querySelector(".edit-btn");
+                    const saveBtn = row.querySelector(".save-btn");
+                    const form = row.querySelector(".edit-form");
+                    const realInputs = form.querySelectorAll("input[name='EditTitle'], textarea[name='EditContent'], input[name='EditLink'], input[type=checkbox][name='EditIsActive']");
 
 
-<form method="get" id="departmentForm">
-    <input type="hidden" name="SelectedDepartmentID" value="@Model.SelectedDepartmentID" />
-    <input type="hidden" name="SelectedStatus" value="@Model.SelectedStatus" />
-</form>
+                    editBtn.addEventListener("click", () => {
+                        const viewCells = row.querySelectorAll(".view-mode");
 
+                        // Show the form controls visually by placing *clones* into the cells
+                        viewCells.forEach((td, i) => {
+                            // Handle Status cell separately
+                            if (td.classList.contains("status-cell")) {
+                                const realCheckbox = form.querySelector('input[type=checkbox][name="EditIsActive"]');
+                                const checkboxClone = realCheckbox.cloneNode(true);
+                                checkboxClone.removeAttribute("name");
+                                checkboxClone.checked = realCheckbox.checked;
 
-@Html.AntiForgeryToken()
+                                checkboxClone.addEventListener("change", () => {
+                                    realCheckbox.checked = checkboxClone.checked;
+                                });
 
-<table class="table table-sm">
-    <thead>
-        <tr>
-            <th>Title</th>
-            <th>Content</th>
-            <th>Created At</th>
-            <th>Updated At</th>
-            <th>Link</th>
-            <th>Status</th>
-            <th>Action</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var post in Model.MyPosts)
-        {
-            <tr data-id="@post.ID">
-                <td class="view-mode">@post.Title</td>
-                <td class="view-mode">@post.Content</td>
-                <td>@post.CreatedAt.ToString("MM/dd/yyyy hh:mm tt")</td>
-                <td>@(post.UpdatedAt.HasValue ? post.UpdatedAt.Value.ToString("MM/dd/yyyy hh:mm tt") : "")</td>
-                <td class="view-mode">
-                    @if (!string.IsNullOrWhiteSpace(post.Link))
-                    {
-                        <a href="@post.Link" target="_blank">View</a>
-                    }
-                </td>
-                <td class="view-mode status-cell">
-                    @if (post.IsActive)
-                    {
-                        <span class="badge bg-success">Active</span>
-                    }
-                    else
-                    {
-                        <span class="badge bg-secondary">Inactive</span>
-                    }
-                </td>
-                <td>
-                    <button type="button" class="btn btn-sm btn-link edit-btn"><i class="bi bi-pencil"></i></button>
-                    <button type="button" class="btn btn-sm btn-link save-btn d-none"><i class="bi bi-check-lg"></i></button>
+                                td.innerHTML = "";
+                                td.appendChild(checkboxClone);
+                                return;
+                            }
 
-                    <!-- Keep the real inputs inside this form so they'll be posted -->
-                    <form class="edit-form d-none" method="post" asp-page-handler="Edit">
-                        @Html.AntiForgeryToken()
-                        <input type="hidden" name="EditID" value="@post.ID" />
-                        <input type="hidden" name="SelectedDepartmentID" value="@Model.SelectedDepartmentID" />
-                        <input type="hidden" name="SelectedStatus" value="@Model.SelectedStatus" />
-                        <input type="text" name="EditTitle" class="form-control form-control-sm" />
-                        <input type="text" name="EditContent" class="form-control form-control-sm" />
-                        <input type="url" name="EditLink" class="form-control form-control-sm" />
-                        <input type="checkbox" name="EditIsActive" value="true" @(post.IsActive ? "checked" : "") /> Active
-                    </form>
-                </td>
-            </tr>
-        }
+                            // Handle Title / Content / Link normally
+                            let text;
+                            if (i === 2 && td.querySelector("a")) { // Link column
+                                text = td.querySelector("a").href;
+                            } 
+                            else {
+                                text = td.textContent.trim();
+                            }
+                            realInputs[i].value = text;
 
-    </tbody>
-</table>
+                            // create an editable clone for the user to interact with
+                            const clone = realInputs[i].cloneNode(true);
+                            // remove name from clone so it doesn't get confused in other contexts (not strictly necessary)
+                            clone.removeAttribute('name');
 
-@section Scripts {
-    <script>
-        document.addEventListener("DOMContentLoaded", () => {
-            enableTableSorting("table", [6]);
-            // -----------------------------
-            // Edit the announcement
-            const rows = document.querySelectorAll("table tbody tr");
-            rows.forEach((row, rowIndex) => {
-                const editBtn = row.querySelector(".edit-btn");
-                const saveBtn = row.querySelector(".save-btn");
-                const form = row.querySelector(".edit-form");
-                const realInputs = form.querySelectorAll("input[type=text], input[type=url], input[type=checkbox]");
+                            // make sure clone shows current value
+                            clone.value = realInputs[i].value;
 
+                            // style: ensure the clone looks like a normal inline element inside the cell
+                            clone.classList.add('form-control', 'form-control-sm');
+                            clone.style.display = ''; // visible
 
-                editBtn.addEventListener("click", () => {
-                    const viewCells = row.querySelectorAll(".view-mode");
-
-                    // Show the form controls visually by placing *clones* into the cells
-                    viewCells.forEach((td, i) => {
-                        // Handle Status cell separately
-                        if (td.classList.contains("status-cell")) {
-                            const realCheckbox = form.querySelector('input[type=checkbox][name="EditIsActive"]');
-                            const checkboxClone = realCheckbox.cloneNode(true);
-                            checkboxClone.removeAttribute("name");
-                            checkboxClone.checked = realCheckbox.checked;
-
-                            checkboxClone.addEventListener("change", () => {
-                                realCheckbox.checked = checkboxClone.checked;
+                            // sync clone -> real input on input events
+                            clone.addEventListener('input', () => {
+                                realInputs[i].value = clone.value;
                             });
 
-                            td.innerHTML = "";
-                            td.appendChild(checkboxClone);
-                            return;
-                        }
-
-                        // Handle Title / Content / Link normally
-                        let text;
-                        if (i === 2 && td.querySelector("a")) { // Link column
-                            text = td.querySelector("a").href;
-                        } 
-                        else {
-                            text = td.textContent.trim();
-                        }
-                        realInputs[i].value = text;
-
-                        // create an editable clone for the user to interact with
-                        const clone = realInputs[i].cloneNode(true);
-                        // remove name from clone so it doesn't get confused in other contexts (not strictly necessary)
-                        clone.removeAttribute('name');
-
-                        // make sure clone shows current value
-                        clone.value = realInputs[i].value;
-
-                        // style: ensure the clone looks like a normal inline element inside the cell
-                        clone.classList.add('form-control', 'form-control-sm');
-                        clone.style.display = ''; // visible
-
-                        // sync clone -> real input on input events
-                        clone.addEventListener('input', () => {
-                            realInputs[i].value = clone.value;
+                            // clear the cell and append the clone
+                            td.innerHTML = '';
+                            td.appendChild(clone);
                         });
 
-                        // clear the cell and append the clone
-                        td.innerHTML = '';
-                        td.appendChild(clone);
+                        editBtn.classList.add("d-none");
+                        saveBtn.classList.remove("d-none");
+                        form.classList.remove("d-none");
+                        form.style.display = 'none';
                     });
 
-                    editBtn.classList.add("d-none");
-                    saveBtn.classList.remove("d-none");
-                    form.classList.remove("d-none");
-                    form.style.display = 'none';
-                });
+                    saveBtn.addEventListener("click", (e) => {
+                        e.preventDefault();
+                        const title = realInputs[0].value.trim();
+                        const content = realInputs[1].value.trim();
+                        const link = realInputs[2].value.trim();
 
-                saveBtn.addEventListener("click", (e) => {
-                    e.preventDefault();
-                    const title = realInputs[0].value.trim();
-                    const content = realInputs[1].value.trim();
-                    const link = realInputs[2].value.trim();
+                        const clones = row.querySelectorAll(".view-mode input");
+                        clones.forEach((c, i) => {
+                            if (realInputs[i].type === "checkbox") {
+                                realInputs[i].checked = c.checked;
+                            } else {
+                                realInputs[i].value = c.value;
+                            }
+                        });
 
-                    const clones = row.querySelectorAll(".view-mode input");
-                    clones.forEach((c, i) => {
-                        if (realInputs[i].type === "checkbox") {
-                            realInputs[i].checked = c.checked;
-                        } else {
-                            realInputs[i].value = c.value;
-                        }
+                        form.submit();
                     });
-
-                    form.submit();
                 });
+
+                // SweetAlert popup if invalid user input
+                @if (!string.IsNullOrEmpty(Model.AlertMessage))
+                {
+                    <text>
+                    Swal.fire({
+                        icon: '@Model.AlertType',
+                        title: '@Model.AlertMessage',
+                        confirmButtonText: 'OK'
+                    });
+                    </text>
+
+                    // Clear TempData so it doesn't show again
+                    @TempData.Remove("AlertMessage");
+                    @TempData.Remove("AlertType");
+                }
+                // -----------------------------
             });
 
-            // SweetAlert popup if invalid user input
-            @if (!string.IsNullOrEmpty(Model.AlertMessage))
-            {
-                <text>
-                Swal.fire({
-                    icon: '@Model.AlertType',
-                    title: '@Model.AlertMessage',
-                    confirmButtonText: 'OK'
-                });
-                </text>
+            // Department filter change
+            document.getElementById('departmentFilter').addEventListener('change', function() {
+                var form = document.getElementById('departmentForm');
+                form.querySelector('input[name="SelectedDepartmentID"]').value = this.value;
+                form.submit();
+            });
 
-                // Clear TempData so it doesn't show again
-                @TempData.Remove("AlertMessage");
-                @TempData.Remove("AlertType");
-            }
-            // -----------------------------
-        });
-
-        // Department filter change
-        document.getElementById('departmentFilter').addEventListener('change', function() {
-            var form = document.getElementById('departmentForm');
-            form.querySelector('input[name="SelectedDepartmentID"]').value = this.value;
-            form.submit();
-        });
-
-        // Status filter change
-        document.getElementById('statusFilter').addEventListener('change', function () {
-            var form = document.getElementById('departmentForm');
-            form.querySelector('input[name="SelectedStatus"]').value = this.value;
-            form.submit();
-        });
-    </script>
-}
+            // Status filter change
+            document.getElementById('statusFilter').addEventListener('change', function () {
+                var form = document.getElementById('departmentForm');
+                form.querySelector('input[name="SelectedStatus"]').value = this.value;
+                form.submit();
+            });
+        </script>
+    }
+</div>
