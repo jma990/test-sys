@@ -10,6 +10,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <link rel="stylesheet" href="@Url.Content(PathDirectory.LayoutCSS)" asp-append-version="true" />
+    @RenderSection("Styles", required: false)
     <title>Content Management System</title>
 </head>
 <body>
@@ -20,9 +21,18 @@
             @await Component.InvokeAsync("Navbar", new { user = User })
         }
     </header>
-    <div class="container">
+
+    @if (ViewData["NoContainer"] as bool? == true)
+    {
         @RenderBody()
-    </div>
+    }
+    else
+    {
+        <div class="container">
+            @RenderBody()
+        </div>
+    }
+
     @RenderSection("Scripts", required: false)
 </body>
 </html>
