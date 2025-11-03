@@ -10,14 +10,19 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <link rel="stylesheet" href="@Url.Content(PathDirectory.LayoutCSS)" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/layout.css" asp-append-version="true" />   <!-- added -->
     @RenderSection("Styles", required: false)
     <title>Content Management System</title>
 </head>
 <body>
     <header>
         @if (User?.Identity?.IsAuthenticated == true &&
-         User.HasClaim(c => c.Type == "MustChangePassword" && c.Value == "False"))
+          User.HasClaim(c => c.Type == "MustChangePassword" && c.Value == "False"))
         {
+            <!-- fold/unfold sidebar button (fixed via .sidebar-toggle in layout.css) -->
+            <button class="sidebar-toggle" type="button" aria-label="Toggle sidebar" title="Toggle sidebar" aria-pressed="false">
+                <span class="icon">☰</span>
+            </button>
             @await Component.InvokeAsync("Navbar", new { user = User })
         }
     </header>
@@ -28,11 +33,59 @@
     }
     else
     {
-        <div class="container">
-            @RenderBody()
+        <div class="app-container">
+            <div class="container">
+                @RenderBody()
+            </div>
         </div>
     }
 
     @RenderSection("Scripts", required: false)
+
+    <script>
+        (function(){
+            const KEY = 'sidebarCollapsed';
+            const body = document.body;
+
+            function setCollapsed(collapsed, btn) {
+                if (collapsed) body.classList.add('sidebar-collapsed');
+                else body.classList.remove('sidebar-collapsed');
+                try { localStorage.setItem(KEY, collapsed ? '1' : '0'); } catch(e) {}
+                if (btn) btn.setAttribute('aria-pressed', collapsed ? 'true' : 'false');
+            }
+
+            function toggleFromButton(btn) {
+                setCollapsed(!body.classList.contains('sidebar-collapsed'), btn);
+            }
+
+            // restore saved state as early as possible
+            try {
+                const stored = localStorage.getItem(KEY);
+                if (stored === '1') body.classList.add('sidebar-collapsed');
+            } catch(e){}
+
+            // Attach handlers after DOM ready and use delegation so the button is always handled
+            document.addEventListener('DOMContentLoaded', function(){
+                // delegated click: works even if DOM changes
+                document.addEventListener('click', function(e){
+                    const btn = e.target.closest('.sidebar-toggle');
+                    if (btn) {
+                        e.preventDefault();
+                        toggleFromButton(btn);
+                    }
+                }, { passive: false });
+
+                // keyboard accessibility: Space/Enter on focused button
+                document.addEventListener('keydown', function(e){
+                    const active = document.activeElement;
+                    if (active && active.classList && active.classList.contains('sidebar-toggle') &&
+                        (e.key === ' ' || e.key === 'Enter')) {
+                        e.preventDefault();
+                        toggleFromButton(active);
+                    }
+                });
+            });
+        })();
+    </script>
 </body>
 </html>

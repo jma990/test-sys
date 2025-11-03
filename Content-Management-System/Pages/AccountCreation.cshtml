@@ -1,78 +1,34 @@
 ﻿@page
 @model Content_Management_System.Pages.AccountCreationModel
 @{
+    ViewData["NoContainer"] = true;
+    Layout = "_Layout";
 }
 
-<h2>Create Account</h2>
-<form method="post">
-    <div class="mb-3">
-        <label class="form-label">First Name</label><span class="text-danger">*</span>
-        <input asp-for="FirstName" class="form-control" />
-        @Html.ValidationMessageFor(m => m.FirstName, "", new { @class = "text-danger" })
-    </div>
-
-    <div class="mb-3">
-        <label class="form-label">Middle Name</label>
-        <input asp-for="MiddleName" class="form-control" />
-    </div>
-
-    <div class="mb-3">
-        <label class="form-label">Last Name</label><span class="text-danger">*</span>
-        <input asp-for="LastName" class="form-control" />
-        @Html.ValidationMessageFor(m => m.LastName, "", new { @class = "text-danger" })
-    </div>
-
-    <div class="mb-3">
-        <label class="form-label">Email</label><span class="text-danger">*</span>
-        <input asp-for="Email" type="email" class="form-control" />
-        @Html.ValidationMessageFor(m => m.Email, "", new { @class = "text-danger" })
-    </div>
-
-    <div class="mb-3">
-        <label class="form-label">Department</label><span class="text-danger">*</span>
-        <select asp-for="DepartmentID" class="form-control" required>
-            <option value="">-- Select Department --</option>
-            @foreach (var dept in Model.Departments)
-            {
-                <option value="@dept.ID">@dept.DepartmentName</option>
-            }
-        </select>
-    </div>
-
-    <div class="mb-3">
-        <label class="form-label">Role</label><span class="text-danger">*</span>
-        <select asp-for="Role" class="form-control" required>
-            @if (User.IsInRole("SuperAdmin"))
-            {
-                <option value="1">Admin</option>
-                <option value="2">Member</option>
-            }
-            else if (User.IsInRole("Admin"))
-            {
-                <option value="2">Member</option>
-            }
-        </select>
-    </div>
-
-    <button type="submit" class="btn btn-primary">Create Account</button>
-</form>
+@section Styles {
+    <link rel="stylesheet" href="@Url.Content(PathDirectory.AccountCreationCSS)" />
+}
 
 @section Scripts {
-    @if (TempData["Message"] != null)
-    {
-        var message = TempData["Message"].ToString();
-        var tempPassword = "";
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            document.querySelector(".account-creation-form").addEventListener("submit", function (event) {
+                showLoading('.create-account-btn', '.btn-text', '.btn-loader');
+            });
 
-        if (message.Contains("Temporary password is:"))
-        {
-            var parts = message.Split("Temporary password is:");
-            var infoMessage = parts[0].Trim();
-            tempPassword = parts.Length > 1 ? parts[1].Trim() : "";
-        }
+            @if (TempData["Message"] != null)
+            {
+                var message = TempData["Message"].ToString();
+                var tempPassword = "";
 
-        <text>
-            <script>
-                document.addEventListener("DOMContentLoaded", () => {
+                if (message.Contains("Temporary password is:"))
+                {
+                    var parts = message.Split("Temporary password is:");
+                    var infoMessage = parts[0].Trim();
+                    tempPassword = parts.Length > 1 ? parts[1].Trim() : "";
+                }
+
+                <text>
                     const msg = "@message";
                     const tempPass = "@tempPassword";
 
@@ -117,8 +73,85 @@
                             }
                         });
                     }
-                });
-            </script>
-        </text>
-    }
+                </text>
+            }
+        });
+    </script>
 }
+
+<div class="account-creation-container">
+    <div class="account-creation-card">
+        <div class="account-creation-header">
+            <h2>Create Account</h2>
+            <p>Fill in the details to create a new user account</p>
+        </div>
+
+        <form method="post" class="account-creation-form" id="accountCreationForm" novalidate>
+            <div class="form-group">
+                <div class="input-wrapper">
+                    <input asp-for="FirstName" placeholder=" " required />
+                    <label for="FirstName">First Name<span class="text-danger">*</span></label>
+                </div>
+                @Html.ValidationMessageFor(m => m.FirstName, "", new { @class = "error-message show" })
+            </div>
+
+            <div class="form-group">
+                <div class="input-wrapper">
+                    <input asp-for="MiddleName" placeholder=" " />
+                    <label for="MiddleName">Middle Name</label>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="input-wrapper">
+                    <input asp-for="LastName" placeholder=" " required />
+                    <label for="LastName">Last Name<span class="text-danger">*</span></label>
+                </div>
+                @Html.ValidationMessageFor(m => m.LastName, "", new { @class = "error-message show" })
+            </div>
+
+            <div class="form-group">
+                <div class="input-wrapper">
+                    <input asp-for="Email" type="email" placeholder=" " required />
+                    <label for="Email">Email Address<span class="text-danger">*</span></label>
+                </div>
+                @Html.ValidationMessageFor(m => m.Email, "", new { @class = "error-message show" })
+            </div>
+
+            <div class="form-group">
+                <div class="input-wrapper">
+                    <select asp-for="DepartmentID" required>
+                        <option value="">-- Select Department --</option>
+                        @foreach (var dept in Model.Departments)
+                        {
+                            <option value="@dept.ID">@dept.DepartmentName</option>
+                        }
+                    </select>
+                    <label for="DepartmentID">Department<span class="text-danger">*</span></label>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="input-wrapper">
+                    <select asp-for="Role" required>
+                        @if (User.IsInRole("SuperAdmin"))
+                        {
+                            <option value="1">Admin</option>
+                            <option value="2">Member</option>
+                        }
+                        else if (User.IsInRole("Admin"))
+                        {
+                            <option value="2">Member</option>
+                        }
+                    </select>
+                    <label for="Role">Role<span class="text-danger">*</span></label>
+                </div>
+            </div>
+
+            <button type="submit" class="create-account-btn">
+                <span class="btn-text">Create Account</span>
+                <span class="btn-loader"></span>
+            </button>
+        </form>
+    </div>
+</div>

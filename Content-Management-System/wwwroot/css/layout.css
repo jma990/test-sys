@@ -1,0 +1,121 @@
+/* Temporary safe overrides to prevent content clipping at 100% zoom.
+   Makes the main content always scrollable and ensures full-viewport height. */
+html, body {
+    height: 100%;
+}
+
+body {
+    min-height: 100vh;
+}
+
+.app-container,
+.main-content,
+.page-wrapper,
+.content,
+#main {
+    min-height: 100vh;
+    box-sizing: border-box;
+    overflow-y: auto;   
+    overflow-x: hidden;
+    -webkit-overflow-scrolling: touch;
+}
+
+/* Keep Bootstrap .container untouched (only preserve box-sizing) */
+.container,
+.container-fluid {
+    box-sizing: border-box;
+}
+
+/* If the app uses a fixed sidebar, ensure main content leaves room */
+.sidebar,
+.app-sidebar,
+.navbar-fixed {
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    z-index: 100;
+}
+
+/* Main column: add left offset if sidebar is fixed (adjust 260px to your sidebar width) */
+.main-column,
+.content,
+#main {
+    margin-left: 260px; /* adjust to actual sidebar width or remove if not needed */
+}
+
+/* Keep the login page centered (no-container pages) */
+.login-container {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Sidebar / main-column folding support */
+.app-sidebar {
+    width: 260px; /* current sidebar width */
+    transition: width 220ms ease, transform 220ms ease;
+    will-change: width, transform;
+}
+
+/* When collapsed, hide sidebar visually */
+body.sidebar-collapsed .app-sidebar {
+    width: 0 !important;
+    min-width: 0 !important;
+    overflow: hidden;
+    transform: translateX(-8px);
+}
+
+/* Main content shifts to leave room for the sidebar by default
+   (do NOT include Bootstrap .container here — it causes overflow) */
+.main-column,
+.content,
+#main {
+    transition: margin-left 220ms ease;
+    margin-left: 260px; /* match .app-sidebar width */
+    box-sizing: border-box;
+}
+
+/* When collapsed, main content takes full width (do NOT include .container) */
+body.sidebar-collapsed .main-column,
+body.sidebar-collapsed .content,
+body.sidebar-collapsed #main {
+    margin-left: 0 !important;
+}
+
+/* Ensure pages that use NoContainer (login) always center correctly */
+.login-container {
+    margin-left: 0 !important;
+    width: 100%;
+}
+
+/* Toggle button styling (small unobtrusive control) */
+.sidebar-toggle {
+    position: fixed;
+    left: 12px;
+    top: 12px;
+    z-index: 99999 !important; /* ensure on top of other UI */
+    pointer-events: auto !important; /* ensure clicks register */
+    background: rgba(0,0,0,0.6);
+    color: #fff;
+    border: none;
+    width: 36px;
+    height: 36px;
+    border-radius: 8px;
+    display: grid;
+    place-items: center;
+    cursor: pointer;
+    box-shadow: 0 6px 18px rgba(16,24,40,0.12);
+}
+.sidebar-toggle:focus { outline: 2px solid #6366f1; }
+
+/* small icon rotation when collapsed (if using an icon inside) */
+.sidebar-toggle .icon {
+    transition: transform 180ms ease;
+}
+body.sidebar-collapsed .sidebar-toggle .icon {
+    transform: rotate(180deg);
+}
+
+

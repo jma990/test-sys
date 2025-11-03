@@ -21,9 +21,7 @@
 /workspaces/test-sys/Content-Management-System/obj/Debug/net8.0/staticwebassets/msbuild.buildMultiTargeting.Content-Management-System.props
 /workspaces/test-sys/Content-Management-System/obj/Debug/net8.0/staticwebassets/msbuild.buildTransitive.Content-Management-System.props
 /workspaces/test-sys/Content-Management-System/obj/Debug/net8.0/staticwebassets.pack.json
-/workspaces/test-sys/Content-Management-System/obj/Debug/net8.0/scopedcss/Pages/Shared/_Layout.cshtml.rz.scp.css
 /workspaces/test-sys/Content-Management-System/obj/Debug/net8.0/scopedcss/bundle/Content-Management-System.styles.css
-/workspaces/test-sys/Content-Management-System/obj/Debug/net8.0/scopedcss/projectbundle/Content-Management-System.bundle.scp.css
 /workspaces/test-sys/Content-Management-System/obj/Debug/net8.0/Content-Management-System.dll
 /workspaces/test-sys/Content-Management-System/obj/Debug/net8.0/refint/Content-Management-System.dll
 /workspaces/test-sys/Content-Management-System/obj/Debug/net8.0/Content-Management-System.pdb

@@ -1,73 +1,92 @@
-nav{
+.app-sidebar{
     position: fixed;
     top: 0;
     height: 100vh;
     left: 0;
     background: #fff;
-    width: 280px;
+    width: 260px;
     overflow: hidden;
     box-shadow: 0 20px 35px rgba(0, 0, 0, 0.1);
     z-index: 100;
 }
 
-.sidebar ul {
+.app-sidebar ul {
     list-style: none;
     padding-left: 0;
     margin: 0;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    position: relative;
 }
 
-.sidebar a {
+.app-sidebar a {
     position: relative;
     color: rgb(85, 83, 83);
     font-size: 14px;
-    display: table;
-    width: 280px;
+    display: flex;
+    align-items: center;
+    width: 100%;
     padding: 10px;
     text-decoration: none !important;
 }
 
-.sidebar a:hover {
+.app-sidebar a:hover {
     text-decoration: none !important;
     background: #eee;
 }
 
-
-.logo{
+.app-sidebar .logo{
     text-align: center;
     display: flex;
-    margin: 10px 0 0 10px;
+    flex-direction: column;
+    align-items: center;
+    margin: 20px 0;
 }
 
-.logo img{
+.app-sidebar .logo img{
     width: 45px;
     height: 45px;
     border-radius: 50%;
+    margin-bottom: 10px;
 }
 
-.logo span{
+.nav-text{
     font-weight: bold;
-    padding-left: 15px;
-    font-size: 18px;
+    font-size: 16px;
     text-transform: uppercase;
-}
-
-nav .fas{
-    position: relative;
-    width: 70px;
-    height: 40px;
-    top: 14px;
-    font-size: 20px;
     text-align: center;
 }
 
-.nav-item{
-    position: relative;
-    top: 12px;
-    margin-left: 10px;
+.app-sidebar .fas{
+    margin-right: 10px;
+    font-size: 18px;
 }
 
-.logout{
+.app-sidebar .nav-item{
+    margin-left: 0;
+}
+
+.app-sidebar .logout{
     position: absolute;
     bottom: 0;
+    width: 100%;
+}
+
+.app-sidebar .account-settings {
+    position: absolute;
+    bottom: 50px;
+    width: 100%;
+}
+
+.dropdown-menu {
+    z-index: 101;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background: #fff;
+    border: 1px solid #ddd;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    min-width: 200px;
 }
 
