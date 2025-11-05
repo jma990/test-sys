@@ -1,50 +1,130 @@
-* {
+html, body {
+    height: 100%;
     margin: 0;
     padding: 0;
-    box-sizing: border-box;
 }
 
+/* ensure page uses full viewport and slightly tighter horizontal padding on small viewports
+   (use padding-inline so vertical padding doesn't push the flex center off) */
 body {
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-    background: #f8fafc;
-    min-height: 100vh;
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 20px;
-    line-height: 1.6;
-    color: #334155;
+    padding-inline: clamp(12px, 3vw, 20px);
+    min-height: 100vh;
+    position: fixed;
+    inset: 0;
 }
 
+/* ensure container wrappers won't push the card */
 .login-container {
     width: 100%;
-    max-width: 400px;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding-inline: clamp(12px, 3vw, 20px);
 }
 
+/* If you use a fixed sidebar on authenticated pages, don't affect login */
+body.sidebar-collapsed .login-container,
+body .login-container {
+    margin-left: 0 !important;
+}
+
+/* Desktop fallback: force viewport centering when zoom/layout from other styles interfere.
+    Apply only on larger viewports to avoid mobile/keyboard issues. */
+@media (min-width: 700px) {
+    .login-container {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding-inline: clamp(12px, 3vw, 20px);
+    }
+
+    .login-card {
+        margin: 0 auto; /* ensure fixed container centers the card exactly */
+    }
+}
+
+/* make card fluid */
 .login-card {
+    width: 100%;
+    max-width: 420px;
+    margin: 0 auto;
     background: white;
     border-radius: 12px;
-    padding: 32px;
+    padding: clamp(20px, 4vw, 32px);
     border: 1px solid #e2e8f0;
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 6px 18px rgba(16,24,40,0.06);
+    box-sizing: border-box;
+    position: relative;
+    z-index: 1;
 }
 
+/* Center header and supportive text inside the card */
 .login-header {
     text-align: center;
-    margin-bottom: 32px;
 }
 
+/* tighten vertical spacing for centered header */
 .login-header h2 {
-    font-size: 1.875rem;
-    font-weight: 700;
-    color: #1e293b;
-    margin-bottom: 8px;
+    margin: 0 0 6px;
 }
 
 .login-header p {
-    color: #64748b;
-    font-size: 0.875rem;
+    margin: 0 0 16px;
 }
+
+/* responsive text / element sizing */
+.login-header h2 {
+    font-size: clamp(1.25rem, 2.5vw, 1.875rem);
+}
+.login-header p {
+    font-size: clamp(0.8rem, 1.8vw, 0.875rem);
+}
+
+/* ensure button text stays centered (defensive) */
+.login-btn .btn-text {
+    display: inline-block;
+    width: 100%;
+    text-align: center;
+}
+
+/* keep signup text centered too */
+.signup-link {
+    text-align: center;
+}
+
+/* tighten spacing on small screens */
+@media (max-width: 480px) {
+    .login-card {
+        padding: 18px;
+        margin: 10px;
+        border-radius: 10px;
+    }
+    
+    .login-header h2 {
+        font-size: 1.25rem;
+    }
+    
+    .form-options {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px;
+    }
+
+    .password-toggle {
+        right: 10px;
+    }
+
+    .login-btn {
+        padding: 10px 20px;
+        border-radius: 8px;
+        font-size: 15px;
+    }
+}
+
 
 /* Form Styles */
 .form-group {
@@ -83,6 +163,9 @@ body {
   transition: all 0.2s ease;
   pointer-events: none;
   transform-origin: left top;
+  background: white;
+  padding: 0 4px;
+  z-index: 1;
 }
 
 .input-wrapper input:focus,
@@ -91,47 +174,12 @@ body {
 }
 
 .input-wrapper input:focus + label,
-.input-wrapper input:not(:placeholder-shown) + label {
-  transform: translateY(-20px) scale(0.875);
-  color: #6366f1;
-  font-weight: 500;
-}
-
-/* Add this for autofill support (Chrome/Edge) */
-.input-wrapper input:-webkit-autofill + label {
-  transform: translateY(-20px) scale(0.875);
-  color: #6366f1;
-  font-weight: 500;
-}
-
-.input-wrapper input:focus + label,
-.input-wrapper input:not(:placeholder-shown) + label {
-  transform: translateY(-20px) scale(0.875);
-  color: #6366f1;
-  font-weight: 500;
-}
-.input-wrapper label {
-  position: absolute;
-  left: 16px;
-  top: 12px;
-  color: #64748b;
-  font-size: 16px;
-  transition: all 0.2s ease;
-  pointer-events: none;
-  transform-origin: left top;
-  background: transparent;
-  padding: 0 4px;
-  z-index: 1;
-}
-
-/* Add this block right after the above */
-.input-wrapper input:focus + label,
 .input-wrapper input:not(:placeholder-shown) + label,
 .input-wrapper input:-webkit-autofill + label {
   transform: translateY(-22px) scale(0.875);
   color: #6366f1;
   font-weight: 500;
-  background: #fff;
+  background: white;
   padding: 0 4px;
   z-index: 2;
 }
@@ -396,22 +444,4 @@ body {
     0% { transform: scale(0); }
     50% { transform: scale(1.1); }
     100% { transform: scale(1); }
-}
-
-/* Mobile Responsive */
-@media (max-width: 480px) {
-    .login-card {
-        padding: 24px;
-        margin: 10px;
-    }
-    
-    .login-header h2 {
-        font-size: 1.5rem;
-    }
-    
-    .form-options {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 16px;
-    }
 }

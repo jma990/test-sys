@@ -1,0 +1,234 @@
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding-inline: clamp(12px, 3vw, 20px);
+    min-height: 100vh;
+    position: fixed;
+    inset: 0;
+}
+
+.account-creation-container {
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding-inline: clamp(12px, 3vw, 20px);
+}
+
+.account-creation-card {
+    width: 100%;
+    max-width: 500px;
+    margin: 0 auto;
+    background: white;
+    border-radius: 12px;
+    padding: clamp(20px, 4vw, 32px);
+    border: 1px solid #e2e8f0;
+    box-shadow: 0 6px 18px rgba(16,24,40,0.06);
+    box-sizing: border-box;
+    position: relative;
+    z-index: 1;
+}
+
+.account-creation-header {
+    text-align: center;
+    margin-bottom: 24px;
+}
+
+.account-creation-header h2 {
+    margin: 0 0 6px;
+    font-size: clamp(1.25rem, 2.5vw, 1.875rem);
+}
+
+.account-creation-header p {
+    margin: 0;
+    font-size: clamp(0.8rem, 1.8vw, 0.875rem);
+    color: #64748b;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.input-wrapper {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+}
+
+.input-wrapper input,
+.input-wrapper select {
+    background: white;
+    border: 2px solid #e2e8f0;
+    border-radius: 8px;
+    padding: 12px 16px 8px 16px;
+    color: #1e293b;
+    font-size: 16px;
+    transition: all 0.2s ease;
+    width: 100%;
+    outline: none;
+}
+
+.input-wrapper select {
+    padding: 12px 16px 8px 16px;
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20' stroke='%236b7280'%3e%3cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m19 9-7 7-7-7'/%3e%3c/svg%3e");
+    background-position: right 12px center;
+    background-repeat: no-repeat;
+    background-size: 16px;
+    cursor: pointer;
+}
+
+.input-wrapper input::placeholder {
+    color: transparent;
+}
+
+.input-wrapper label {
+    position: absolute;
+    left: 16px;
+    top: 12px;
+    color: #64748b;
+    font-size: 16px;
+    transition: all 0.2s ease;
+    pointer-events: none;
+    transform-origin: left top;
+    background: white;
+    padding: 0 4px;
+    z-index: 1;
+}
+
+.input-wrapper input:focus,
+.input-wrapper input:not(:placeholder-shown),
+.input-wrapper select:focus {
+    border-color: #6366f1;
+}
+
+.input-wrapper input:focus + label,
+.input-wrapper input:not(:placeholder-shown) + label,
+.input-wrapper input:-webkit-autofill + label {
+    transform: translateY(-22px) scale(0.875);
+    color: #6366f1;
+    font-weight: 500;
+    background: white;
+    padding: 0 4px;
+    z-index: 2;
+}
+
+.input-wrapper select:focus + label,
+.input-wrapper select:not([value=""]) + label {
+    transform: translateY(-22px) scale(0.875);
+    color: #6366f1;
+    font-weight: 500;
+    background: white;
+    padding: 0 4px;
+    z-index: 2;
+}
+
+.error-message {
+    display: block;
+    color: #ef4444;
+    font-size: 0.75rem;
+    font-weight: 500;
+    margin-top: 4px;
+    margin-left: 4px;
+    opacity: 0;
+    transform: translateY(-4px);
+    transition: all 0.2s ease;
+}
+
+.error-message.show {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.form-group.error .input-wrapper input,
+.form-group.error .input-wrapper select {
+    border-color: #ef4444;
+}
+
+.create-account-btn {
+    width: 100%;
+    background: #6366f1;
+    border: none;
+    border-radius: 8px;
+    padding: 12px 24px;
+    color: white;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    position: relative;
+    margin-top: 24px;
+}
+
+.create-account-btn:hover {
+    background: #4f46e5;
+}
+
+.create-account-btn:active {
+    transform: translateY(1px);
+}
+
+.create-account-btn.loading {
+    pointer-events: none;
+    background: #a5a6f6;
+}
+
+.btn-text {
+    transition: opacity 0.2s ease;
+}
+
+.btn-loader {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 16px;
+    height: 16px;
+    border: 2px solid transparent;
+    border-top: 2px solid white;
+    border-radius: 50%;
+    opacity: 0;
+    animation: spin 1s linear infinite;
+    transition: opacity 0.2s ease;
+}
+
+.create-account-btn.loading .btn-text {
+    opacity: 0;
+}
+
+.create-account-btn.loading .btn-loader {
+    opacity: 1;
+}
+
+@keyframes spin {
+    0% { transform: translate(-50%, -50%) rotate(0deg); }
+    100% { transform: translate(-50%, -50%) rotate(360deg); }
+}
+
+@media (max-width: 480px) {
+    .account-creation-card {
+        padding: 18px;
+        margin: 10px;
+        border-radius: 10px;
+    }
+
+    .account-creation-header h2 {
+        font-size: 1.25rem;
+    }
+
+    .create-account-btn {
+        padding: 10px 20px;
+        border-radius: 8px;
+        font-size: 15px;
+    }
+}

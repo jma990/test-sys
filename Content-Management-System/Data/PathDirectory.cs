@@ -23,6 +23,7 @@ public static class PathDirectory
 
     // AccountCreation Page and its Partial Views
     public const string AccountCreationPage = "/AccountCreation";
+    public const string AccountCreationCSS = "~/css/account-creation.css";
 
     // UserManagement Page and its Partial Views
     public const string UserManagementPage = "/UserManagement";
@@ -38,7 +39,7 @@ public static class PathDirectory
     public const string ChangePasswordPage = "/ChangePassword";
     
     // Layout
-    public const string LayoutCSS = "~/css/site.css";
+    public const string LayoutCSS = "~/css/layout.css"; // use layout.css instead
 
     // Navbar
     public const string NavbarCSS = "~/css/navbar.css";

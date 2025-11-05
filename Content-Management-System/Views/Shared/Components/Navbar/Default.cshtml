@@ -2,15 +2,14 @@
 @model Content_Management_System.Models.Shared.NavbarModel
 
 <link rel="stylesheet" href="@Url.Content(PathDirectory.NavbarCSS)" />
-<nav class="sidebar">
+<nav class="app-sidebar">
     <ul>
         <li class="nav-item">
-            <a href="@Url.Content(Model.Role == nameof(UserRole.SuperAdmin) 
-                ? PathDirectory.DepartmentsPage 
+            <a href="@Url.Content(Model.Role == nameof(UserRole.SuperAdmin)
+                ? PathDirectory.DepartmentsPage
                 : PathDirectory.AnnouncementsPage)" class="logo">
                 <img src="@Url.Content(PathDirectory.Logo)" alt="Logo">
                 <span class="nav-text">Dashboard</span>
-                <br>
                 <span class="nav-text">Welcome @Model.UserName (@Model.Role)</span>
             </a>
         </li>
@@ -41,36 +40,29 @@
                 </a>
             </li>
             <li class="nav-item dropdown">
-                <a class="dropdown-toggle" href="#" id="usersDropdown" role="button"
-                data-bs-toggle="dropdown" aria-expanded="false">
-                    <i class="fas fa-user"></i>
-                    <span class="nav-item">Users</span>
-                </a>
-                <ul class="dropdown-menu" aria-labelledby="usersDropdown">
-                    <li>
-                        <a class="dropdown-item" href="@Url.Content(PathDirectory.UserManagementPage)">
-                            <i class="fas fa-users-cog me-2"></i> User Management
-                        </a>
-                    </li>
-                    <li>
-                        <a class="dropdown-item" href="@Url.Content(PathDirectory.AccountCreationPage)">
-                            <i class="fas fa-user-plus me-2"></i> Account Creation
-                        </a>
-                    </li>
-                </ul>
+                <li>
+                    <a class="dropdown-item" href="@Url.Content(PathDirectory.UserManagementPage)">
+                        <i class="fas fa-users-cog me-2"></i> User Management
+                    </a>
+                </li>
+                <li>
+                    <a class="dropdown-item" href="@Url.Content(PathDirectory.AccountCreationPage)">
+                        <i class="fas fa-user-plus me-2"></i> Account Creation
+                    </a>
+                </li>
             </li>
         }
         @if (Model?.UserName != null)
         {
-            <li class="nav-item">
+            <li class="nav-item account-settings">
                 <a href="@Url.Content(PathDirectory.AccountSettingsPage)">
                     <i class="fas fa-cog"></i>
                     <span class="nav-item">Account Settings</span>
                 </a>
             </li>
 
-            <li class="nav-item">
-                <a href="@Url.Content(PathDirectory.LogoutPage)" class="logout">
+            <li class="nav-item logout">
+                <a href="@Url.Content(PathDirectory.LogoutPage)">
                     <i class="fas fa-sign-out-alt"></i>
                     <span class="nav-item">Log out</span>
                 </a>

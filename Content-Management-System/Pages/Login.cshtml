@@ -1,10 +1,14 @@
 ﻿@page
 @model Content_Management_System.Pages.LoginModel
 @{
+    ViewData["NoContainer"] = true;
     Layout = "_Layout";
 }
 
-<link rel="stylesheet" href="@Url.Content(PathDirectory.LoginCSS)" />
+@section Styles {
+    <link rel="stylesheet" href="@Url.Content(PathDirectory.LoginCSS)" />
+}
+
 @section Scripts {
     <script>
         const passwordInput = document.getElementById('password');
