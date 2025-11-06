@@ -9,6 +9,10 @@
       "PackagePath": "staticwebassets/css/account-creation.css"
     },
     {
+      "Id": "/workspaces/test-sys/Content-Management-System/wwwroot/css/account-settings.css",
+      "PackagePath": "staticwebassets/css/account-settings.css"
+    },
+    {
       "Id": "/workspaces/test-sys/Content-Management-System/wwwroot/css/admin-posts.css",
       "PackagePath": "staticwebassets/css/admin-posts.css"
     },
@@ -19,6 +23,14 @@
     {
       "Id": "/workspaces/test-sys/Content-Management-System/wwwroot/css/announcements.css",
       "PackagePath": "staticwebassets/css/announcements.css"
+    },
+    {
+      "Id": "/workspaces/test-sys/Content-Management-System/wwwroot/css/change-password.css",
+      "PackagePath": "staticwebassets/css/change-password.css"
+    },
+    {
+      "Id": "/workspaces/test-sys/Content-Management-System/wwwroot/css/change-personal-info.css",
+      "PackagePath": "staticwebassets/css/change-personal-info.css"
     },
     {
       "Id": "/workspaces/test-sys/Content-Management-System/wwwroot/css/departments.css",
@@ -39,6 +51,10 @@
     {
       "Id": "/workspaces/test-sys/Content-Management-System/wwwroot/css/site.css",
       "PackagePath": "staticwebassets/css/site.css"
+    },
+    {
+      "Id": "/workspaces/test-sys/Content-Management-System/wwwroot/css/user-management.css",
+      "PackagePath": "staticwebassets/css/user-management.css"
     },
     {
       "Id": "/workspaces/test-sys/Content-Management-System/wwwroot/favicon.ico",

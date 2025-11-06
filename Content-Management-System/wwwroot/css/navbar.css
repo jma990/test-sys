@@ -68,14 +68,10 @@
 }
 
 .app-sidebar .logout{
-    position: absolute;
-    bottom: 0;
     width: 100%;
 }
 
 .app-sidebar .account-settings {
-    position: absolute;
-    bottom: 50px;
     width: 100%;
 }
 
