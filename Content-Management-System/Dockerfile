@@ -5,11 +5,11 @@ FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 WORKDIR /app
 
 # Copy the .csproj file and restore the dependencies
-COPY Content-Management-System/Content-Management-System.csproj .  # Relative path to .csproj file
+COPY Content_Management_System.csproj .  # Relative path to .csproj file
 RUN dotnet restore
 
 # Copy the rest of the application code
-COPY Content-Management-System/ .  # Copy all files from Content_Management_System folder
+COPY . .  # Copy all files from Content_Management_System folder
 
 # Publish the app to the /app/publish directory
 RUN dotnet publish -c Release -o /app/publish
@@ -27,4 +27,4 @@ COPY --from=build /app/publish .
 EXPOSE 80
 
 # Run the application
-ENTRYPOINT ["dotnet", "Content-Management-System.dll"]
+ENTRYPOINT ["dotnet", "Content_Management_System.dll"]
