@@ -69,15 +69,23 @@ app.UseAuthorization();
 app.MapRazorPages();
 app.MapControllers(); 
 
-// Note: This shall be changed if actual hosting is made other than NGROK
-var ngrokMode = Environment.GetEnvironmentVariable("USE_NGROK");
-if (ngrokMode == "true")
+var portEnv = Environment.GetEnvironmentVariable("PORT");
+if (!string.IsNullOrEmpty(portEnv))
 {
-    app.Run("http://0.0.0.0:5282");
+    // Listen on all interfaces on the provided port (Vercel will route to it)
+    app.Run($"http://0.0.0.0:{portEnv}");
 }
 else
 {
-    app.Run();
+    var ngrokMode = Environment.GetEnvironmentVariable("USE_NGROK");
+    if (ngrokMode == "true")
+    {
+        app.Run("http://0.0.0.0:5282");
+    }
+    else
+    {
+        app.Run();
+    }
 }
 
 
