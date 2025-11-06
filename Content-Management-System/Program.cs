@@ -10,8 +10,7 @@ builder.Services.AddRazorPages();
 builder.Services.AddControllers(); 
 builder.Services.AddSession();
 builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection") 
-        ?? "Data Source=/app/Content-Management-System/ContentManagement.db"));
+    options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
 builder.Services.AddScoped<SuperAdminService>();
 builder.Services.AddScoped<AuthPageFilter>();
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
@@ -52,14 +51,15 @@ using (var scope = app.Services.CreateScope())
     await superAdminService.CreateSuperAdmin();
 }
 
-if (!app.Environment.IsDevelopment() && !Environment.GetEnvironmentVariable("VERCEL")?.Equals("true", StringComparison.OrdinalIgnoreCase) == true)
+if (!app.Environment.IsDevelopment())
 {
-    app.UseHttpsRedirection();
+    app.UseExceptionHandler("/Error");
+    app.UseHsts();
 }
-
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
+
 app.UseRouting();
 
 app.UseSession(); 
@@ -68,24 +68,4 @@ app.UseAuthorization();
 
 app.MapRazorPages();
 app.MapControllers(); 
-
-var portEnv = Environment.GetEnvironmentVariable("PORT");
-if (!string.IsNullOrEmpty(portEnv))
-{
-    // Listen on all interfaces on the provided port (Vercel will route to it)
-    app.Run($"http://0.0.0.0:{portEnv}");
-}
-else
-{
-    var ngrokMode = Environment.GetEnvironmentVariable("USE_NGROK");
-    if (ngrokMode == "true")
-    {
-        app.Run("http://0.0.0.0:5282");
-    }
-    else
-    {
-        app.Run();
-    }
-}
-
-
+app.Run();
