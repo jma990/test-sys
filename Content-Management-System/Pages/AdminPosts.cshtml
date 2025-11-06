@@ -195,18 +195,21 @@
                         const content = realInputs[1].value.trim();
                         const link = realInputs[2].value.trim();
 
-                        const clones = row.querySelectorAll(".view-mode input");
+                        // include textareas as well as inputs when reading the visible clones
+                        const clones = row.querySelectorAll(".view-mode input, .view-mode textarea");
                         clones.forEach((c, i) => {
-                            if (realInputs[i].type === "checkbox") {
-                                realInputs[i].checked = c.checked;
+                            const real = realInputs[i];
+                            if (!real) return;
+                            if (real.type === "checkbox") {
+                                real.checked = c.checked;
                             } else {
-                                realInputs[i].value = c.value;
+                                real.value = c.value;
                             }
                         });
 
                         form.submit();
                     });
-                });
+                }); 
 
                 // SweetAlert popup if invalid user input
                 @if (!string.IsNullOrEmpty(Model.AlertMessage))
