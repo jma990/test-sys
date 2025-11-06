@@ -59,7 +59,6 @@ if (!app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
-
 app.UseRouting();
 
 app.UseSession(); 
@@ -68,4 +67,16 @@ app.UseAuthorization();
 
 app.MapRazorPages();
 app.MapControllers(); 
-app.Run();
+
+// Note: This shall be changed if actual hosting is made other than NGROK
+var ngrokMode = Environment.GetEnvironmentVariable("USE_NGROK");
+if (ngrokMode == "true")
+{
+    app.Run("http://0.0.0.0:5282");
+}
+else
+{
+    app.Run();
+}
+
+
