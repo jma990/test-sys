@@ -18,4 +18,10 @@ RUN dotnet publish "Content_Management_System.csproj" -c Release -o /app/publish
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
+COPY wwwroot /app/wwwroot  # Add this line to ensure static files are copied correctly
+ENTRYPOINT ["dotnet", "Content_Management_System.dll"]
+
+FROM base AS final
+WORKDIR /app
+COPY --from=publish /app/publish .
 ENTRYPOINT ["dotnet", "Content_Management_System.dll"]

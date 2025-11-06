@@ -1,8 +1,0 @@
-services:
-  - type: web
-    name: cms-app
-    env: dotnet
-    rootDir: Content-Management-System
-    buildCommand: dotnet publish -c Release -o out
-    startCommand: dotnet out/Content-Management-System.dll
-    plan: free
