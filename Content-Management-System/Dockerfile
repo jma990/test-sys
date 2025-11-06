@@ -5,7 +5,7 @@ FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 WORKDIR /app
 
 # Copy the .csproj file and restore the dependencies
-COPY Content_Management_System/Content_Management_System.csproj .
+COPY /Content_Management_System/Content_Management_System.csproj .
 RUN dotnet restore
 
 # Copy the rest of the application code
