@@ -1,30 +1,26 @@
-# Use the official .NET SDK image for building the app
-FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
+# ...existing code...
+FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
+WORKDIR /src
 
-# Set the working directory in the container
+# Copy the repo into the image (keeps things simple & avoids wrong paths)
+COPY . .
+
+# Find a .csproj, restore and publish it
+# Note: if you have multiple projects, replace the detection with the exact relative path to your .csproj
+RUN set -ex \
+ && csproj=$(sh -c 'ls **/*.csproj 2>/dev/null | head -n 1') \
+ && if [ -z "$csproj" ]; then echo "No .csproj found"; exit 1; fi \
+ && echo "Using project: $csproj" \
+ && dotnet restore "$csproj" \
+ && dotnet publish "$csproj" -c Release -o /app/publish
+
+FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS runtime
 WORKDIR /app
-
-# Copy the .csproj file and restore the dependencies
-COPY Content-Management-System/Content-Management-System.csproj .  # Relative path to .csproj file
-RUN dotnet restore
-
-# Copy the rest of the application code
-COPY Content-Management-System/ .  # Copy all files from Content_Management_System folder
-
-# Publish the app to the /app/publish directory
-RUN dotnet publish -c Release -o /app/publish
-
-# Use the .NET runtime image to run the app
-FROM mcr.microsoft.com/dotnet/aspnet:6.0 AS final
-
-# Set the working directory in the container
-WORKDIR /app
-
-# Copy the app from the build stage
-COPY --from=build /app/publish .
-
-# Expose port 80
 EXPOSE 80
 
-# Run the application
-ENTRYPOINT ["dotnet", "Content-Management-System.dll"]
+# Copy published output
+COPY --from=build /app/publish .
+
+# Start the first DLL found in /app (robust if project assembly name differs)
+ENTRYPOINT ["/bin/bash","-lc","exec dotnet /app/$(ls /app/*.dll | head -n 1)"]
+ 
