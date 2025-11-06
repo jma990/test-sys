@@ -10,7 +10,8 @@ builder.Services.AddRazorPages();
 builder.Services.AddControllers(); 
 builder.Services.AddSession();
 builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
+    options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection") 
+        ?? "Data Source=/app/Content-Management-System/ContentManagement.db"));
 builder.Services.AddScoped<SuperAdminService>();
 builder.Services.AddScoped<AuthPageFilter>();
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
@@ -51,11 +52,11 @@ using (var scope = app.Services.CreateScope())
     await superAdminService.CreateSuperAdmin();
 }
 
-if (!app.Environment.IsDevelopment())
+if (!app.Environment.IsDevelopment() && !Environment.GetEnvironmentVariable("VERCEL")?.Equals("true", StringComparison.OrdinalIgnoreCase) == true)
 {
-    app.UseExceptionHandler("/Error");
-    app.UseHsts();
+    app.UseHttpsRedirection();
 }
+
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
