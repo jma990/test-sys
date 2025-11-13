@@ -378,15 +378,22 @@
     .page-header {
         flex-direction: column;
         align-items: flex-start;
-        gap: 16px;
+        gap: 12px;
+        margin-bottom: 32px;
     }
 
     .header-content h2 {
         font-size: 1.75rem;
+        margin-bottom: 4px;
+    }
+
+    .header-content h2::after {
+        width: 60px;
     }
 
     .header-subtitle {
         font-size: 0.95rem;
+        margin-top: 8px;
     }
 
     .add-post-btn {
@@ -396,25 +403,72 @@
         align-self: flex-end;
     }
 
+    .filters-container {
+        gap: 12px;
+    }
+
+    .filter-select {
+        padding: 10px 14px;
+        font-size: 0.95rem;
+    }
+
+    .posts-table-wrapper {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        border-radius: 12px;
+    }
+
+    .posts-table {
+        min-width: 850px;
+    }
+
     .posts-table thead th {
-        padding: 12px 8px;
-        font-size: 0.8rem;
+        padding: 12px 10px;
+        font-size: 0.75rem;
+        white-space: normal;
     }
 
     .posts-table tbody td {
-        padding: 12px 8px;
+        padding: 14px 10px;
+        font-size: 0.9rem;
+    }
+
+    .posts-table tbody tr:hover {
+        transform: none;
+    }
+
+    .title-col { width: 16%; min-width: 120px; }
+    .content-col { width: 28%; min-width: 200px; }
+    .date-col { width: 14%; min-width: 110px; font-size: 0.8rem; }
+    .link-col { width: 10%; min-width: 70px; }
+    .status-col { width: 10%; min-width: 80px; }
+    .action-col { width: 10%; min-width: 75px; gap: 4px; }
+
+    .cell-content {
+        max-height: 100px;
         font-size: 0.9rem;
     }
 
     .edit-btn,
     .save-btn {
-        width: 32px;
-        height: 32px;
-        font-size: 0.9rem;
+        width: 34px;
+        height: 34px;
+        font-size: 0.95rem;
+    }
+
+    .view-mode input,
+    .view-mode textarea {
+        padding: 6px 10px;
+        font-size: 0.88rem;
+    }
+
+    .view-mode textarea {
+        min-height: 70px;
+        max-height: 150px;
     }
 }
 
-@media (max-width: 480px) {
+@media (max-width: 600px) {
     .admin-posts-page {
         padding: 16px 10px;
     }
@@ -423,12 +477,175 @@
         font-size: 1.5rem;
     }
 
-    .posts-table-wrapper {
-        border-radius: 12px;
+    .header-content h2::after {
+        width: 50px;
+        height: 3px;
+    }
+
+    .page-header {
+        gap: 10px;
+        margin-bottom: 24px;
+    }
+
+    .add-post-btn {
+        width: 44px;
+        height: 44px;
+        font-size: 1.1rem;
+    }
+
+    .filters-container {
+        grid-template-columns: 1fr;
+        gap: 10px;
+    }
+
+    .filter-label {
+        font-size: 0.9rem;
     }
 
     .filter-select {
         padding: 10px 12px;
         font-size: 0.9rem;
+        border-radius: 8px;
+    }
+
+    .posts-table-wrapper {
+        border-radius: 10px;
+        box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+    }
+
+    .posts-table {
+        min-width: 800px;
+        font-size: 0.85rem;
+    }
+
+    .posts-table thead th {
+        padding: 10px 8px;
+        font-size: 0.7rem;
+        white-space: normal;
+        word-break: break-word;
+    }
+
+    .posts-table tbody td {
+        padding: 10px 8px;
+        font-size: 0.85rem;
+    }
+
+    .title-col { width: 18%; min-width: 110px; }
+    .content-col { width: 26%; min-width: 180px; }
+    .date-col { width: 16%; min-width: 100px; font-size: 0.75rem; }
+    .link-col { width: 12%; min-width: 60px; }
+    .status-col { width: 12%; min-width: 70px; }
+    .action-col { width: 12%; min-width: 65px; }
+
+    .cell-content {
+        max-height: 80px;
+        font-size: 0.85rem;
+    }
+
+    .badge {
+        padding: 4px 10px;
+        font-size: 0.7rem;
+    }
+
+    .edit-btn,
+    .save-btn {
+        width: 32px;
+        height: 32px;
+        font-size: 0.9rem;
+        gap: 2px;
+    }
+
+    .view-mode input,
+    .view-mode textarea {
+        padding: 6px 8px;
+        font-size: 0.85rem;
+        border-radius: 6px;
+    }
+
+    .view-mode textarea {
+        min-height: 60px;
+        max-height: 120px;
+        font-size: 0.85rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .admin-posts-page {
+        padding: 14px 10px;
+    }
+
+    .header-content h2 {
+        font-size: 1.4rem;
+    }
+
+    .header-subtitle {
+        font-size: 0.9rem;
+    }
+
+    .page-header {
+        gap: 8px;
+    }
+
+    .add-post-btn {
+        width: 42px;
+        height: 42px;
+        font-size: 1rem;
+    }
+
+    .posts-table {
+        min-width: 750px;
+        font-size: 0.8rem;
+    }
+
+    .posts-table thead {
+        background: #f1f5f9;
+    }
+
+    .posts-table thead th {
+        padding: 8px 6px;
+        font-size: 0.65rem;
+        letter-spacing: 0px;
+    }
+
+    .posts-table tbody td {
+        padding: 8px 6px;
+        font-size: 0.8rem;
+    }
+
+    .title-col { width: 20%; min-width: 100px; }
+    .content-col { width: 28%; min-width: 170px; }
+    .date-col { width: 18%; min-width: 90px; font-size: 0.7rem; }
+    .link-col { width: 10%; min-width: 50px; }
+    .status-col { width: 12%; min-width: 65px; }
+    .action-col { width: 12%; min-width: 60px; }
+
+    .cell-content {
+        max-height: 70px;
+        font-size: 0.8rem;
+        padding: 2px 0;
+    }
+
+    .badge {
+        padding: 3px 8px;
+        font-size: 0.65rem;
+    }
+
+    .edit-btn,
+    .save-btn {
+        width: 30px;
+        height: 30px;
+        font-size: 0.85rem;
+    }
+
+    .view-mode input,
+    .view-mode textarea {
+        padding: 5px 7px;
+        font-size: 0.8rem;
+        border: 1px solid #cbd5e1;
+    }
+
+    .view-mode textarea {
+        min-height: 50px;
+        max-height: 100px;
     }
 }
