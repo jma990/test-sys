@@ -114,6 +114,7 @@ body.sidebar-collapsed #main {
 .sidebar-toggle .icon {
     transition: transform 180ms ease;
 }
+
 body.sidebar-collapsed .sidebar-toggle .icon {
     transform: rotate(180deg);
 }
