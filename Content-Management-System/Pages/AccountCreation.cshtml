@@ -80,78 +80,80 @@
 }
 
 <div class="account-creation-container">
-    <div class="account-creation-card">
-        <div class="account-creation-header">
-            <h2>Create Account</h2>
-            <p>Fill in the details to create a new user account</p>
+    <div class="account-creation-wrapper">
+        <div class="account-creation-card">
+            <div class="account-creation-header">
+                <h1><i class="fas fa-user-plus"></i> Create Account</h1>
+                <p>Fill in the details to create a new user account</p>
+            </div>
+
+            <form method="post" class="account-creation-form" id="accountCreationForm" novalidate>
+                <div class="form-group">
+                    <div class="input-wrapper">
+                        <input asp-for="FirstName" placeholder=" " required />
+                        <label for="FirstName">First Name<span class="text-danger">*</span></label>
+                    </div>
+                    @Html.ValidationMessageFor(m => m.FirstName, "", new { @class = "error-message show" })
+                </div>
+
+                <div class="form-group">
+                    <div class="input-wrapper">
+                        <input asp-for="MiddleName" placeholder=" " />
+                        <label for="MiddleName">Middle Name</label>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="input-wrapper">
+                        <input asp-for="LastName" placeholder=" " required />
+                        <label for="LastName">Last Name<span class="text-danger">*</span></label>
+                    </div>
+                    @Html.ValidationMessageFor(m => m.LastName, "", new { @class = "error-message show" })
+                </div>
+
+                <div class="form-group">
+                    <div class="input-wrapper">
+                        <input asp-for="Email" type="email" placeholder=" " required />
+                        <label for="Email">Email Address<span class="text-danger">*</span></label>
+                    </div>
+                    @Html.ValidationMessageFor(m => m.Email, "", new { @class = "error-message show" })
+                </div>
+
+                <div class="form-group">
+                    <div class="input-wrapper">
+                        <select asp-for="DepartmentID" required>
+                            <option value="">-- Select Department --</option>
+                            @foreach (var dept in Model.Departments)
+                            {
+                                <option value="@dept.ID">@dept.DepartmentName</option>
+                            }
+                        </select>
+                        <label for="DepartmentID">Department<span class="text-danger">*</span></label>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="input-wrapper">
+                        <select asp-for="Role" required>
+                            @if (User.IsInRole("SuperAdmin"))
+                            {
+                                <option value="1">Admin</option>
+                                <option value="2">Member</option>
+                            }
+                            else if (User.IsInRole("Admin"))
+                            {
+                                <option value="2">Member</option>
+                            }
+                        </select>
+                        <label for="Role">Role<span class="text-danger">*</span></label>
+                    </div>
+                </div>
+
+                <button type="submit" class="create-account-btn">
+                    <span class="btn-text">Create Account</span>
+                    <span class="btn-loader"></span>
+                </button>
+            </form>
         </div>
-
-        <form method="post" class="account-creation-form" id="accountCreationForm" novalidate>
-            <div class="form-group">
-                <div class="input-wrapper">
-                    <input asp-for="FirstName" placeholder=" " required />
-                    <label for="FirstName">First Name<span class="text-danger">*</span></label>
-                </div>
-                @Html.ValidationMessageFor(m => m.FirstName, "", new { @class = "error-message show" })
-            </div>
-
-            <div class="form-group">
-                <div class="input-wrapper">
-                    <input asp-for="MiddleName" placeholder=" " />
-                    <label for="MiddleName">Middle Name</label>
-                </div>
-            </div>
-
-            <div class="form-group">
-                <div class="input-wrapper">
-                    <input asp-for="LastName" placeholder=" " required />
-                    <label for="LastName">Last Name<span class="text-danger">*</span></label>
-                </div>
-                @Html.ValidationMessageFor(m => m.LastName, "", new { @class = "error-message show" })
-            </div>
-
-            <div class="form-group">
-                <div class="input-wrapper">
-                    <input asp-for="Email" type="email" placeholder=" " required />
-                    <label for="Email">Email Address<span class="text-danger">*</span></label>
-                </div>
-                @Html.ValidationMessageFor(m => m.Email, "", new { @class = "error-message show" })
-            </div>
-
-            <div class="form-group">
-                <div class="input-wrapper">
-                    <select asp-for="DepartmentID" required>
-                        <option value="">-- Select Department --</option>
-                        @foreach (var dept in Model.Departments)
-                        {
-                            <option value="@dept.ID">@dept.DepartmentName</option>
-                        }
-                    </select>
-                    <label for="DepartmentID">Department<span class="text-danger">*</span></label>
-                </div>
-            </div>
-
-            <div class="form-group">
-                <div class="input-wrapper">
-                    <select asp-for="Role" required>
-                        @if (User.IsInRole("SuperAdmin"))
-                        {
-                            <option value="1">Admin</option>
-                            <option value="2">Member</option>
-                        }
-                        else if (User.IsInRole("Admin"))
-                        {
-                            <option value="2">Member</option>
-                        }
-                    </select>
-                    <label for="Role">Role<span class="text-danger">*</span></label>
-                </div>
-            </div>
-
-            <button type="submit" class="create-account-btn">
-                <span class="btn-text">Create Account</span>
-                <span class="btn-loader"></span>
-            </button>
-        </form>
     </div>
 </div>

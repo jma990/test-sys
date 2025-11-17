@@ -199,7 +199,8 @@ body.sidebar-collapsed .sidebar-toggle .icon {
         left: 0;
         right: 0;
         bottom: 0;
-        background: rgba(0, 0, 0, 0.4);
+        /* slightly softened so page behind remains readable */
+        background: rgba(0, 0, 0, 0.22);
         backdrop-filter: blur(2px);
         z-index: 98;
         pointer-events: auto;
@@ -224,10 +225,18 @@ body.sidebar-collapsed .sidebar-toggle .icon {
                     filter 250ms ease;
     }
 
+    /* When the mobile sidebar is open, shift the page content right a bit
+       so it isn't fully covered. Use a clamp to keep the shift within
+       reasonable bounds across screen sizes. Keep brightness almost
+       normal so content remains readable. */
     body:not(.sidebar-collapsed) .main-column,
     body:not(.sidebar-collapsed) .content,
     body:not(.sidebar-collapsed) #main {
-        filter: brightness(0.8);
+        transform: translateX(clamp(56px, 14vw, 220px));
+        transition: transform 250ms cubic-bezier(0.4, 0, 0.2, 1), filter 250ms ease;
+        filter: brightness(0.96);
+        /* avoid horizontal scroll when translated */
+        will-change: transform;
     }
 
     .sidebar-toggle {

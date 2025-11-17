@@ -55,7 +55,7 @@
 
 .announcement-box {
     width: 100%;
-    min-height: 500px;
+    min-height: auto; /* don't force a large fixed min height */
     height: auto;
     padding: 0;
     background: #fff;
@@ -123,9 +123,9 @@
     gap: 24px;
     padding: 32px;
     overflow-x: visible;
-    overflow-y: auto;
-    max-height: calc(100vh - 300px);
-    flex: 1;
+    overflow-y: visible;
+    max-height: none; /* let content determine height */
+    flex: initial;
 }
 
 /* Modern Announcement Cards */
@@ -139,7 +139,8 @@
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     position: relative;
-    overflow: hidden;
+    /* allow popups/tooltips to escape the rounded card instead of being clipped */
+    overflow: visible;
     flex-shrink: 1;
     display: flex;
     flex-direction: column;
@@ -286,77 +287,7 @@
     font-size: 0.75rem;
 }
 
-/* Tooltip Styling */
-.more-tooltip {
-    position: relative;
-    display: inline-block;
-    margin-top: 12px;
-}
-
-.more-tooltip a {
-    color: #6366f1;
-    text-decoration: none;
-    font-weight: 600;
-    font-size: 0.875rem;
-    display: inline-flex;
-    align-items: center;
-    gap: 4px;
-    transition: color 0.3s ease;
-}
-
-.more-tooltip a::after {
-    content: '→';
-    transition: transform 0.3s ease;
-}
-
-.more-tooltip a:hover {
-    color: #4f46e5;
-}
-
-.more-tooltip a:hover::after {
-    transform: translateX(4px);
-}
-
-.more-tooltip .tooltip-content {
-    visibility: hidden;
-    opacity: 0;
-    width: 400px;
-    max-width: 90vw;
-    background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
-    color: white;
-    text-align: left;
-    border-radius: 12px;
-    padding: 20px;
-    position: absolute;
-    z-index: 1000;
-    left: 0;
-    top: 120%;
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
-    font-size: 0.9375rem;
-    line-height: 1.6;
-    transition: all 0.3s ease;
-    transform: translateY(-8px);
-    word-break: break-word;
-}
-
-.more-tooltip .tooltip-content::before {
-    content: '';
-    position: absolute;
-    top: -8px;
-    left: 20px;
-    width: 0;
-    height: 0;
-    border-left: 8px solid transparent;
-    border-right: 8px solid transparent;
-    border-bottom: 8px solid #1e293b;
-}
-
-.more-tooltip:hover .tooltip-content,
-.more-tooltip:focus-within .tooltip-content {
-    visibility: visible;
-    opacity: 1;
-    transform: translateY(0);
-}
+/* Tooltip styling removed - full content now displays in cards */
 
 /* Empty State */
 .empty-state {
@@ -527,31 +458,6 @@
         font-size: 0.8rem;
     }
 
-    .more-tooltip a {
-        font-size: 0.85rem;
-    }
-
-    .more-tooltip .tooltip-content {
-        width: 280px;
-        left: 50%;
-        transform: translateX(-50%) translateY(-8px);
-        padding: 16px;
-        font-size: 0.875rem;
-        line-height: 1.5;
-        border-radius: 10px;
-        top: 110%;
-    }
-
-    .more-tooltip:hover .tooltip-content,
-    .more-tooltip:focus-within .tooltip-content {
-        transform: translateX(-50%) translateY(0);
-    }
-
-    .more-tooltip .tooltip-content::before {
-        left: calc(50% - 8px);
-        top: -8px;
-    }
-
     .empty-state {
         padding: 40px 20px;
         font-size: 1rem;
@@ -660,25 +566,6 @@
         padding: 9px 12px;
         font-size: 0.8rem;
         border-radius: 7px;
-    }
-
-    .more-tooltip a {
-        font-size: 0.8rem;
-        gap: 3px;
-    }
-
-    .more-tooltip .tooltip-content {
-        width: calc(100vw - 30px);
-        padding: 12px;
-        font-size: 0.8rem;
-        line-height: 1.5;
-        top: 100%;
-        border-radius: 8px;
-    }
-
-    .more-tooltip .tooltip-content::before {
-        border-bottom: 6px solid #1e293b;
-        top: -6px;
     }
 
     .empty-state {
@@ -835,37 +722,6 @@
 
     .announcement-link-btn i {
         font-size: 0.65rem;
-    }
-
-    .more-tooltip {
-        margin-top: 8px;
-    }
-
-    .more-tooltip a {
-        font-size: 0.75rem;
-        gap: 2px;
-    }
-
-    .more-tooltip a::after {
-        font-size: 0.75rem;
-    }
-
-    .more-tooltip .tooltip-content {
-        width: calc(100vw - 24px);
-        padding: 10px;
-        font-size: 0.75rem;
-        line-height: 1.4;
-        top: 100%;
-        border-radius: 6px;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-    }
-
-    .more-tooltip .tooltip-content::before {
-        border-left: 6px solid transparent;
-        border-right: 6px solid transparent;
-        border-bottom: 6px solid #1e293b;
-        top: -6px;
-        height: auto;
     }
 
     .empty-state {

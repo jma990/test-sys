@@ -1,85 +1,528 @@
 
-    .departments-container {
-        padding: 20px;
-        background: #fff;
-        border-radius: 8px;
-        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+/* Departments Page - Modern Design */
+
+.departments-page {
+    padding: 40px 20px;
+    max-width: 1400px;
+    margin: 0 auto;
+    background: #fff;
+}
+
+/* Header Section */
+.departments-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 24px;
+    margin-bottom: 40px;
+    flex-wrap: wrap;
+}
+
+.departments-header .header-content h1 {
+    color: #1e293b;
+    font-weight: 700;
+    font-size: 2.5rem;
+    margin: 0 0 8px 0;
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.departments-header .header-content h1 i {
+    color: #6366f1;
+    font-size: 2.25rem;
+}
+
+.departments-header .header-content h1::after {
+    content: '';
+    position: absolute;
+    bottom: -8px;
+    left: 0;
+    width: 80px;
+    height: 4px;
+    background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+    border-radius: 2px;
+}
+
+.departments-header .header-content p {
+    color: #64748b;
+    font-size: 1rem;
+    margin: 16px 0 0 0;
+}
+
+/* Add Department Button */
+.btn-add-department {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 24px;
+    background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+    color: white;
+    border: none;
+    border-radius: 10px;
+    font-weight: 600;
+    font-size: 0.95rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+    white-space: nowrap;
+}
+
+.btn-add-department:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(99, 102, 241, 0.4);
+    background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+}
+
+.btn-add-department:active {
+    transform: translateY(0);
+}
+
+.btn-add-department i {
+    font-size: 1rem;
+}
+
+/* Filter Section */
+.filter-section {
+    margin-bottom: 32px;
+}
+
+.filter-buttons {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.filter-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 10px 18px;
+    background: #f1f5f9;
+    color: #475569;
+    text-decoration: none;
+    border: 2px solid #e2e8f0;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 0.875rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.filter-btn:hover {
+    background: #e2e8f0;
+    border-color: #cbd5e1;
+    color: #334155;
+}
+
+.filter-btn.active {
+    background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+    color: white;
+    border-color: #6366f1;
+}
+
+.filter-btn i {
+    font-size: 0.875rem;
+}
+
+/* Table Section */
+.departments-table-wrapper {
+    background: #fff;
+    border-radius: 16px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    border: 1px solid #e2e8f0;
+    overflow: hidden;
+}
+
+.departments-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 0;
+}
+
+.departments-table thead {
+    background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+    border-bottom: 3px solid #cbd5e1;
+}
+
+.departments-table thead th {
+    padding: 18px 20px;
+    color: #1e293b;
+    font-weight: 700;
+    font-size: 0.875rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    text-align: left;
+}
+
+.departments-table thead th.text-center {
+    text-align: center;
+}
+
+.departments-table tbody tr {
+    border-bottom: 1px solid #e2e8f0;
+    transition: all 0.3s ease;
+}
+
+.departments-table tbody tr:hover {
+    background: #f8fafc;
+}
+
+.departments-table tbody tr:last-child {
+    border-bottom: none;
+}
+
+.departments-table tbody td {
+    padding: 18px 20px;
+    color: #334155;
+    font-size: 0.95rem;
+    vertical-align: middle;
+}
+
+.departments-table .dept-name-cell {
+    font-weight: 600;
+    color: #1e293b;
+}
+
+.departments-table .user-count {
+    color: #64748b;
+    font-weight: 500;
+}
+
+.departments-table .text-center {
+    text-align: center;
+}
+
+/* Status Badges */
+.status-badge {
+    display: inline-block;
+    padding: 6px 12px;
+    border-radius: 6px;
+    font-weight: 600;
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+}
+
+.status-active {
+    background: #dcfce7;
+    color: #166534;
+}
+
+.status-inactive {
+    background: #f3f4f6;
+    color: #6b7280;
+}
+
+/* Action Buttons */
+.action-cell {
+    white-space: nowrap;
+}
+
+.action-buttons {
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+    align-items: center;
+}
+
+.action-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    padding: 0;
+    background: #f1f5f9;
+    color: #6366f1;
+    border: 2px solid #e2e8f0;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 0.95rem;
+    transition: all 0.3s ease;
+}
+
+.action-btn:hover {
+    background: #e0e7ff;
+    border-color: #6366f1;
+    color: #4f46e5;
+}
+
+.action-btn:active {
+    transform: scale(0.95);
+}
+
+.action-btn.edit-btn {
+    color: #6366f1;
+}
+
+.action-btn.save-btn {
+    color: #16a34a;
+    border-color: #86efac;
+}
+
+.action-btn.save-btn:hover {
+    background: #f0fdf4;
+    border-color: #16a34a;
+}
+
+.action-btn.archive-btn {
+    color: #dc2626;
+    border-color: #fecaca;
+}
+
+.action-btn.archive-btn:hover {
+    background: #fef2f2;
+    border-color: #dc2626;
+}
+
+.action-btn.view-users-btn {
+    color: #0891b2;
+    border-color: #cffafe;
+}
+
+.action-btn.view-users-btn:hover {
+    background: #f0f9fa;
+    border-color: #0891b2;
+}
+
+/* Edit Input */
+.edit-form {
+    position: relative;
+}
+
+.edit-form .form-control-sm {
+    height: 36px;
+    padding: 8px 12px;
+    font-size: 0.9rem;
+    border: 2px solid #6366f1;
+    border-radius: 6px;
+    color: #1e293b;
+}
+
+.edit-form .form-control-sm:focus {
+    outline: none;
+    border-color: #4f46e5;
+    box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1);
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+    .departments-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 16px;
+    }
+
+    .departments-header .header-content h1 {
+        font-size: 2rem;
+    }
+
+    .btn-add-department {
+        align-self: flex-start;
+    }
+}
+
+@media (max-width: 768px) {
+    .departments-page {
+        padding: 24px 16px;
     }
 
     .departments-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 20px;
+        flex-direction: column;
+        gap: 12px;
+        margin-bottom: 28px;
     }
 
-    .departments-header h2 {
-        margin: 0;
-        color: #333;
+    .departments-header .header-content h1 {
+        font-size: 1.75rem;
+    }
+
+    .departments-header .header-content h1::after {
+        width: 60px;
+        height: 3px;
+    }
+
+    .btn-add-department {
+        width: 100%;
+        justify-content: center;
     }
 
     .filter-buttons {
-        margin-bottom: 20px;
+        gap: 8px;
     }
 
-    .filter-buttons .btn {
-        margin-right: 8px;
+    .filter-btn {
+        padding: 8px 14px;
+        font-size: 0.8rem;
+        flex: 1;
+        min-width: 80px;
+        justify-content: center;
     }
 
-    .table {
-        background: #fff;
-        border-radius: 4px;
+    .departments-table-wrapper {
+        border-radius: 12px;
     }
 
-    .table thead th {
-        background-color: #f8f9fa;
-        border-bottom: 2px solid #dee2e6;
-        color: #495057;
+    .departments-table thead th {
+        padding: 14px 16px;
+        font-size: 0.75rem;
     }
 
-    .table tbody tr:hover {
-        background-color: #f8f9fa;
+    .departments-table tbody td {
+        padding: 14px 16px;
+        font-size: 0.9rem;
     }
 
     .action-buttons {
-        white-space: nowrap;
+        gap: 6px;
     }
 
-    .action-buttons .btn-group {
-        display: flex;
+    .action-btn {
+        width: 32px;
+        height: 32px;
+        font-size: 0.85rem;
+    }
+
+    .status-badge {
+        padding: 4px 10px;
+        font-size: 0.7rem;
+    }
+}
+
+@media (max-width: 600px) {
+    .departments-page {
+        padding: 16px 12px;
+    }
+
+    .departments-header .header-content h1 {
+        font-size: 1.5rem;
+        gap: 8px;
+    }
+
+    .departments-header .header-content h1 i {
+        font-size: 1.75rem;
+    }
+
+    .departments-header .header-content h1::after {
+        width: 50px;
+        height: 2px;
+    }
+
+    .departments-header .header-content p {
+        font-size: 0.9rem;
+    }
+
+    .btn-add-department {
+        font-size: 0.85rem;
+        padding: 10px 16px;
+    }
+
+    .btn-add-department i {
+        font-size: 0.9rem;
+    }
+
+    .filter-btn {
+        padding: 6px 12px;
+        font-size: 0.75rem;
+        min-width: 70px;
+    }
+
+    .filter-btn i {
+        display: none;
+    }
+
+    .departments-table {
+        font-size: 0.85rem;
+    }
+
+    .departments-table thead th {
+        padding: 12px 10px;
+        font-size: 0.7rem;
+    }
+
+    .departments-table tbody td {
+        padding: 12px 10px;
+        font-size: 0.85rem;
+    }
+
+    .dept-name-cell {
+        font-weight: 600;
+    }
+
+    .user-count {
+        font-size: 0.9rem;
+    }
+
+    .action-btn {
+        width: 28px;
+        height: 28px;
+        font-size: 0.75rem;
+    }
+
+    .status-badge {
+        padding: 3px 8px;
+        font-size: 0.65rem;
+    }
+
+    .edit-form .form-control-sm {
+        height: 32px;
+        padding: 6px 10px;
+        font-size: 0.8rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .departments-page {
+        padding: 12px 8px;
+    }
+
+    .departments-header .header-content h1 {
+        font-size: 1.35rem;
+    }
+
+    .departments-header .header-content h1 i {
+        font-size: 1.5rem;
+    }
+
+    .departments-header .header-content p {
+        font-size: 0.85rem;
+    }
+
+    .filter-buttons {
+        gap: 6px;
+    }
+
+    .filter-btn {
+        padding: 5px 10px;
+        font-size: 0.7rem;
+        min-width: 60px;
+    }
+
+    .departments-table thead th {
+        padding: 10px 8px;
+        font-size: 0.65rem;
+        letter-spacing: 0px;
+    }
+
+    .departments-table tbody td {
+        padding: 10px 8px;
+        font-size: 0.8rem;
+    }
+
+    .action-buttons {
         gap: 4px;
     }
 
-    .action-buttons .btn {
-        padding: 0.25rem 0.5rem;
+    .action-btn {
+        width: 26px;
+        height: 26px;
+        font-size: 0.7rem;
     }
 
-    .status-cell .badge {
-        font-size: 0.875rem;
-        padding: 0.35em 0.65em;
+    .status-badge {
+        padding: 2px 6px;
+        font-size: 0.6rem;
     }
-
-    .form-control-sm {
-        height: calc(1.5em + 0.5rem + 2px);
-        padding: 0.25rem 0.5rem;
-        font-size: 0.875rem;
-        border-radius: 0.2rem;
-    }
-
-    @media (max-width: 768px) {
-        .departments-header {
-            flex-direction: column;
-            gap: 1rem;
-            align-items: flex-start;
-        }
-
-        .filter-buttons {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 0.5rem;
-        }
-
-        .filter-buttons .btn {
-            margin-right: 0;
-        }
-    }
+}

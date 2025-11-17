@@ -8,79 +8,93 @@
 
 <link rel="stylesheet" href="~/css/departments.css" />
 
-<div class="departments-container">
+<div class="departments-page">
     <div class="departments-header">
-        <h2>Departments</h2>
-        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addDepartmentModal">
-            <i class="bi bi-plus-lg"></i> Add Department
+        <div class="header-content">
+            <h1><i class="fas fa-building"></i> Departments</h1>
+            <p>Manage your organization's departments and team members</p>
+        </div>
+        <button type="button" class="btn-add-department" data-bs-toggle="modal" data-bs-target="#addDepartmentModal">
+            <i class="fas fa-plus"></i> Add Department
         </button>
     </div>
 
     @Html.AntiForgeryToken()
-    <div class="filter-buttons">
-        <a asp-page="@Url.Content(PathDirectory.DepartmentsPage)" asp-route-filter="all"
-           class="btn btn-outline-primary @(Model.Filter == "all" ? "active" : "")">All</a>
-        <a asp-page="@Url.Content(PathDirectory.DepartmentsPage)" asp-route-filter="active"
-           class="btn btn-outline-success @(Model.Filter == "active" ? "active" : "")">Active</a>
-        <a asp-page="@Url.Content(PathDirectory.DepartmentsPage)" asp-route-filter="inactive"
-           class="btn btn-outline-secondary @(Model.Filter == "inactive" ? "active" : "")">Inactive</a>
+    
+    <div class="filter-section">
+        <div class="filter-buttons">
+            <a asp-page="@Url.Content(PathDirectory.DepartmentsPage)" asp-route-filter="all"
+               class="filter-btn @(Model.Filter == "all" ? "active" : "")">
+                <i class="fas fa-list"></i> All
+            </a>
+            <a asp-page="@Url.Content(PathDirectory.DepartmentsPage)" asp-route-filter="active"
+               class="filter-btn @(Model.Filter == "active" ? "active" : "")">
+                <i class="fas fa-check-circle"></i> Active
+            </a>
+            <a asp-page="@Url.Content(PathDirectory.DepartmentsPage)" asp-route-filter="inactive"
+               class="filter-btn @(Model.Filter == "inactive" ? "active" : "")">
+                <i class="fas fa-ban"></i> Inactive
+            </a>
+        </div>
     </div>
 
-    <div class="table-responsive">
-        <table class="table table-hover">
+    <div class="departments-table-wrapper">
+        <table class="departments-table">
             <thead>
                 <tr>
                     <th>Department Name</th>
-                    <th>Number of Users</th>
-                    <th>Status</th>
-                    <th>Action</th>
+                    <th class="text-center">Number of Users</th>
+                    <th class="text-center">Status</th>
+                    <th class="text-center">Action</th>
                 </tr>
             </thead>
             <tbody>
             @foreach (var dept in Model.Departments)
             {
                 <tr data-id="@dept.ID">
-                    <td class="view-mode">@dept.DepartmentName</td>
-                    <td>@dept.UserCount</td>
-                    <td class="view-mode status-cell">
+                    <td class="dept-name-cell view-mode">@dept.DepartmentName</td>
+                    <td class="text-center user-count">@dept.UserCount</td>
+                    <td class="text-center view-mode status-cell">
                         @if (dept.IsActive)
                         {
-                            <span class="badge bg-success">Active</span>
+                            <span class="status-badge status-active">Active</span>
                         }
                         else
                         {
-                            <span class="badge bg-secondary">Inactive</span>
+                            <span class="status-badge status-inactive">Inactive</span>
                         }
                     </td>
-                    <td class="action-buttons">
-                        <div class="btn-group">
-                            <button type="button" class="btn btn-sm btn-outline-primary edit-btn">
-                                <i class="bi bi-pencil"></i>
+                    <td class="text-center action-cell">
+                        <div class="action-buttons">
+                            <button type="button" class="action-btn edit-btn" title="Edit">
+                                <i class="fas fa-edit"></i>
                             </button>
-                            <button type="button" class="btn btn-sm btn-outline-success save-btn d-none">
-                                <i class="bi bi-check-lg"></i>
+                            <button type="button" class="action-btn save-btn d-none" title="Save">
+                                <i class="fas fa-check"></i>
                             </button>
                             @if (dept.UserCount == 0)   
                             {
-                                <button type="button" class="btn btn-sm btn-outline-danger archive-btn" 
-                                        data-id="@dept.ID" data-active="@dept.IsActive">
+                                <button type="button" class="action-btn archive-btn" 
+                                        data-id="@dept.ID" data-active="@dept.IsActive"
+                                        title="@(dept.IsActive ? "Archive" : "Unarchive")">
                                     @if (dept.IsActive)
                                     {
-                                        <i class="bi bi-trash" title="Archive"></i>
+                                        <i class="fas fa-trash-alt"></i>
                                     }
                                     else
                                     {
-                                        <i class="bi bi-arrow-counterclockwise" title="Unarchive"></i>
+                                        <i class="fas fa-undo"></i>
                                     }
                                 </button>
                             }
                             <button type="button"
-                                    class="btn btn-sm btn-outline-info view-users-btn"
+                                    class="action-btn view-users-btn"
                                     data-bs-toggle="modal"
                                     data-bs-target="#viewUsersModal"
                                     data-id="@dept.ID"
-                                    data-name="@dept.DepartmentName">
-                                <i class="bi bi-people" title="View Users"></i>
+                                    data-name="@dept.DepartmentName"
+                                    title="View Users">
+                                <i class="fas fa-users"></i>
                             </button>
                         </div>
 

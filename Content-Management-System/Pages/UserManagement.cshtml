@@ -10,170 +10,157 @@
 @await Html.PartialAsync(@Url.Content(PathDirectory._ResetPasswordLogs), Model)
 @Html.AntiForgeryToken()
 
-<div class="container-fluid py-4">
-    <div class="row">
-        <div class="col-12">
-            <div class="card shadow-sm">
-                <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
-                    <h4 class="mb-0">
-                        <i class="bi bi-people-fill me-2"></i>User Management
-                    </h4>
-                    <div class="d-flex gap-2">
-                        <button type="button" class="btn btn-light btn-sm" onclick="refreshUsers()">
-                            <i class="bi bi-arrow-clockwise"></i> Refresh
-                        </button>
-                    </div>
-                </div>
+<div class="user-management-page">
+    <div class="user-management-header">
+        <div class="header-content">
+            <h1><i class="fas fa-users"></i> User Management</h1>
+            <p>Manage user accounts, roles, and permissions</p>
+        </div>
+        <button type="button" class="btn-refresh" onclick="refreshUsers()" title="Refresh">
+            <i class="fas fa-sync-alt"></i> Refresh
+        </button>
+    </div>
 
-                <div class="card-body">
-                    @if (Model.Users == null || !Model.Users.Any())
-                    {
-                        <div class="text-center py-5">
-                            <i class="bi bi-people display-4 text-muted mb-3"></i>
-                            <h5 class="text-muted">No users available</h5>
-                            <p class="text-muted">There are currently no users to manage.</p>
-                        </div>
-                    }
-                    else
-                    {
-                        <!-- Search and Filter Section -->
-                        <div class="row mb-4">
-                            <div class="col-md-6">
-                                <div class="input-group">
-                                    <span class="input-group-text"><i class="bi bi-search"></i></span>
-                                    <input type="text" id="searchInput" class="form-control" placeholder="Search users...">
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="input-group">
-                                    <span class="input-group-text"><i class="bi bi-funnel"></i></span>
-                                    <select id="roleFilter" class="form-select">
-                                        <option value="">All Roles</option>
-                                        <option value="Admin">Admin</option>
-                                        <option value="User">User</option>
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Users Table -->
-                        <div class="table-responsive">
-                            <table id="usersTable" class="table table-hover">
-                                <thead class="table-light">
-                                    <tr>
-                                        <th scope="col">
-                                            <i class="bi bi-person me-1"></i>Name
-                                            <button class="btn btn-link btn-sm p-0 ms-1 sort-btn" data-column="0">
-                                                <i class="bi bi-chevron-expand"></i>
-                                            </button>
-                                        </th>
-                                        <th scope="col">
-                                            <i class="bi bi-envelope me-1"></i>Email
-                                            <button class="btn btn-link btn-sm p-0 ms-1 sort-btn" data-column="1">
-                                                <i class="bi bi-chevron-expand"></i>
-                                            </button>
-                                        </th>
-                                        <th scope="col">
-                                            <i class="bi bi-shield me-1"></i>Role
-                                            <button class="btn btn-link btn-sm p-0 ms-1 sort-btn" data-column="2">
-                                                <i class="bi bi-chevron-expand"></i>
-                                            </button>
-                                        </th>
-                                        <th scope="col">
-                                            <i class="bi bi-building me-1"></i>Department
-                                            <button class="btn btn-link btn-sm p-0 ms-1 sort-btn" data-column="3">
-                                                <i class="bi bi-chevron-expand"></i>
-                                            </button>
-                                        </th>
-                                        <th scope="col">
-                                            <i class="bi bi-calendar me-1"></i>Created At
-                                            <button class="btn btn-link btn-sm p-0 ms-1 sort-btn" data-column="4">
-                                                <i class="bi bi-chevron-expand"></i>
-                                            </button>
-                                        </th>
-                                        <th scope="col" class="text-center">
-                                            <i class="bi bi-gear me-1"></i>Actions
-                                        </th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach (var user in Model.Users)
-                                    {
-                                        <tr class="user-row" data-role="@user.Role" data-archived="@user.IsArchived.ToString().ToLower()">
-                                            <td>
-                                                <div class="d-flex align-items-center">
-                                                    <div class="avatar-circle me-2 bg-primary text-white">
-                                                        @($"{user.FirstName[0]}{user.LastName[0]}".ToUpper())
-                                                    </div>
-                                                    <div>
-                                                        <div class="fw-semibold">@($"{user.FirstName} {user.LastName}")</div>
-                                                        @if (user.IsArchived)
-                                                        {
-                                                            <small class="text-muted"><i class="bi bi-archive me-1"></i>Archived</small>
-                                                        }
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <a href="mailto:@user.Email" class="text-decoration-none">@user.Email</a>
-                                            </td>
-                                            <td>
-                                                <span class="badge bg-@(user.Role == UserRole.Admin ? "warning" : "secondary")">
-                                                    @user.Role
-                                                </span>
-                                            </td>
-                                            <td>@(user.Department?.DepartmentName ?? "No Department")</td>
-                                            <td>
-                                                <small class="text-muted">@user.CreatedAt.ToString("MMM dd, yyyy")</small>
-                                            </td>
-                                            <td>
-                                                <div class="btn-group" role="group">
-                                                    <button type="button"
-                                                            class="btn btn-sm btn-outline-danger"
-                                                            title="Reset Password"
-                                                            onclick="resetPassword(@user.ID, '@user.FirstName @user.LastName')">
-                                                        <i class="bi bi-arrow-repeat"></i>
-                                                    </button>
-                                                    <button type="button"
-                                                            class="btn btn-sm btn-outline-info"
-                                                            title="View Reset Password Logs"
-                                                            onclick="showResetLogs(@user.ID, '@user.FirstName @user.LastName')">
-                                                        <i class="bi bi-journal-text"></i>
-                                                    </button>
-                                                    <button type="button"
-                                                            class="btn btn-sm btn-outline-@(user.IsArchived ? "success" : "secondary")"
-                                                            title="@(user.IsArchived ? "Unarchive User" : "Archive User")"
-                                                            onclick="toggleArchive(@user.ID, '@user.FirstName @user.LastName', @user.IsArchived.ToString().ToLower())">
-                                                        <i class="bi @(user.IsArchived ? "bi-box-arrow-in-up" : "bi-archive")"></i>
-                                                    </button>
-                                                    @if (User.FindFirstValue(ClaimTypes.Role) == nameof(UserRole.SuperAdmin))
-                                                    {
-                                                        <button type="button"
-                                                                class="btn btn-sm btn-outline-primary"
-                                                                title="Change Department"
-                                                                onclick="changeDepartment(@user.ID, '@user.FirstName @user.LastName')">
-                                                            <i class="bi bi-building"></i>
-                                                        </button>
-                                                    }
-                                                </div>
-                                            </td>
-                                        </tr>
-                                    }
-                                </tbody>
-                            </table>
-                        </div>
-
-                        <!-- Pagination -->
-                        <nav aria-label="User pagination" class="mt-4">
-                            <ul class="pagination justify-content-center" id="pagination">
-                                <!-- Pagination will be generated by JavaScript -->
-                            </ul>
-                        </nav>
-                    }
-                </div>
+    @if (Model.Users == null || !Model.Users.Any())
+    {
+        <div class="empty-state">
+            <i class="fas fa-users"></i>
+            <h3>No Users Found</h3>
+            <p>There are currently no users to manage.</p>
+        </div>
+    }
+    else
+    {
+        <!-- Search and Filter Section -->
+        <div class="search-filter-section">
+            <div class="search-box">
+                <i class="fas fa-search"></i>
+                <input type="text" id="searchInput" placeholder="Search by name or email..." />
+            </div>
+            <div class="filter-box">
+                <i class="fas fa-filter"></i>
+                <select id="roleFilter">
+                    <option value="">All Roles</option>
+                    <option value="Admin">Admin</option>
+                    <option value="User">Member</option>
+                </select>
             </div>
         </div>
-    </div>
+
+        <!-- Users Table -->
+        <div class="users-table-wrapper">
+            <table id="usersTable" class="users-table">
+                <thead>
+                    <tr>
+                        <th>
+                            <i class="fas fa-user"></i> Name
+                            <button class="sort-btn" data-column="0" title="Sort">
+                                <i class="fas fa-arrows-alt-v"></i>
+                            </button>
+                        </th>
+                        <th>
+                            <i class="fas fa-envelope"></i> Email
+                            <button class="sort-btn" data-column="1" title="Sort">
+                                <i class="fas fa-arrows-alt-v"></i>
+                            </button>
+                        </th>
+                        <th class="text-center">
+                            <i class="fas fa-shield-alt"></i> Role
+                            <button class="sort-btn" data-column="2" title="Sort">
+                                <i class="fas fa-arrows-alt-v"></i>
+                            </button>
+                        </th>
+                        <th class="text-center">
+                            <i class="fas fa-building"></i> Department
+                            <button class="sort-btn" data-column="3" title="Sort">
+                                <i class="fas fa-arrows-alt-v"></i>
+                            </button>
+                        </th>
+                        <th class="text-center">
+                            <i class="fas fa-calendar"></i> Created At
+                            <button class="sort-btn" data-column="4" title="Sort">
+                                <i class="fas fa-arrows-alt-v"></i>
+                            </button>
+                        </th>
+                        <th class="text-center">
+                            <i class="fas fa-cog"></i> Actions
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var user in Model.Users)
+                    {
+                        <tr class="user-row" data-role="@user.Role" data-archived="@user.IsArchived.ToString().ToLower()">
+                            <td class="name-cell">
+                                <div class="user-info">
+                                    <div class="avatar">@($"{user.FirstName[0]}{user.LastName[0]}".ToUpper())</div>
+                                    <div class="user-details">
+                                        <span class="user-name">@($"{user.FirstName} {user.LastName}")</span>
+                                        @if (user.IsArchived)
+                                        {
+                                            <span class="archived-badge"><i class="fas fa-archive"></i> Archived</span>
+                                        }
+                                    </div>
+                                </div>
+                            </td>
+                            <td>
+                                <a href="mailto:@user.Email" class="email-link">@user.Email</a>
+                            </td>
+                            <td class="text-center">
+                                <span class="role-badge role-@user.Role.ToString().ToLower()">
+                                    @user.Role
+                                </span>
+                            </td>
+                            <td class="text-center">
+                                <span class="dept-name">@(user.Department?.DepartmentName ?? "No Dept")</span>
+                            </td>
+                            <td class="text-center">
+                                <span class="date-text">@user.CreatedAt.ToString("MMM dd, yyyy")</span>
+                            </td>
+                            <td class="text-center">
+                                <div class="action-buttons">
+                                    <button type="button"
+                                            class="action-btn reset-btn"
+                                            title="Reset Password"
+                                            onclick="resetPassword(@user.ID, '@user.FirstName @user.LastName')">
+                                        <i class="fas fa-key"></i>
+                                    </button>
+                                    <button type="button"
+                                            class="action-btn logs-btn"
+                                            title="View Reset Logs"
+                                            onclick="showResetLogs(@user.ID, '@user.FirstName @user.LastName')">
+                                        <i class="fas fa-history"></i>
+                                    </button>
+                                    <button type="button"
+                                            class="action-btn archive-btn"
+                                            title="@(user.IsArchived ? "Unarchive User" : "Archive User")"
+                                            onclick="toggleArchive(@user.ID, '@user.FirstName @user.LastName', @user.IsArchived.ToString().ToLower())">
+                                        <i class="fas @(user.IsArchived ? "fa-undo" : "fa-trash-alt")"></i>
+                                    </button>
+                                    @if (User.FindFirstValue(ClaimTypes.Role) == nameof(UserRole.SuperAdmin))
+                                    {
+                                        <button type="button"
+                                                class="action-btn dept-btn"
+                                                title="Change Department"
+                                                onclick="changeDepartment(@user.ID, '@user.FirstName @user.LastName')">
+                                            <i class="fas fa-exchange-alt"></i>
+                                        </button>
+                                    }
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Pagination -->
+        <nav aria-label="User pagination" class="pagination-section">
+            <ul class="pagination" id="pagination">
+                <!-- Pagination will be generated by JavaScript -->
+            </ul>
+        </nav>
+    }
 </div>
 
 @section Scripts {
