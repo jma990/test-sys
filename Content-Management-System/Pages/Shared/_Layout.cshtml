@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+ ﻿<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -14,19 +14,16 @@
     @RenderSection("Styles", required: false)
     <title>Content Management System</title>
 </head>
-<body>
+<body> 
     <header>
-         @if (User?.Identity?.IsAuthenticated == true &&
-             User.HasClaim(c => c.Type == "MustChangePassword" && c.Value == "False"))
-         {
-            <button class="sidebar-toggle" type="button" aria-label="Toggle sidebar">
-                <span class="icon">☰</span>
-            </button>
-
-            <div class="app-sidebar">
+            @if (User?.Identity?.IsAuthenticated == true &&
+            User.HasClaim(c => c.Type == "MustChangePassword" && c.Value == "False"))
+            {
+                <button class="sidebar-toggle" type="button" aria-label="Toggle sidebar" title="Toggle sidebar" aria-pressed="false">
+                    <span class="icon">☰</span>
+                </button>
                 @await Component.InvokeAsync("Navbar", new { user = User })
-            </div>
-        }
+            }
     </header>
 
     @if (ViewData["NoContainer"] as bool? == true)
@@ -79,6 +76,19 @@
                     }
                 }, { passive: false });
 
+                // Mobile: Close sidebar when clicking overlay
+                document.addEventListener('click', function(e){
+                    // Check if we clicked the pseudo-element overlay
+                    if (e.target === body || (e.target === document.documentElement && window.innerWidth <= 480)) {
+                        const rect = body.getBoundingClientRect();
+                        // Only close if click was outside sidebar area (in overlay)
+                        if (e.clientX > 260 && !body.classList.contains('sidebar-collapsed') && window.innerWidth <= 480) {
+                            const toggleBtn = document.querySelector('.sidebar-toggle');
+                            setCollapsed(true, toggleBtn);
+                        }
+                    }
+                }, { passive: true });
+
                 // keyboard accessibility: Space/Enter on focused button
                 document.addEventListener('keydown', function(e){
                     const active = document.activeElement;
@@ -88,8 +98,52 @@
                         toggleFromButton(active);
                     }
                 });
+
+                // Keyboard accessibility: Escape key to close sidebar on mobile
+                document.addEventListener('keydown', function(e){
+                    if (e.key === 'Escape' && !body.classList.contains('sidebar-collapsed') && window.innerWidth <= 480) {
+                        const toggleBtn = document.querySelector('.sidebar-toggle');
+                        setCollapsed(true, toggleBtn);
+                    }
+                });
+
+                // Auto-collapse sidebar when clicking navigation links (except logo) on mobile
+                document.addEventListener('click', function(e){
+                    const link = e.target.closest('.app-sidebar a');
+                    if (link && !link.classList.contains('logo')) {
+                        // Collapse sidebar after a short delay to allow navigation
+                        if (window.innerWidth <= 768) {
+                            setTimeout(function() {
+                                const toggleBtn = document.querySelector('.sidebar-toggle');
+                                setCollapsed(true, toggleBtn);
+                            }, 150);
+                        }
+                    }
+                });
+
+                // Highlight active page in sidebar
+                const currentPath = window.location.pathname;
+                document.querySelectorAll('.app-sidebar a').forEach(function(link) {
+                    if (link.getAttribute('href') === currentPath) {
+                        link.classList.add('active');
+                    }
+                });
+
+                // Handle window resize: reset sidebar on larger screens
+                window.addEventListener('resize', function() {
+                    if (window.innerWidth > 768) {
+                        // Keep state from localStorage on larger screens
+                        try {
+                            const stored = localStorage.getItem(KEY);
+                            if (stored === '1') {
+                                body.classList.add('sidebar-collapsed');
+                            } else {
+                                body.classList.remove('sidebar-collapsed');
+                            }
+                        } catch(e){}
+                    }
+                });
             });
         })();
     </script>
 </body>
-</html>

@@ -1,27 +1,52 @@
-﻿@page
+@page
 @model Content_Management_System.Pages.AccountSettingsModel
 @{
 }
 
-<h2>Account Settings</h2>
+@section Styles {
+    <link rel="stylesheet" href="@Url.Content(PathDirectory.AccountSettingsCSS)" />
+}
 
-<div class="row mt-4">
-    <div class="col-md-6 mb-3">
-        <div class="card shadow-sm">
-            <div class="card-body text-center">
-                <h5 class="card-title">Change Personal Information</h5>
-                <p class="card-text">Update your first name, middle name, last name, and email address.</p>
-                <a asp-page="@Url.Content(PathDirectory.ChangePersonalInfoPage)" class="btn btn-primary">Go</a>
-            </div>
-        </div>
+<div class="account-settings-container">
+    <div class="account-settings-header">
+        <h2>Account Settings</h2>
+        <p>Manage your personal information and security settings</p>
     </div>
 
-    <div class="col-md-6 mb-3">
-        <div class="card shadow-sm">
-            <div class="card-body text-center">
-                <h5 class="card-title">Change Password</h5>
-                <p class="card-text">Update your account password securely.</p>
-                <a asp-page="@Url.Content(PathDirectory.ChangePasswordPage)" class="btn btn-danger">Go</a>
+    <div class="account-settings-grid">
+        <div class="settings-card">
+            <div class="settings-card-header">
+                <div class="settings-card-icon">
+                    <i class="fas fa-user-edit"></i>
+                </div>
+                <h3 class="settings-card-title">Personal Info</h3>
+            </div>
+            <div class="settings-card-body">
+                <p class="settings-card-description">
+                    Update your first name, middle name, last name, and email address to keep your profile current.
+                </p>
+                <a asp-page="@Url.Content(PathDirectory.ChangePersonalInfoPage)" class="settings-card-btn primary">
+                    <i class="fas fa-arrow-right"></i>
+                    <span>Update Info</span>
+                </a>
+            </div>
+        </div>
+
+        <div class="settings-card">
+            <div class="settings-card-header danger">
+                <div class="settings-card-icon">
+                    <i class="fas fa-lock"></i>
+                </div>
+                <h3 class="settings-card-title">Password</h3>
+            </div>
+            <div class="settings-card-body">
+                <p class="settings-card-description">
+                    Change your password to maintain account security. Use a strong, unique password.
+                </p>
+                <a asp-page="@Url.Content(PathDirectory.ChangePasswordPage)" class="settings-card-btn danger">
+                    <i class="fas fa-shield-alt"></i>
+                    <span>Change Password</span>
+                </a>
             </div>
         </div>
     </div>
