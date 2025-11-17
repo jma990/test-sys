@@ -16,14 +16,16 @@
 </head>
 <body>
     <header>
-        @if (User?.Identity?.IsAuthenticated == true &&
-          User.HasClaim(c => c.Type == "MustChangePassword" && c.Value == "False"))
-        {
-            <!-- fold/unfold sidebar button (fixed via .sidebar-toggle in layout.css) -->
-            <button class="sidebar-toggle" type="button" aria-label="Toggle sidebar" title="Toggle sidebar" aria-pressed="false">
+         @if (User?.Identity?.IsAuthenticated == true &&
+             User.HasClaim(c => c.Type == "MustChangePassword" && c.Value == "False"))
+         {
+            <button class="sidebar-toggle" type="button" aria-label="Toggle sidebar">
                 <span class="icon">☰</span>
             </button>
-            @await Component.InvokeAsync("Navbar", new { user = User })
+
+            <div class="app-sidebar">
+                @await Component.InvokeAsync("Navbar", new { user = User })
+            </div>
         }
     </header>
 
@@ -33,9 +35,11 @@
     }
     else
     {
-        <div class="app-container">
-            <div class="container">
-                @RenderBody()
+        <div class="main-column">
+            <div class="app-container">
+                <div class="container">
+                    @RenderBody()
+                </div>
             </div>
         </div>
     }

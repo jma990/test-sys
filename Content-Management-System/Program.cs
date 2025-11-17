@@ -47,8 +47,22 @@ var app = builder.Build();
 // Create the two only super admins if none exists
 using (var scope = app.Services.CreateScope())
 {
-    var superAdminService = scope.ServiceProvider.GetRequiredService<SuperAdminService>();
-    await superAdminService.CreateSuperAdmin();
+    var services = scope.ServiceProvider;
+    try
+    {
+        // Ensure DB exists and migrations are applied before any queries/seeding
+        var db = services.GetRequiredService<Content_Management_System.Data.AppDbContext>();
+        await db.Database.MigrateAsync();
+
+        var superAdminService = services.GetRequiredService<Content_Management_System.Utilities.SuperAdminService>();
+        await superAdminService.CreateSuperAdmin();
+    }
+    catch (Exception ex)
+    {
+        var logger = services.GetService<Microsoft.Extensions.Logging.ILogger<Program>>();
+        logger?.LogError(ex, "An error occurred migrating or seeding the database.");
+        throw;
+    }
 }
 
 if (!app.Environment.IsDevelopment())
