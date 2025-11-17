@@ -31,12 +31,15 @@ public static class PathDirectory
 
     // AccountSettings Page
     public const string AccountSettingsPage = "/AccountSettings";
+    public const string AccountSettingsCSS = "~/css/account-settings.css";
 
     // ChangePersonalInfo Page
     public const string ChangePersonalInfoPage = "/ChangePersonalInfo";
+    public const string ChangePersonalInfoCSS = "~/css/change-personal-info.css";
 
     // ChangePassword Page
     public const string ChangePasswordPage = "/ChangePassword";
+    public const string ChangePasswordCSS = "~/css/change-password.css";
     
     // Layout
     public const string LayoutCSS = "~/css/layout.css"; // use layout.css instead
