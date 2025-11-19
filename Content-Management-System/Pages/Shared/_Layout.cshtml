@@ -106,17 +106,21 @@
                     }
                 });
 
-                // Auto-collapse sidebar when clicking navigation links (except logo) on mobile
+                // Auto-collapse sidebar when clicking navigation items or buttons inside the sidebar on small screens.
+                // Supports anchors, buttons, or any element with `data-collapse-on-click` attribute.
                 document.addEventListener('click', function(e){
-                    const link = e.target.closest('.app-sidebar a');
-                    if (link && !link.classList.contains('logo')) {
-                        // Collapse sidebar after a short delay to allow navigation
-                        if (window.innerWidth <= 768) {
-                            setTimeout(function() {
-                                const toggleBtn = document.querySelector('.sidebar-toggle');
-                                setCollapsed(true, toggleBtn);
-                            }, 150);
-                        }
+                    const selectorTarget = e.target.closest('.app-sidebar a, .app-sidebar button, .app-sidebar [data-collapse-on-click]');
+                    if (selectorTarget) {
+                        // skip if it's the sidebar toggle (rare) or if clicked element has data-no-collapse
+                        if (selectorTarget.classList && selectorTarget.classList.contains('sidebar-toggle')) return;
+                        if (selectorTarget.hasAttribute && selectorTarget.hasAttribute('data-no-collapse')) return;
+
+                        // Auto-collapse on any screen size unless explicitly opted-out.
+                        // Slight delay so navigation or modal triggers first.
+                        setTimeout(function() {
+                            const toggleBtn = document.querySelector('.sidebar-toggle');
+                            setCollapsed(true, toggleBtn);
+                        }, 120);
                     }
                 });
 
